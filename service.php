@@ -91,7 +91,7 @@ class Trabajos extends Service
 		$name = trim(ucfirst($request->query));
 		if ($name !== '')
 		{
-			Connection::query("UPADTE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
+			Connection::query("UPDATE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
 			return $this->_editar($request);
 		}
 
