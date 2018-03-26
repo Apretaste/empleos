@@ -25,6 +25,7 @@
         <td>{$cv->jobs}</td>
     </tr>
 </table>
-
+<p align="center">
 {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true"}
 {button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true"}
+</p>
