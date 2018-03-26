@@ -40,10 +40,10 @@
 </ul>
 
 {space10}
-<h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:start_year*|n:end_year|t:title*|t:company"}</h2>
+<h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}</h2>
 <ul>
     {foreach item=item from=$cv->experiences}
-        <li>{$item->start_year}-{$item->end_year} {$item->title}, {$item->company}</li>
+        <li>{$item->start_year} - {$item->end_year} {$item->title}, {$item->company}</li>
     {/foreach}
 </ul>
 
