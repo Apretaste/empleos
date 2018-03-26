@@ -57,7 +57,7 @@ class Trabajos extends Service
 
 		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='{$request->email}'");
 		if (!isset($cv[0])) $cv = new stdClass();
-		
+
 		$default_cv = [
 			'full_name' => $profile->full_name,
 			'profession1' => '',
@@ -190,8 +190,9 @@ class Trabajos extends Service
 		$cv = Connection::query("SELECT *,
 									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession1) as profession1_title,
 									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession2) as profession2_title,
-									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession3) as profession3_title,
- 									FROM _trabajos_cv WHERE email = '$email';");
+									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession3) as profession3_title
+ 									FROM _trabajos_cv 
+ 									WHERE email = '$email';");
 
 		if (isset($cv[0]))
 			return $cv[0];
