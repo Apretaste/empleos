@@ -32,10 +32,10 @@
 
 {space10}
 
-<h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:graduation_year*|t:school"}</h2>
+<h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:Escuela/Universidad/Instituto"}</h2>
 <ul>
 {foreach item=item from=$cv->educations}
-    <li>{$item->graduation_year} {$item->school}</li>
+    <li>{$item->graduation_year} - {$item->school}</li>
 {/foreach}
 </ul>
 

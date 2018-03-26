@@ -87,6 +87,18 @@ class Trabajos extends Service
 		return $response;
 	}
 
+	public function _nombre($request)
+	{
+		$name = trim(ucfirst($request->query));
+		if ($name !== '')
+		{
+			Connection::query("UPADTE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
+			return $this->_editar($request);
+		}
+
+		return new Response();
+	}
+	
 	public function _educacion($request)
 	{
 		$q = trim($request->query);
