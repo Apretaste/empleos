@@ -8,8 +8,6 @@
         {noimage width="300" height="200" text="Tristemente ...<br/>Sin foto de perfil :'-("}
     {/if}
 
-</center>
-
 {if $cv->full_name}
     {$cv->full_name} {link href="TRABAJOS NOMBRE {$cv->full_name}" caption="editar" desc="Cambiar nombre" popup="true"}<br/>
     {else}
@@ -17,10 +15,10 @@
 {/if}
 
 {foreach from=$cv->professions item=item}
-    {$item->profession}
+    {$item->profession} {link href="TRABAJOS PROFESSION {$item->profession}" popup="true" desc="Nombre de la profesion" caption="editar"}
 {/foreach}
 <br/>
-{link href="TRABAJOS PROFESSION" popup="true" desc="Nombre" caption="agregar profesi&oacute;n"}
+{link href="TRABAJOS PROFESSION" popup="true" desc="Nombre de la profesion" caption="agregar profesi&oacute;n"}
 
 {if $cv->province}
     {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar"}<br/>
@@ -68,3 +66,4 @@
     {button href="TRABAJOS" caption="INICIO"}
     {button href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
 </p>
+</center>
