@@ -101,7 +101,7 @@ class Trabajos extends Service
 		$title = trim(substr($q, strlen($year)));
 		$q = "INSERT INTO trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
 		Connection::query($q);
-		return new Response();
+		return $this->_editar($request);
 	}
 
 	public function _habilidad($request)
