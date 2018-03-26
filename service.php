@@ -36,6 +36,20 @@ class Trabajos extends Service
 		return $response;
 	}
 
+	public function _editar($request)
+	{
+		$response = new Response();
+		$profile = $this->utils->getPerson($request->email);
+		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='$request->email}'");
+
+		$response->createFromTemplate('profile.tpl',[
+			'profile' => $profile,
+			'cv' => $cv
+		]);
+
+		return $response;
+	}
+
 	public function _educacion($request)
 	{
 		$q = trim($request->query);
