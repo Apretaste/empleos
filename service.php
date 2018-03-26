@@ -55,29 +55,7 @@ class Trabajos extends Service
 
 		$profile = $this->utils->getPerson($request->email);
 
-		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='{$request->email}'");
-		if (isset($cv[0])) $cv = $cv[0];
-		else $cv = new stdClass();
-
-		$default_cv = [
-			'full_name' => $profile->full_name,
-			'profession1' => '',
-			'profession2' => '',
-			'profession3' => '',
-			'description' => '',
-			'province' => '',
-			'educations' => [],
-			'skills' => [],
-			'experiences' => [],
-			'professions' => [],
-			'langs' => []
-		];
-
-		foreach($default_cv as $prop => $value)
-			if (!isset($cv->$prop)) $cv->$prop = $value;
-
-		var_dump($profile);
-		var_dump($cv);
+		$cv = $this->getCV($request->email);
 
 		$response->createFromTemplate('profile_edit.tpl',[
 			'profile' => $profile,
@@ -189,6 +167,8 @@ class Trabajos extends Service
 	
 	private function getCV($email)
 	{
+		$profile = $this->utils->getPerson($email);
+
 		Connection::query("INSERT IGNORE INTO _trabajos_cv (email) VALUES ('$email');");
 		$cv = Connection::query("SELECT *,
 									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession1) as profession1_title,
@@ -197,10 +177,37 @@ class Trabajos extends Service
  									FROM _trabajos_cv 
  									WHERE email = '$email';");
 
-		if (isset($cv[0]))
-			return $cv[0];
+		if (isset($cv[0])) $cv = $cv[0];
+		else $cv = new stdClass();
 
-		return null;
+		$default_cv = [
+			'full_name' => $profile->full_name,
+			'profession1' => '',
+			'profession2' => '',
+			'profession3' => '',
+			'description' => '',
+			'province' => '',
+			'educations' => [],
+			'skills' => [],
+			'experiences' => [],
+			'professions' => [],
+			'langs' => []
+		];
+
+		foreach($default_cv as $prop => $value)
+			if (!isset($cv->$prop)) $cv->$prop = $value;
+
+		$experiencies = Connection::query("SELECT * FROM _trabajos_cv_experience WHERE email = '$email';");
+		$educations = Connection::query("SELECT * FROM _trabajos_cv_education WHERE email = '$email';");
+		$skills = Connection::query("SELECT * FROM _trabajos_cv_skills WHERE email = '$email';");
+		$langs = Connection::query("SELECT * FROM _trabajos_cv_langs WHERE email = '$email';");
+
+		$cv->experiences = $experiencies;
+		$cv->educations = $educations;
+		$cv->skills = $skills;
+		$cv->langs = $langs;
+		
+		return $cv;
 	}
 
 	private function getCVForce($cv)

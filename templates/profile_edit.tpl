@@ -15,7 +15,7 @@
 {/if}
 
 {foreach from=$cv->professions item=item}
-    {$item->profession} {link href="TRABAJOS PROFESSION {$item->profession}" popup="true" desc="Nombre de la profesion" caption="editar"}
+    {$item->profession} {link href="TRABAJOS PROFESSION {$item->id}" popup="true" desc="Nombre de la profesion" caption="editar"}
 {/foreach}
 <br/>
 {link href="TRABAJOS PROFESSION" popup="true" desc="Nombre de la profesion" caption="agregar profesi&oacute;n"}
