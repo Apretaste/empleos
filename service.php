@@ -99,7 +99,7 @@ class Trabajos extends Service
 		$data = explode(' ', $q);
 		$year = intval($data[0]);
 		$title = trim(substr($q, strlen($year)));
-		$q = "INSERT INTO trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
+		$q = "INSERT INTO _trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
 		Connection::query($q);
 		return $this->_editar($request);
 	}
