@@ -16,7 +16,7 @@
     {link href="TRABAJOS NOMBRE" popup="true" desc="Nombre" caption="agregar nombre"}<br/>
 {/if}
 
-{foreach var=$cv->professions item=item}
+{foreach from=$cv->professions item=item}
     {$item->profession}
 {/foreach}
 <br/>
