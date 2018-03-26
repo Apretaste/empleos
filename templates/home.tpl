@@ -18,10 +18,10 @@
     <tr>
         <td>Mis trabajos publicados
             <br/>{link href="TRABAJOS OFERTAS" caption="ver trabajos"}
-            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="title*|a:deatils|name|phone|looking_for_profession|d:end_date*|f:salary|m:contract[Proyecto,Salario]|m:job_level[Eperto,Avanzado,Principiante]"}</td>
+            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="titulo*|a:detalles|nombre|telefono|buscando_profesion|d:caduca*|f:salario|m:contrato[PROYECTO,SALARIO]|m:nivel[EXPERTO,AVANZADO,PRINCIPIANTE]"}</td>
         <td>{$cv->jobs}</td>
     </tr>
 </table>
 
-{button href="TRABAJOS BUSCAR" caption="Buscar trabajo"}
-{button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador"}
+{button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true"}
+{button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true"}
