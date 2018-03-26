@@ -55,7 +55,7 @@ class Trabajos extends Service
 		$profile = $this->utils->getPerson($request->email);
 		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='{$request->email}'");
 
-		$response->createFromTemplate('profile.tpl',[
+		$response->createFromTemplate('profile_edit.tpl',[
 			'profile' => $profile,
 			'cv' => $cv
 		]);
