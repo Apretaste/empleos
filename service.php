@@ -57,8 +57,7 @@ class Trabajos extends Service
 
 		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='{$request->email}'");
 		if (!isset($cv[0])) $cv = new stdClass();
-
-
+		
 		$default_cv = [
 			'full_name' => $profile->full_name,
 			'profession1' => '',
