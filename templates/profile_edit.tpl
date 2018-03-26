@@ -1,6 +1,6 @@
 <center>
     <!--PROFILE PICTURE-->
-    {if $cv->picture}
+    {if $profile->picture}
         <table cellpadding="3"><tr><td bgcolor="#202020">
                     {img src="{$profile->picture_internal}" alt="Picture" width="300"}
                 </td></tr></table>
@@ -10,8 +10,8 @@
 
 </center>
 
-{if $cv->nombre}
-    {$cv->nombre} {link href="TRABAJOS NOMBRE {$cv->nombre}" caption="editar" desc="Cambiar nombre"}<br/>
+{if $cv->full_name}
+    {$cv->full_name} {link href="TRABAJOS NOMBRE {$cv->nombre}" caption="editar" desc="Cambiar nombre"}<br/>
     {else}
     {link href="TRABAJOS NOMBRE" popup="true" desc="Nombre" caption="agregar nombre"}<br/>
 {/if}
