@@ -52,8 +52,24 @@ class Trabajos extends Service
 	public function _editar($request)
 	{
 		$response = new Response();
+
 		$profile = $this->utils->getPerson($request->email);
+
 		$cv = Connection::query("SELECT * FROM _trabajos_cv WHERE email='{$request->email}'");
+		if (!isset($cv[0])) $cv = new stdClass();
+
+		var_dump($profile);
+		$default_cv = [
+			'full_name' => $profile->full_name,
+			'profession1' => '',
+			'profession2' => '',
+			'profession3' => '',
+			'description' => '',
+			'province' => ''
+		];
+
+		foreach($default_cv as $prop => $value)
+			if (!isset($cv->$prop)) $cv->$prop = $value;
 
 		$response->createFromTemplate('profile_edit.tpl',[
 			'profile' => $profile,
