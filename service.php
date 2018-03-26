@@ -88,6 +88,7 @@ class Trabajos extends Service
 
 	public function _nombre($request)
 	{
+		$cv = $this->getCV($request->email);
 		$name = trim(ucfirst($request->query));
 		if ($name !== '')
 		{
@@ -187,6 +188,7 @@ class Trabajos extends Service
 	
 	private function getCV($email)
 	{
+		Connection::query("INSERT IGNORE INTO _trabajos_cv (email) VALUES ('$email');");
 		$cv = Connection::query("SELECT *,
 									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession1) as profession1_title,
 									(SELECT profession FROM _trabajos_cv_professions WHERE id = _trabajos_cv.profession2) as profession2_title,
