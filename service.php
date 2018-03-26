@@ -69,9 +69,9 @@ class Trabajos extends Service
 			'educations' => [],
 			'skills' => [],
 			'experiences' => [],
-			'professions' => []
+			'professions' => [],
+			'langs' => []
 		];
-
 
 		foreach($default_cv as $prop => $value)
 			if (!isset($cv->$prop)) $cv->$prop = $value;
@@ -98,7 +98,7 @@ class Trabajos extends Service
 
 		return new Response();
 	}
-	
+
 	public function _educacion($request)
 	{
 		$q = trim($request->query);

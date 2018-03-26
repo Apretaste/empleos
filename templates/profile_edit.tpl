@@ -9,7 +9,7 @@
     {/if}
 
 {if $cv->full_name}
-    {$cv->full_name} {link href="TRABAJOS NOMBRE {$cv->full_name}" caption="editar" desc="Cambiar nombre" popup="true"}<br/>
+    {$cv->full_name} {link href="TRABAJOS NOMBRE" caption="editar" desc="Cambiar nombre" popup="true"}<br/>
     {else}
     {link href="TRABAJOS NOMBRE" popup="true" desc="Nombre" caption="agregar nombre"}<br/>
 {/if}
