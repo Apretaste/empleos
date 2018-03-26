@@ -88,9 +88,10 @@ CREATE TABLE _trabajos_cv_education (
   school varchar(300)
 );
 
+DROP TABLE IF EXISTS _trabajos_cv_experience;
 CREATE TABLE _trabajos_cv_experience (
   id int(11) auto_increment not null primary key,
-  email varchar(11) not null,
+  email varchar(255) not null,
   start_year int(11),
   end_year int(11),
   title varchar(300),
