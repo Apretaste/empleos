@@ -96,15 +96,9 @@ class Trabajos extends Service
 	public function _experiencia($request)
 	{
 		$q = trim($request->query);
-		$data = @json_decode($q);
-		if (is_object($data))
-		{
-			$q = "INSERT INTO trabajos_cv_experience (email, start_year, end_year, title, company) 
-					VALUES ('{$request->email}','{$data->start_year}','{$data->end_year}', '{$data->title}', '{$data->company}');";
-
-			Connection::query($q);
-		}
-
+		$data = explode(' ', $q);
+		$q = "INSERT INTO trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$data->start_year}', '{$data->title}');";
+		Connection::query($q);
 		return new Response();
 	}
 
@@ -206,7 +200,7 @@ class Trabajos extends Service
 		$cv->educations = $educations;
 		$cv->skills = $skills;
 		$cv->langs = $langs;
-		
+
 		return $cv;
 	}
 
