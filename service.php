@@ -36,6 +36,19 @@ class Trabajos extends Service
 		return $response;
 	}
 
+	public function _agregar($request)
+	{
+		$q = trim($request->query);
+		$data = explode(' ', $q);
+
+		$q = "INSERT INTO trabajos_cv_job (email, title, details, name, phone, looking_for_profession, end_date, salary, contract, job_level) 
+				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}', '{$data[2]}', '{$data[3]}', '{$data[4]}', '{$data[5]}', '{$data[6]}', '{$data[7]}', '{$data[8]}', '{$data[9]}');";
+
+		Connection::query($q);
+
+		return new Response();
+	}
+
 	public function _editar($request)
 	{
 		$response = new Response();
