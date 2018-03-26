@@ -88,10 +88,10 @@ class Trabajos extends Service
 
 	public function _nombre($request)
 	{
-		$cv = $this->getCV($request->email);
 		$name = trim(ucfirst($request->query));
 		if ($name !== '')
 		{
+			$this->createCV($request->email);
 			Connection::query("UPDATE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
 			return $this->_editar($request);
 		}
@@ -207,4 +207,8 @@ class Trabajos extends Service
 
 	}
 
+	public function createCV($email)
+	{
+		Connection::query("INSERT IGNORE INTO _trabajos_cv (email) VALUES ('$email');");
+	}
 }
