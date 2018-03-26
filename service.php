@@ -98,14 +98,12 @@ class Trabajos extends Service
 	public function _idioma($request)
 	{
 		$q = trim($request->query);
-		$data = @json_decode($q);
-		if (is_object($data))
-		{
-			$q = "INSERT INTO trabajos_cv_langs (email, lang, lang_level) 
-					VALUES ('{$request->email}','{$data->lang}', '{$data->lang_level}');";
+		$data = explode(' ', $q);
 
-			Connection::query($q);
-		}
+		$q = "INSERT INTO trabajos_cv_langs (email, lang, lang_level) 
+				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}');";
+
+		Connection::query($q);
 
 		return new Response();
 	}
