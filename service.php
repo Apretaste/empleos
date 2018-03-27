@@ -58,9 +58,9 @@ class Trabajos extends Service
 			$id = trim(strtolower($parts[1]));
 			$campo = trim(strtolower($parts[2]));
 
-			$parts = array_shift($parts);
-			$parts = array_shift($parts);
-			$parts = array_shift($parts);
+			array_shift($parts);
+			array_shift($parts);
+			array_shift($parts);
 
 			$valor = implode(' ', $parts);
 
@@ -80,7 +80,7 @@ class Trabajos extends Service
 			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
 			{
 				$valor = Connection::escape($valor);
-				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}';");
+				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}' WHERE id = $id;");
 				$request->query = '';
 				return $this->_editar($request);
 			}
@@ -198,7 +198,7 @@ class Trabajos extends Service
 		if (isset($map[$what])) {
 			Connection::query("DELETE FROM {$map[$what]} WHERE id = $id;");
 		}
-		
+
 		$request->query = '';
 		return $this->_editar($request);
 	}
