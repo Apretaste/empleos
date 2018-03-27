@@ -62,7 +62,7 @@
         {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntilde;o final"}
     {/if}
 
-    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}
+    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}
 
     {if $item->company}
         {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="{$item->company}" popup="true" desc="Compa&ntilde;&iacute;a"}
