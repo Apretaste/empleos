@@ -69,7 +69,7 @@
     {else}
         {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="[compa&ntilde;ia]" popup="true" desc="Compa&ntilde;&iacute;a/Empresa"}
     {/if}
-    
+
     {link href="TRABAJOS QUITAR EXPERIENCIA {$item->id}" caption="x"}<br/>
 {/foreach}
 
