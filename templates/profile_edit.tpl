@@ -42,11 +42,12 @@
 <h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}</h2>
 
 {foreach item=item from=$cv->experiences}
-    {$item->start_year} - {if $item->end_year}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="{$item->end_year}" popup="true" desc="n:A&ntillde;o final"}<br/>
+    {$item->start_year} - {if $item->end_year}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="{$item->end_year}" popup="true" desc="n:A&ntillde;o final"}
     {else}
-    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntillde;o final"}{/if} {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}</li>
+    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntillde;o final"}{/if} {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}
+    <br/>
 {/foreach}
-    
+
 {space10}
 <h2>Habilidades {link caption="+" href="TRABAJOS HABILIDAD" popup="true" desc="Habilidad"}</h2>
 <p align="center">
