@@ -9,13 +9,12 @@ class Trabajos extends Service
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function _main (Request $request)
+	public function _main(Request $request)
 	{
 
 		$cv = $this->getCV($request->email);
 
-		if (is_null($cv))
-		{
+		if (is_null($cv)) {
 			$cv = new stdClass();
 
 			// TODO: add custom fields here
@@ -23,7 +22,7 @@ class Trabajos extends Service
 
 		$cv->force = $this->getCVForce($cv);
 		$cv->messages_count = 0;
-		$cv->views  = 0;
+		$cv->views = 0;
 		$cv->jobs = 0;
 
 		$response = new Response();
@@ -57,7 +56,7 @@ class Trabajos extends Service
 
 		$cv = $this->getCV($request->email);
 
-		$response->createFromTemplate('profile_edit.tpl',[
+		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
 			'cv' => $cv
 		]);
@@ -68,8 +67,7 @@ class Trabajos extends Service
 	public function _nombre($request)
 	{
 		$name = trim(ucfirst($request->query));
-		if ($name !== '')
-		{
+		if ($name !== '') {
 			$this->createCV($request->email);
 			Connection::query("UPDATE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
 			return $this->_editar($request);
@@ -82,8 +80,7 @@ class Trabajos extends Service
 	{
 		$q = trim($request->query);
 		$data = @json_decode($q);
-		if (is_object($data))
-		{
+		if (is_object($data)) {
 			$q = "INSERT INTO trabajos_cv_education (email, graduation_year, school) 
 				  VALUES ('{$request->email}','{$data->graduation_year}','{$data->school}');";
 
@@ -104,16 +101,20 @@ class Trabajos extends Service
 		return $this->_editar($request);
 	}
 
+	/**
+	 * Subservice HABILIDAD
+	 * 
+	 * @param $request
+	 * @return Response
+	 */
 	public function _habilidad($request)
 	{
 		$q = trim($request->query);
-		$data = @json_decode($q);
-		if (is_object($data))
+		if ($q != '')
 		{
-			$q = "INSERT INTO trabajos_cv_skills (email, skill) 
-					VALUES ('{$request->email}','{$data->skill}');";
-
+			$q = "INSERT INTO trabajos_cv_skills (email, skill) VALUES ('{$request->email}','{$q}');";
 			Connection::query($q);
+			return $this->_editar($request);
 		}
 
 		return new Response();
@@ -137,13 +138,13 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		$what = explode(' ', $q);
 		$what = strtolower($what[0]);
-		$p = strpos($q,' ');
+		$p = strpos($q, ' ');
 
 		if ($p === false) return new Response();
 
-		$q = trim(substr($q,$p));
+		$q = trim(substr($q, $p));
 
-		$id = explode($q,' ');
+		$id = explode($q, ' ');
 		$id = intval($id[0]);
 
 		$map = [
@@ -153,14 +154,13 @@ class Trabajos extends Service
 			'idioma' => '_trabajos_cv_langs'
 		];
 
-		if (isset($map[$what]))
-		{
+		if (isset($map[$what])) {
 			Connection::query("DELETE FROM $map[$what] WHERE id = $id;");
 		}
 
 		return new Response();
 	}
-	
+
 	private function getCV($email)
 	{
 		$profile = $this->utils->getPerson($email);
@@ -190,7 +190,7 @@ class Trabajos extends Service
 			'langs' => []
 		];
 
-		foreach($default_cv as $prop => $value)
+		foreach ($default_cv as $prop => $value)
 			if (!isset($cv->$prop)) $cv->$prop = $value;
 
 		$experiencies = Connection::query("SELECT * FROM _trabajos_cv_experience WHERE email = '$email';");

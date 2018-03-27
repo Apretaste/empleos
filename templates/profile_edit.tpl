@@ -50,7 +50,7 @@
 </ul>
 
 {space10}
-<h2>Habilidades {link caption="+" href="TRABAJOS HABILIDAD" popup="true" desc="habilidad"}</h2>
+<h2>Habilidades {link caption="+" href="TRABAJOS HABILIDAD" popup="true" desc="Habilidad"}</h2>
 <p align="center">
 {foreach item=item from=$cv->skills}
     {$item->skill} {link href="TRABAJOS QUITAR HABILIDAD {$item->id}" caption="x"} &nbsp;
