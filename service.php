@@ -146,9 +146,7 @@ class Trabajos extends Service
 		if ($p === false) return new Response();
 
 		$q = trim(substr($q, $p));
-
-		$id = explode($q, ' ');
-		$id = intval($id[0]);
+		$id = intval(trim($q));
 
 		$map = [
 			'educacion' => '_trabajos_cv_education',
