@@ -86,15 +86,19 @@ class Trabajos extends Service
 			}
 		}
 
+		$professions = [];
+		$r = Connection::query("SELECT * FROM _trabajos_cv_professions;");
+		foreach($r as $item)
+			$professions[] = $item->profession;
+
 		$response = new Response();
-
 		$profile = $this->utils->getPerson($request->email);
-
 		$cv = $this->getCV($request->email);
 
 		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
-			'cv' => $cv
+			'cv' => $cv,
+			'professions' => implode(',', $professions)
 		]);
 
 		return $response;
