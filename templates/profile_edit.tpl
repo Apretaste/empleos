@@ -26,12 +26,12 @@
     {link href="TRABAJOS PROFESION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
 
-{if $cv->profession2}
+{if $cv->profession3}
     {link href="TRABAJOS PROFESION 3" caption="{$cv->profession3_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {else}
     {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
-
+<br/>
 {if $cv->province}
     {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar" desc="m:[{$provinces}]*"}<br/>
     {else}
