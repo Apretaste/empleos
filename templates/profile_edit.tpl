@@ -54,9 +54,22 @@
 <h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}</h2>
 
 {foreach item=item from=$cv->experiences}
-    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="{$item->start_year}" popup="true" desc="n:A&ntilde;o desde"} - {if $item->end_year}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="{$item->end_year}" popup="true" desc="n:A&ntillde;o final"}
+    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="{$item->start_year}" popup="true" desc="n:A&ntilde;o desde"} -
+
+    {if $item->end_year}
+        {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="{$item->end_year}" popup="true" desc="n:A&ntilde;o final"}
     {else}
-    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntillde;o final"}{/if} {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}
+        {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntilde;o final"}
+    {/if}
+
+    {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}
+
+    {if $item->company}
+        {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="{$item->company}" popup="true" desc="Compa&ntilde;&iacute;a"}
+    {else}
+        {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="[compa&ntilde;ia]" popup="true" desc="Compa&ntilde;&iacute;a/Empresa"}
+    {/if}
+    
     {link href="TRABAJOS QUITAR EXPERIENCIA {$item->id}" caption="x"}<br/>
 {/foreach}
 
