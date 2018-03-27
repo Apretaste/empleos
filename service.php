@@ -88,7 +88,7 @@ class Trabajos extends Service
 		$year = intval($data[0]);
 		$school = trim(substr($q, strlen($year)));
 
-		$q = "INSERT INTO trabajos_cv_education (email, graduation_year, school) VALUES ('{$request->email}','{$year}', '{$school}');";
+		$q = "INSERT INTO _trabajos_cv_education (email, graduation_year, school) VALUES ('{$request->email}','{$year}', '{$school}');";
 		Connection::query($q);
 		return $this->_editar($request);
 	}
