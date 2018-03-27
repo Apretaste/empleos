@@ -103,7 +103,7 @@ class Trabajos extends Service
 
 	/**
 	 * Subservice HABILIDAD
-	 * 
+	 *
 	 * @param $request
 	 * @return Response
 	 */
@@ -112,7 +112,7 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		if ($q != '')
 		{
-			$q = "INSERT INTO trabajos_cv_skills (email, skill) VALUES ('{$request->email}','{$q}');";
+			$q = "INSERT INTO _trabajos_cv_skills (email, skill) VALUES ('{$request->email}','{$q}');";
 			Connection::query($q);
 			return $this->_editar($request);
 		}
@@ -125,7 +125,7 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		$data = explode(' ', $q);
 
-		$q = "INSERT INTO trabajos_cv_langs (email, lang, lang_level) 
+		$q = "INSERT INTO _trabajos_cv_langs (email, lang, lang_level) 
 				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}');";
 
 		Connection::query($q);
