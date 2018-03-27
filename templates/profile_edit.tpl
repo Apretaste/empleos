@@ -14,11 +14,23 @@
     {link href="TRABAJOS NOMBRE" popup="true" desc="Nombre" caption="agregar nombre"}<br/>
 {/if}
 
-{foreach from=$cv->professions item=item}
-    {$item->profession} {link href="TRABAJOS PROFESSION {$item->id}" popup="true" desc="Nombre de la profesion" caption="editar"}
-{/foreach}
-<br/>
-    {link href="TRABAJOS PROFESSION" popup="true" desc="Nombre de la profesion" caption="agregar profesi&oacute;n"}<br/>
+{if $cv->profession1}
+    {link href="TRABAJOS PROFESSION 1" caption="{$cv->profession1}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {else}
+    {link href="TRABAJOS PROFESSION 1" caption="profesion #1" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+{/if}
+
+{if $cv->profession2}
+    {link href="TRABAJOS PROFESSION 2" caption="{$cv->profession2}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+{else}
+    {link href="TRABAJOS PROFESSION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+{/if}
+
+{if $cv->profession2}
+    {link href="TRABAJOS PROFESSION 3" caption="{$cv->profession3}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+{else}
+    {link href="TRABAJOS PROFESSION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+{/if}
 
 {if $cv->province}
     {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar"}<br/>

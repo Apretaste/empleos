@@ -115,7 +115,13 @@ class Trabajos extends Service
 
 	public function _profesion($request)
 	{
-
+		$q = trim(ucfirst($request->query));
+		$p = strpos($q,' ');
+		$n = trim(substr($q, 0, $p));
+		$q = trim(substr($q,$p));
+		Connection::query("UPDATE _trabajos_cv SET profession{$n} = '$q';");
+		$request->query = '';
+		return $this->_editar($request);
 	}
 
 	public function _educacion($request)
