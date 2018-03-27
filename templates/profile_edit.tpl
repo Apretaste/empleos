@@ -45,7 +45,7 @@
     {$item->start_year} - {if $item->end_year}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="{$item->end_year}" popup="true" desc="n:A&ntillde;o final"}
     {else}
     {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA" caption="hasta" popup="true" desc="n:A&ntillde;o final"}{/if} {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="{$item->title}" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}, {$item->company}
-    <br/>
+    {link href="TRABAJOS QUITAR EXPERIENCIA {$item->id}" caption="x"}<br/>
 {/foreach}
 
 {space10}
