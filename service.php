@@ -48,6 +48,14 @@ class Trabajos extends Service
 		return new Response();
 	}
 
+	public function _descripcion($request)
+	{
+		$desc = trim($request->query);
+		Connection::query("UPDATE _trabajos_cv SET description = '$desc' WHERE email = '{$request->email}';");
+		$request->query = '';
+		return $this->_editar($request);
+	}
+
 	public function _editar($request)
 	{
 		$q = trim($request->query);
