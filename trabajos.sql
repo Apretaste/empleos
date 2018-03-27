@@ -98,22 +98,25 @@ CREATE TABLE _trabajos_cv_experience (
   company varchar(300)
 );
 
+DROP TABLE IF EXISTS _trabajos_cv_skills;
 CREATE TABLE _trabajos_cv_skills (
   id int(11) auto_increment not null primary key,
-  email varchar(11) not null,
+  email varchar(255) not null,
   skill varchar(255) not null
 );
 
+DROP TABLE IF EXISTS _trabajos_cv_langs;
 CREATE TABLE _trabajos_cv_langs (
   id int(11) auto_increment not null primary key,
-  email varchar(11) not null,
+  email varchar(255) not null,
   lang enum ('ESPANNOL', 'INGLES', 'FRANCES', 'ITALIANO', 'RUSO', 'CHINO', 'JAPONES'),
   lang_level enum('NATIVO','FLUIDO','CONVERSACIONAL','ESCRITO')
 );
 
+DROP TABLE IF EXISTS _trabajos_job;
 CREATE TABLE _trabajos_job (
   id int(11) auto_increment not null primary key,
-  email varchar(11) not null,
+  email varchar(255) not null,
   title varchar(80) not null,
   deatils varchar(500),
   name varchar(50),

@@ -76,18 +76,21 @@ class Trabajos extends Service
 		return new Response();
 	}
 
+	public function _profesion($request)
+	{
+
+	}
+
 	public function _educacion($request)
 	{
 		$q = trim($request->query);
-		$data = @json_decode($q);
-		if (is_object($data)) {
-			$q = "INSERT INTO trabajos_cv_education (email, graduation_year, school) 
-				  VALUES ('{$request->email}','{$data->graduation_year}','{$data->school}');";
+		$data = explode(' ', $q);
+		$year = intval($data[0]);
+		$school = trim(substr($q, strlen($year)));
 
-			Connection::query($q);
-		}
-
-		return new Response();
+		$q = "INSERT INTO trabajos_cv_education (email, graduation_year, school) VALUES ('{$request->email}','{$year}', '{$school}');";
+		Connection::query($q);
+		return $this->_editar($request);
 	}
 
 	public function _experiencia($request)
