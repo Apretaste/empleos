@@ -18,7 +18,7 @@
     {$item->profession} {link href="TRABAJOS PROFESSION {$item->id}" popup="true" desc="Nombre de la profesion" caption="editar"}
 {/foreach}
 <br/>
-{link href="TRABAJOS PROFESSION" popup="true" desc="Nombre de la profesion" caption="agregar profesi&oacute;n"}
+    {link href="TRABAJOS PROFESSION" popup="true" desc="Nombre de la profesion" caption="agregar profesi&oacute;n"}<br/>
 
 {if $cv->province}
     {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar"}<br/>
@@ -33,11 +33,10 @@
 {space10}
 
 <h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:Escuela/Universidad/Instituto"}</h2>
-<ul>
+
 {foreach item=item from=$cv->educations}
-    <li>{$item->graduation_year} - {$item->school} {link href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}</li>
+    {$item->graduation_year} - {$item->school} {link href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}<br/>
 {/foreach}
-</ul>
 
 {space10}
 <h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}</h2>
