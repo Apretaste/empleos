@@ -33,14 +33,14 @@
 {/if}
 <br/>
 {if $cv->province}
-    {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar" desc="m:[{$provinces}]*"}<br/>
+    {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar" desc="m:Provincia[{$provinces}]*"}<br/>
     {else}
-    {link href="TRABAJOS PROVINCIA" popup="true" desc="Nombre" caption="agregar provincia" desc="m:[{$provinces}]*"}<br/>
+    {link href="TRABAJOS PROVINCIA" popup="true" desc="Nombre" caption="agregar provincia" desc="m:Provincia[{$provinces}]*"}<br/>
 {/if}
 {space10}
 
 <!--ABOUT ME-->
-<p align="center">{$cv->description}</p>
+<p align="center">{$cv->description} ({link href="TRABAJOS DESCRIPCION" popup="true" caption="editar" desc="a:Descripci&oacute;n"})</p>
 
 {space10}
 
