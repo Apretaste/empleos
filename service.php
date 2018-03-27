@@ -50,6 +50,42 @@ class Trabajos extends Service
 
 	public function _editar($request)
 	{
+		$q = trim($request->query);
+		if ($q != '')
+		{
+			$parts = explode(' ', $q);
+			$tabla = trim(strtolower($parts[0]));
+			$id = trim(strtolower($parts[1]));
+			$campo = trim(strtolower($parts[2]));
+
+			$parts = array_shift($parts);
+			$parts = array_shift($parts);
+			$parts = array_shift($parts);
+
+			$valor = implode(' ', $parts);
+
+			$map = [
+				'educacion' => '_trabajos_cv_education',
+				'experiencia' => '_trabajos_cv_experience',
+				'habilidad' => '_trabajos_cv_skills',
+				'idioma' => '_trabajos_cv_langs'
+			];
+
+			$fieldMap = [
+				'desde' => 'start_year',
+				'hasta' => 'end_year',
+				'ocupacion' => 'title'
+			];
+
+			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
+			{
+				$valor = Connection::escape($valor);
+				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}';");
+				$request->query = '';
+				return $this->_editar($request);
+			}
+		}
+
 		$response = new Response();
 
 		$profile = $this->utils->getPerson($request->email);
@@ -70,6 +106,7 @@ class Trabajos extends Service
 		if ($name !== '') {
 			$this->createCV($request->email);
 			Connection::query("UPDATE _trabajos_cv SET full_name = '$name' WHERE email = '{$request->email}';");
+			$request->query = '';
 			return $this->_editar($request);
 		}
 
@@ -90,6 +127,7 @@ class Trabajos extends Service
 
 		$q = "INSERT INTO _trabajos_cv_education (email, graduation_year, school) VALUES ('{$request->email}','{$year}', '{$school}');";
 		Connection::query($q);
+		$request->query = '';
 		return $this->_editar($request);
 	}
 
@@ -101,6 +139,7 @@ class Trabajos extends Service
 		$title = trim(substr($q, strlen($year)));
 		$q = "INSERT INTO _trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
 		Connection::query($q);
+		$request->query = '';
 		return $this->_editar($request);
 	}
 
@@ -117,6 +156,7 @@ class Trabajos extends Service
 		{
 			$q = "INSERT INTO _trabajos_cv_skills (email, skill) VALUES ('{$request->email}','{$q}');";
 			Connection::query($q);
+			$request->query = '';
 			return $this->_editar($request);
 		}
 
@@ -132,8 +172,8 @@ class Trabajos extends Service
 				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}');";
 
 		Connection::query($q);
-
-		return new Response();
+		$request->query = '';
+		return $this->_editar($request);
 	}
 
 	public function _quitar($request)
@@ -158,7 +198,8 @@ class Trabajos extends Service
 		if (isset($map[$what])) {
 			Connection::query("DELETE FROM {$map[$what]} WHERE id = $id;");
 		}
-
+		
+		$request->query = '';
 		return $this->_editar($request);
 	}
 
