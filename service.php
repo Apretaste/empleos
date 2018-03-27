@@ -123,7 +123,8 @@ class Trabajos extends Service
 		$p = strpos($q,' ');
 		$n = trim(substr($q, 0, $p));
 		$q = trim(substr($q,$p));
-		Connection::query("UPDATE _trabajos_cv SET profession{$n} = '$q';");
+		$q = strtoupper($q);
+		Connection::query("UPDATE _trabajos_cv SET profession{$n} = (SELECT id FROM _trabajos_cv_professions WHERE profession ='$q');");
 		$request->query = '';
 		return $this->_editar($request);
 	}
