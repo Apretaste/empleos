@@ -98,7 +98,8 @@ class Trabajos extends Service
 		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
 			'cv' => $cv,
-			'professions' => implode(',', $professions)
+			'professions' => implode(',', $professions),
+			'provinces' => str_replace('_',' ', implode(',',['PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD']))
 		]);
 
 		return $response;
@@ -210,6 +211,14 @@ class Trabajos extends Service
 			Connection::query("DELETE FROM {$map[$what]} WHERE id = $id;");
 		}
 
+		$request->query = '';
+		return $this->_editar($request);
+	}
+
+	public function _provincia($request)
+	{
+		$prov = str_replace(' ','_', strtoupper(trim($request->query)));
+		Connection::query("UPDATE _trabajos_cv SET province = '$prov' WHERE email = '{$request->email}';");
 		$request->query = '';
 		return $this->_editar($request);
 	}

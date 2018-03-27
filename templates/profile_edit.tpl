@@ -15,27 +15,27 @@
 {/if}
 
 {if $cv->profession1}
-    {link href="TRABAJOS PROFESION 1" caption="{$cv->profession1_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 1" caption="{$cv->profession1_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
     {else}
-    {link href="TRABAJOS PROFESION 1" caption="profesion #1" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 1" caption="profesion #1" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
 
 {if $cv->profession2}
-    {link href="TRABAJOS PROFESION 2" caption="{$cv->profession2_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 2" caption="{$cv->profession2_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {else}
-    {link href="TRABAJOS PROFESION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
 
 {if $cv->profession2}
-    {link href="TRABAJOS PROFESION 3" caption="{$cv->profession3_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 3" caption="{$cv->profession3_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {else}
-    {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]"}
+    {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
 
 {if $cv->province}
-    {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar"}<br/>
+    {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar" desc="m:[{$provinces}]*"}<br/>
     {else}
-    {link href="TRABAJOS PROVINCIA" popup="true" desc="Nombre" caption="agregar provincia"}<br/>
+    {link href="TRABAJOS PROVINCIA" popup="true" desc="Nombre" caption="agregar provincia" desc="m:[{$provinces}]*"}<br/>
 {/if}
 {space10}
 
