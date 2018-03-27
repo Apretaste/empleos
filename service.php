@@ -82,7 +82,8 @@ class Trabajos extends Service
 			$fieldMap = [
 				'desde' => 'start_year',
 				'hasta' => 'end_year',
-				'ocupacion' => 'title'
+				'ocupacion' => 'title',
+				'titulo' => 'title'
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
