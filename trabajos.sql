@@ -80,10 +80,10 @@ CREATE TABLE _trabajos_cv (
   description varchar(300),
   province enum('PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD')
 );
-
+DROP TABLE IF EXISTS _trabajos_cv_education;
 CREATE TABLE _trabajos_cv_education (
   id int(11) auto_increment not null primary key,
-  email varchar(11) not null,
+  email varchar(255) not null,
   graduation_year int(11),
   school varchar(300)
 );

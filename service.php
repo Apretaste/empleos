@@ -161,7 +161,7 @@ class Trabajos extends Service
 			Connection::query("DELETE FROM $map[$what] WHERE id = $id;");
 		}
 
-		return new Response();
+		return $this->_editar($request);
 	}
 
 	private function getCV($email)
