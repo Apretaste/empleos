@@ -158,7 +158,7 @@ class Trabajos extends Service
 		];
 
 		if (isset($map[$what])) {
-			Connection::query("DELETE FROM $map[$what] WHERE id = $id;");
+			Connection::query("DELETE FROM {$map[$what]} WHERE id = $id;");
 		}
 
 		return $this->_editar($request);
