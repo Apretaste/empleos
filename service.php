@@ -40,7 +40,7 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		$data = explode('|', $q);
 
-		$q = "INSERT INTO trabajos_cv_job (email, title) 
+		$q = "INSERT INTO _trabajos_cv_job (email, title) 
 				VALUES ('{$request->email}','{$data[0]}');";
 
 		$id = Connection::query($q);
