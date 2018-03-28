@@ -37,14 +37,8 @@ class Trabajos extends Service
 
 	public function _agregar($request)
 	{
-		$q = trim($request->query);
-		$data = explode('|', $q);
-
-		$q = "INSERT INTO _trabajos_job (email, title) 
-				VALUES ('{$request->email}','{$data[0]}');";
-
-		$id = Connection::query($q);
-
+		$title = trim($request->query);
+		$id = Connection::query("INSERT INTO _trabajos_job (email, title) VALUES ('{$request->email}','{$title}');");
 		$request->query = $id;
 		return $this->_trabajo($request);
 	}
