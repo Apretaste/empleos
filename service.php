@@ -40,6 +40,7 @@ class Trabajos extends Service
 		$title = trim($request->query);
 		$id = Connection::query("INSERT INTO _trabajos_job (email, title) VALUES ('{$request->email}','{$title}');");
 		$request->query = $id;
+		var_dump($id);
 		return $this->_trabajo($request);
 	}
 
