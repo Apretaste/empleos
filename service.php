@@ -107,8 +107,15 @@ class Trabajos extends Service
 			{
 				$valor = Connection::escape($valor);
 				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}' WHERE id = $id;");
-				$request->query = '';
-				return $this->_editar($request);
+
+				switch($tabla) {
+					case 'oferta':
+						$request->query = $id;
+						return $this->_trabajo($request);
+					default:
+						$request->query = '';
+						return $this->_editar($request);
+				}
 			}
 		}
 
