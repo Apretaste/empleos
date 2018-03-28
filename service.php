@@ -49,6 +49,10 @@ class Trabajos extends Service
 		$id = intval(trim($request->query));
 		$job = Connection::query("SELECT * FROM _trabajos_job WHERE id = '$id';");
 
+		if (!isset($job[0]))
+			return new Response();
+
+		$job = $job[0];
 		$response = new Response();
 		$response->createFromTemplate('job_edit.tpl', [
 			'job' => $job
