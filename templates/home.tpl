@@ -21,7 +21,7 @@
     <tr style="background-color:#F2F2F2;">
         <td>Mis trabajos publicados
             <br/>{link href="TRABAJOS OFERTAS" caption="ver trabajos"}
-            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="titulo*|a:detalles|nombre|telefono|buscando_profesion|d:caduca*|f:salario|m:contrato[PROYECTO,SALARIO]|m:nivel[EXPERTO,AVANZADO,PRINCIPIANTE]"}</td>
+            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="t:T&iacute;tulo*"}</td>
         <td>{$cv->jobs}</td>
     </tr>
 </table>

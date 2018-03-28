@@ -40,12 +40,27 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		$data = explode('|', $q);
 
-		$q = "INSERT INTO trabajos_cv_job (email, title, details, name, phone, looking_for_profession, end_date, salary, contract, job_level) 
-				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}', '{$data[2]}', '{$data[3]}', '{$data[4]}', '{$data[5]}', '{$data[6]}', '{$data[7]}', '{$data[8]}', '{$data[9]}');";
+		$q = "INSERT INTO trabajos_cv_job (email, title) 
+				VALUES ('{$request->email}','{$data[0]}');";
 
-		Connection::query($q);
+		$id = Connection::query($q);
 
-		return new Response();
+		$request->query = $id;
+		return $this->_trabajo($request);
+	}
+
+	public function _trabajo($request)
+	{
+		$id = intval(trim($request->query));
+
+		$job = Connection::query("SELECT * FROM _trabajos_job WHERE id = '$id';");
+
+		$response = new Response();
+		$response->createFromTemplate('job_edit.tpl', [
+			'job' => $job
+		]);
+
+		return $response;
 	}
 
 	public function _descripcion($request)
@@ -76,7 +91,8 @@ class Trabajos extends Service
 				'educacion' => '_trabajos_cv_education',
 				'experiencia' => '_trabajos_cv_experience',
 				'habilidad' => '_trabajos_cv_skills',
-				'idioma' => '_trabajos_cv_langs'
+				'idioma' => '_trabajos_cv_langs',
+				'oferta' => '_trabajos_job'
 			];
 
 			$fieldMap = [
