@@ -86,6 +86,7 @@ CREATE TABLE _trabajos_cv_education (
   id int(11) auto_increment not null primary key,
   email varchar(255) not null,
   graduation_year int(11),
+  title varchar(255),
   school varchar(300)
 );
 

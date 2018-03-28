@@ -44,10 +44,18 @@
 
 {space10}
 
-<h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:Escuela/Universidad/Instituto"}</h2>
+<h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}</h2>
 
 {foreach item=item from=$cv->educations}
-    {$item->graduation_year} - {$item->school} {link href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}<br/>
+    {link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="{$item->graduation_year}" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"} -
+    {link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="{$item->title}" popup="true" desc="t:T&iacute;tulo"} -
+    {if $item->school}
+        {link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA" popup="true" desc="Escuela" caption="{$item->school}"} -
+        {else}
+        {link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA {$item->school}" popup="true" caption="[escuela]"}
+    {/if}
+
+    {link href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}<br/>
 {/foreach}
 
 {space10}
