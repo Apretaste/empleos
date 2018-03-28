@@ -46,7 +46,6 @@ class Trabajos extends Service
 	public function _trabajo($request)
 	{
 		$id = intval(trim($request->query));
-
 		$job = Connection::query("SELECT * FROM _trabajos_job WHERE id = '$id';");
 
 		$response = new Response();

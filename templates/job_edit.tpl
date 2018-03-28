@@ -3,11 +3,10 @@
 
 <p align="center">
     {if $job->details}
-        {link href="TRABAJOS EDITAR OFERTA {$job->id} DESCRIPCION" caption="{$job->" desc="a:Descripci&oacute;n" popup="true"}
+        {link href="TRABAJOS EDITAR OFERTA {$job->id} DESCRIPCION" caption="{$job->details}" desc="a:Descripci&oacute;n" popup="true"}
         {else}
-        {link href="TRABAJOS EDITAR OFERTA {$job->id} DESCRIPCION" caption="editar" desc="a:Descripci&oacute;n" popup="true"}
+        {link href="TRABAJOS EDITAR OFERTA {$job->id} DESCRIPCION" caption="[descripci&oacute;n]" desc="a:Descripci&oacute;n" popup="true"}
     {/if}
-    {$job->details}
 </p>
 
 <p>
