@@ -84,7 +84,8 @@ class Trabajos extends Service
 				'hasta' => 'end_year',
 				'ocupacion' => 'title',
 				'titulo' => 'title',
-				'compania' => 'company'
+				'compania' => 'company',
+				'escuela' => 'school'
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
