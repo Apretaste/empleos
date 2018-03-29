@@ -14,19 +14,15 @@ class Trabajos extends Service
 
 		$cv = $this->getCV($request->email);
 
-		if (is_null($cv)) {
-			$cv = new stdClass();
-
-			// TODO: add custom fields here
-		}
-
 		$cv->force = $this->getCVForce($cv);
-		$cv->messages_count = 0;
-		$cv->views = 0;
-		$cv->jobs = 0;
+
+		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
+		$cv->messages_count = $r[0]->total * 1;
+
+		$r = Connection::query("SELECT count(*) as total FROM _trabajos_cv WHERE email = '{$request->email}';");
+		$cv->jobs = $r[0]->total * 1;
 
 		$response = new Response();
-
 		$response->createFromTemplate('home.tpl', [
 			"username" => $request->username,
 			"cv" => $cv
@@ -167,6 +163,9 @@ class Trabajos extends Service
 
 		if ($email === false)
 			return new Response();
+
+		if ($email != $request->email)
+			Connection::query("UPDATE _trabajos_cv SET views = views + 1 WHERE email = '$email';");
 
 		$cv = $this->getCV($email);
 		$profile = $this->utils->getPerson($email);
