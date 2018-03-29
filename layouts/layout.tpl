@@ -57,7 +57,7 @@
 					<td align="center" valign="middle">
 						<div style="font-family:Times; font-size:42px; font-weight:bold; margin:15px 0px; color:black;">
 							OFERTAS DE
-							<span style="color:white; background-color:navy; padding:3px;">TRABAJOS</span>
+							<span style="color:white; background-color:navy; padding:3px;">TRABAJO</span>
 						</div>
 					</td>
 				</tr>
