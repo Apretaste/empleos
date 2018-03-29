@@ -6,7 +6,7 @@
             <td>{$cv->full_name} - {$cv->province}<br/>
             {$cv->profession1}, {$cv->profession2}, {$cv->profession3}<br/>
             {$cv->experience_years} a&ntilde;os de experiencia</td>
-            <td>{link href="TRABAJOS TRABAJADOR {$cv->profile->username}" caption="ver"}</td>
+            <td>{link href="TRABAJOS PERFIL {$cv->profile->username}" caption="ver"}</td>
         </tr>
     {/foreach}
 </table>
