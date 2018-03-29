@@ -20,6 +20,7 @@ class Trabajos extends Service
 		$cv->jobs = $r[0]->total * 1;
 
 		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('home.tpl', [
 			"username" => $request->username,
 			"cv" => $cv
@@ -51,6 +52,8 @@ class Trabajos extends Service
 
 		$tpl = 'job';
 		if ($job->email == $request->email) $tpl = 'job_edit';
+
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate("$tpl.tpl", [
 			'job' => $job,
 			'professions' => $this->getProfessionsInline()
@@ -65,6 +68,7 @@ class Trabajos extends Service
 		$jobs = Connection::query("SELECT * FROM _trabajos_job WHERE email = '{$request->email}';");
 
 		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('jobs_list.tpl', [
 			"jobs" => $jobs
 		]);
@@ -141,6 +145,8 @@ class Trabajos extends Service
 		$profile = $this->utils->getPerson($request->email);
 		$cv = $this->getCV($request->email);
 		$cv->province = str_replace('_', ' ', $cv->province);
+
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
 			'cv' => $cv,
@@ -167,6 +173,7 @@ class Trabajos extends Service
 		$profile = $this->utils->getPerson($email);
 
 		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
 			'cv' => $cv,
 			'profile' => $profile
@@ -306,6 +313,7 @@ class Trabajos extends Service
 
 		$jobs = Connection::query($q);
 		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('search_job.tpl', [
 			'jobs' => $jobs
 		]);
@@ -340,6 +348,7 @@ class Trabajos extends Service
 		}
 
 		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('search_cv.tpl', [
 			'cvs' => $cvs
 		]);
