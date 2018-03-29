@@ -60,6 +60,13 @@ habilidades - 18%
 idiomas - 10%
 	fluido:5%, Conversacional:3%, Escrito:2%
 
+	descripcion  30%
+	profesion 20%
+	eduacion 20%
+	experiencia 20%
+	habilidad 20%
+	idioma 20%
+
 */
 DROP TABLE IF EXISTS _trabajos_cv_professions;
 CREATE TABLE _trabajos_cv_professions (

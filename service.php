@@ -11,10 +11,7 @@ class Trabajos extends Service
 	 */
 	public function _main(Request $request)
 	{
-
 		$cv = $this->getCV($request->email);
-
-		$cv->force = $this->getCVForce($cv);
 
 		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
 		$cv->messages_count = $r[0]->total * 1;
@@ -406,12 +403,28 @@ class Trabajos extends Service
 		$cv->skills = $skills;
 		$cv->langs = $langs;
 
+		$force = 0;
+
+		if (!empty($cv->description))
+			$force += 30;
+		if (!empty($cv->profession1) || !empty($cv->profession2) || !empty($cv->profession3))
+			$force += 20;
+
+		if (count($cv->educations)>0)
+			$force += 20;
+
+		if (count($cv->experiencies)>0)
+			$force += 20;
+
+		if (count($cv->skills)>0)
+			$force += 20;
+
+		if (count($cv->langs)>0)
+			$force += 20;
+
+		$cv->force = $force;
+
 		return $cv;
-	}
-
-	private function getCVForce($cv)
-	{
-
 	}
 
 	public function createCV($email)
