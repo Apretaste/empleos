@@ -309,7 +309,7 @@ class Trabajos extends Service
 
 		$where .= 'TRUE';
 
-		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days FROM _trabajos_job WHERE $where;";
+		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days FROM _trabajos_job WHERE end_date <= CURRENT_DATE $where;";
 
 		$jobs = Connection::query($q);
 		$response = new Response();
