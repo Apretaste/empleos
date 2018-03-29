@@ -1,18 +1,14 @@
 <center>
-    <!--PROFILE PICTURE-->
-    {if $profile->picture}
-        <table cellpadding="3"><tr><td bgcolor="#202020">
-                    {img src="{$profile->picture_internal}" alt="Picture" width="300"}
-                </td></tr></table>
-    {else}
-        {noimage width="300" height="200" text="Tristemente ...<br/>Sin foto de perfil :'-("}
-    {/if}
-
-{if $cv->full_name}
-    {$cv->full_name} {link href="TRABAJOS NOMBRE" caption="editar" desc="Cambiar nombre" popup="true"}<br/>
-    {else}
-    {link href="TRABAJOS NOMBRE" popup="true" desc="Nombre" caption="agregar nombre"}<br/>
+<!--PROFILE PICTURE-->
+{if $profile->picture}
+    <table cellpadding="3"><tr><td bgcolor="#202020">
+                {img src="{$profile->picture_internal}" alt="Picture" width="300"}
+            </td></tr></table>
+{else}
+    {noimage width="300" height="200" text="Tristemente ...<br/>Sin foto de perfil :'-("}
 {/if}
+
+{link href="TRABAJOS NOMBRE" caption="{if $cv->full_name}{$cv->full_name}{else}[nombre]{/if}" desc="Cambiar nombre" popup="true"}<br/>
 
 {if $cv->profession1}
     {link href="TRABAJOS PROFESION 1" caption="{$cv->profession1_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
@@ -32,15 +28,11 @@
     {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
 {/if}
 <br/>
-{if $cv->province}
-    {$cv->province} {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="editar" desc="m:Provincia[{$provinces}]*"}<br/>
-    {else}
-    {link href="TRABAJOS PROVINCIA" popup="true" desc="Nombre" caption="agregar provincia" desc="m:Provincia[{$provinces}]*"}<br/>
-{/if}
+    {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="{if $cv->province}{$cv->province}{else}[provincia]{/if}" desc="m:Provincia[{$provinces}]*"}<br/>
 {space10}
 
 <!--ABOUT ME-->
-<p align="center">{$cv->description} ({link href="TRABAJOS DESCRIPCION" popup="true" caption="editar" desc="a:Descripci&oacute;n"})</p>
+<p align="center">{link href="TRABAJOS DESCRIPCION" popup="true" caption="{if $cv->description}{$cv->description}{else}[descripci&oacute;n]{/if}" desc="a:Descripci&oacute;n"}</p>
 
 {space10}
 

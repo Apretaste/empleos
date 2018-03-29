@@ -26,6 +26,6 @@
     </tr>
 </table>
 <p align="center">
-{button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true"}
-{button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true"}
+{button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+{button href="TRABAJOS RECLUTAR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
 </p>

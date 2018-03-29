@@ -53,9 +53,26 @@ class Trabajos extends Service
 			return new Response();
 
 		$job = $job[0];
+		$job->username = $this->utils->getUsernameFromEmail($job->email);
 		$response = new Response();
-		$response->createFromTemplate('job_edit.tpl', [
-			'job' => $job
+
+		$tpl = 'job';
+		if ($job->email == $request->email) $tpl = 'job_edit';
+		$response->createFromTemplate("$tpl.tpl", [
+			'job' => $job,
+			'professions' => $this->getProfessionsInline()
+		]);
+
+		return $response;
+	}
+
+	public function _ofertas($request){
+
+		$jobs = Connection::query("SELECT * FROM _trabajos_job WHERE email = '{$request->email}';");
+
+		$response = new Response();
+		$response->createFromTemplate('jobs_list.tpl', [
+			"jobs" => $jobs
 		]);
 
 		return $response;
@@ -100,7 +117,11 @@ class Trabajos extends Service
 				'titulo' => 'title',
 				'compania' => 'company',
 				'escuela' => 'school',
-				'graduacion' => 'graduation_year'
+				'graduacion' => 'graduation_year',
+				'detalles' => 'details',
+				'descripcion' => 'description',
+				'buscando' => 'looking_for_profession',
+				'details' => 'detalles'
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
@@ -127,14 +148,34 @@ class Trabajos extends Service
 		$response = new Response();
 		$profile = $this->utils->getPerson($request->email);
 		$cv = $this->getCV($request->email);
-
+		$cv->province = str_replace('_', ' ', $cv->province);
 		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
 			'cv' => $cv,
-			'professions' => implode(',', $professions),
+			'professions' =>$this->getProfessionsInline(),
 			'provinces' => str_replace('_',' ', implode(',',['PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD']))
 		]);
 
+		return $response;
+	}
+
+	public function _perfil($request)
+	{
+		$username = trim($request->query);
+
+		$email = $this->utils->getEmailFromUsername($username);
+
+		if ($email === false)
+			return new Response();
+
+		$cv = $this->getCV($email);
+		$profile = $this->utils->getPerson($email);
+
+		$response = new Response();
+		$response->createFromTemplate('profile.tpl', [
+			'cv' => $cv,
+			'profile' => $profile
+		]);
 		return $response;
 	}
 
@@ -168,9 +209,9 @@ class Trabajos extends Service
 		$q = trim($request->query);
 		$data = explode(' ', $q);
 		$year = intval($data[0]);
-		$school = trim(substr($q, strlen($year)));
+		$title = trim(substr($q, strlen($year)));
 
-		$q = "INSERT INTO _trabajos_cv_education (email, graduation_year, school) VALUES ('{$request->email}','{$year}', '{$school}');";
+		$q = "INSERT INTO _trabajos_cv_education (email, graduation_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
 		Connection::query($q);
 		$request->query = '';
 		return $this->_editar($request);
@@ -256,6 +297,74 @@ class Trabajos extends Service
 		return $this->_editar($request);
 	}
 
+	public function _buscar($request)
+	{
+		$words = $this->getWords($request->query);
+		$where = '';
+		foreach($words as $w)
+			$where .= "concat(coalesce(title,''), ' ', coalesce(details,''), ' ', coalesce(looking_for_profession,''), ' ', coalesce(contract,''), ' ',coalesce(job_level,'')) LIKE '%{$w}%' AND ";
+
+		$where .= 'TRUE';
+
+		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days FROM _trabajos_job WHERE $where;";
+
+		$jobs = Connection::query($q);
+		$response = new Response();
+		$response->createFromTemplate('search_job.tpl', [
+			'jobs' => $jobs
+		]);
+		return $response;
+	}
+
+	public function _reclutar($request)
+	{
+		$r = Connection::query("SELECT * FROM _trabajos_cv_professions");
+		$professions = [];
+		foreach ($r as $prof)
+			$professions[$prof->id] = $prof->profession;
+		$words = $this->getWords($request->query);
+		$where = '';
+
+		foreach($words as $w)
+			$where .= "concat(coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession1),''), 
+					     ' ', coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession2),''), 
+					     ' ', coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession3),''), 
+					     ' ', coalesce(description, ''), ' ',coalesce(province,'')) LIKE '%{$w}%' AND ";
+		$where .= 'TRUE';
+
+
+
+		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(concat((SELECT min(start_year) FROM _trabajos_cv_experience WHERE _trabajos_cv_experience.email = _trabajos_cv.email),'-01-01'), CURRENT_DATE)) /365 as experience_years FROM _trabajos_cv WHERE $where;";
+		//echo $q;
+		$cvs = Connection::query($q);
+
+		foreach ($cvs as $k => $cv)
+		{
+			$profile = $this->utils->getPerson($cv->email);
+			$cvs[$k]->profile = $profile;
+			$cvs[$k]->experience_years = intval($cvs[$k]->experience_years);
+		}
+
+		$response = new Response();
+		$response->createFromTemplate('search_cv.tpl', [
+			'cvs' => $cvs
+		]);
+		return $response;
+	}
+
+	private function getWords($text)
+	{
+		$q = trim(strtolower($text));
+		$words = [];
+		$q = explode(' ', $q);
+		foreach ($q as $w)
+		{
+			$w = trim($w);
+			if ($w != '')
+				$words[$w] = $w;
+		}
+		return $words;
+	}
 	private function getCV($email)
 	{
 		$profile = $this->utils->getPerson($email);
@@ -288,10 +397,10 @@ class Trabajos extends Service
 		foreach ($default_cv as $prop => $value)
 			if (!isset($cv->$prop)) $cv->$prop = $value;
 
-		$experiencies = Connection::query("SELECT * FROM _trabajos_cv_experience WHERE email = '$email';");
-		$educations = Connection::query("SELECT * FROM _trabajos_cv_education WHERE email = '$email';");
-		$skills = Connection::query("SELECT * FROM _trabajos_cv_skills WHERE email = '$email';");
-		$langs = Connection::query("SELECT * FROM _trabajos_cv_langs WHERE email = '$email';");
+		$experiencies = Connection::query("SELECT * FROM _trabajos_cv_experience WHERE email = '$email' ORDER BY start_year;");
+		$educations = Connection::query("SELECT * FROM _trabajos_cv_education WHERE email = '$email' ORDER BY graduation_year;");
+		$skills = Connection::query("SELECT * FROM _trabajos_cv_skills WHERE email = '$email' ORDER BY skill;");
+		$langs = Connection::query("SELECT * FROM _trabajos_cv_langs WHERE email = '$email' ORDER BY lang;");
 
 		$cv->experiences = $experiencies;
 		$cv->educations = $educations;
@@ -309,5 +418,15 @@ class Trabajos extends Service
 	public function createCV($email)
 	{
 		Connection::query("INSERT IGNORE INTO _trabajos_cv (email) VALUES ('$email');");
+	}
+
+	private function getProfessionsInline()
+	{
+		$professions = [];
+		$r = Connection::query("SELECT * FROM _trabajos_cv_professions;");
+		foreach($r as $item)
+			$professions[] = $item->profession;
+
+		return implode(',', $professions);
 	}
 }

@@ -61,7 +61,7 @@ idiomas - 10%
 	fluido:5%, Conversacional:3%, Escrito:2%
 
 */
-
+DROP TABLE IF EXISTS _trabajos_cv_professions;
 CREATE TABLE _trabajos_cv_professions (
   id int(11) auto_increment not null primary key,
   profession varchar(255)
@@ -71,6 +71,7 @@ INSERT INTO _trabajos_cv_professions (profession) VALUES
   ('Dise&ntilde;ador'),('Profesor'), ('Programador'), ('Escritor'), ('Fisiologi&iacute;a'), ('Cocinero'),
   ('Belleza'), ('Traductor'), ('Fisiculturista'), ('Entrenador'), ('Medicina'), ('Veterinareo'), ('Multimedia');
 
+DROP TABLE IF EXISTS _trabajos_cv;
 CREATE TABLE _trabajos_cv (
   email varchar(255) not null primary key,
   full_name varchar(255),
@@ -78,7 +79,8 @@ CREATE TABLE _trabajos_cv (
   profession2 int(11),
   profession3 int(11),
   description varchar(300),
-  province enum('PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD')
+  province enum('PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD'),
+  views int(11) default 0
 );
 
 DROP TABLE IF EXISTS _trabajos_cv_education;
@@ -120,7 +122,7 @@ CREATE TABLE _trabajos_job (
   id int(11) auto_increment not null primary key,
   email varchar(255) not null,
   title varchar(80) not null,
-  deatils varchar(500),
+  details varchar(500),
   name varchar(50),
   phone varchar(20),
   looking_for_profession int(11),
