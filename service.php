@@ -59,7 +59,8 @@ class Trabajos extends Service
 		return $response;
 	}
 
-	public function _ofertas($request){
+	public function _ofertas($request)
+	{
 
 		$jobs = Connection::query("SELECT * FROM _trabajos_job WHERE email = '{$request->email}';");
 
@@ -82,8 +83,7 @@ class Trabajos extends Service
 	public function _editar($request)
 	{
 		$q = trim($request->query);
-		if ($q != '')
-		{
+		if ($q != '') {
 			$parts = explode(' ', $q);
 			$tabla = trim(strtolower($parts[0]));
 			$id = trim(strtolower($parts[1]));
@@ -117,12 +117,11 @@ class Trabajos extends Service
 				'details' => 'detalles'
 			];
 
-			if (isset($map[$tabla]) && isset($fieldMap[$campo]))
-			{
+			if (isset($map[$tabla]) && isset($fieldMap[$campo])) {
 				$valor = Connection::escape($valor);
 				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}' WHERE id = $id;");
 
-				switch($tabla) {
+				switch ($tabla) {
 					case 'oferta':
 						$request->query = $id;
 						return $this->_trabajo($request);
@@ -135,7 +134,7 @@ class Trabajos extends Service
 
 		$professions = [];
 		$r = Connection::query("SELECT * FROM _trabajos_cv_professions;");
-		foreach($r as $item)
+		foreach ($r as $item)
 			$professions[] = $item->profession;
 
 		$response = new Response();
@@ -145,8 +144,8 @@ class Trabajos extends Service
 		$response->createFromTemplate('profile_edit.tpl', [
 			'profile' => $profile,
 			'cv' => $cv,
-			'professions' =>$this->getProfessionsInline(),
-			'provinces' => str_replace('_',' ', implode(',',['PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANCTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD']))
+			'professions' => $this->getProfessionsInline(),
+			'provinces' => str_replace('_', ' ', implode(',', ['PINAR_DEL_RIO', 'LA_HABANA', 'ARTEMISA', 'MAYABEQUE', 'MATANZAS', 'VILLA_CLARA', 'CIENFUEGOS', 'SANCTI_SPIRITUS', 'CIEGO_DE_AVILA', 'CAMAGUEY', 'LAS_TUNAS', 'HOLGUIN', 'GRANMA', 'SANTIAGO_DE_CUBA', 'GUANTANAMO', 'ISLA_DE_LA_JUVENTUD']))
 		]);
 
 		return $response;
@@ -191,9 +190,9 @@ class Trabajos extends Service
 	public function _profesion($request)
 	{
 		$q = trim(ucfirst($request->query));
-		$p = strpos($q,' ');
+		$p = strpos($q, ' ');
 		$n = trim(substr($q, 0, $p));
-		$q = trim(substr($q,$p));
+		$q = trim(substr($q, $p));
 		$q = strtoupper($q);
 		Connection::query("UPDATE _trabajos_cv SET profession{$n} = (SELECT id FROM _trabajos_cv_professions WHERE profession ='$q');");
 		$request->query = '';
@@ -234,8 +233,7 @@ class Trabajos extends Service
 	public function _habilidad($request)
 	{
 		$q = trim($request->query);
-		if ($q != '')
-		{
+		if ($q != '') {
 			$q = "INSERT INTO _trabajos_cv_skills (email, skill) VALUES ('{$request->email}','{$q}');";
 			Connection::query($q);
 			$request->query = '';
@@ -287,7 +285,7 @@ class Trabajos extends Service
 
 	public function _provincia($request)
 	{
-		$prov = str_replace(' ','_', strtoupper(trim($request->query)));
+		$prov = str_replace(' ', '_', strtoupper(trim($request->query)));
 		Connection::query("UPDATE _trabajos_cv SET province = '$prov' WHERE email = '{$request->email}';");
 		$request->query = '';
 		return $this->_editar($request);
@@ -297,7 +295,7 @@ class Trabajos extends Service
 	{
 		$words = $this->getWords($request->query);
 		$where = '';
-		foreach($words as $w)
+		foreach ($words as $w)
 			$where .= "concat(coalesce(title,''), ' ', coalesce(details,''), ' ', coalesce(looking_for_profession,''), ' ', coalesce(contract,''), ' ',coalesce(job_level,'')) LIKE '%{$w}%' AND ";
 
 		$where .= 'TRUE';
@@ -321,7 +319,7 @@ class Trabajos extends Service
 		$words = $this->getWords($request->query);
 		$where = '';
 
-		foreach($words as $w)
+		foreach ($words as $w)
 			$where .= "concat(coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession1),''), 
 					     ' ', coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession2),''), 
 					     ' ', coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession3),''), 
@@ -329,13 +327,11 @@ class Trabajos extends Service
 		$where .= 'TRUE';
 
 
-
 		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(concat((SELECT min(start_year) FROM _trabajos_cv_experience WHERE _trabajos_cv_experience.email = _trabajos_cv.email),'-01-01'), CURRENT_DATE)) /365 as experience_years FROM _trabajos_cv WHERE $where;";
 		//echo $q;
 		$cvs = Connection::query($q);
 
-		foreach ($cvs as $k => $cv)
-		{
+		foreach ($cvs as $k => $cv) {
 			$profile = $this->utils->getPerson($cv->email);
 			$cvs[$k]->profile = $profile;
 			$cvs[$k]->experience_years = intval($cvs[$k]->experience_years);
@@ -353,14 +349,14 @@ class Trabajos extends Service
 		$q = trim(strtolower($text));
 		$words = [];
 		$q = explode(' ', $q);
-		foreach ($q as $w)
-		{
+		foreach ($q as $w) {
 			$w = trim($w);
 			if ($w != '')
 				$words[$w] = $w;
 		}
 		return $words;
 	}
+
 	private function getCV($email)
 	{
 		$profile = $this->utils->getPerson($email);
@@ -410,16 +406,16 @@ class Trabajos extends Service
 		if (!empty($cv->profession1) || !empty($cv->profession2) || !empty($cv->profession3))
 			$force += 20;
 
-		if (count($cv->educations)>0)
+		if (count($cv->educations) > 0)
 			$force += 20;
 
-		if (count($cv->experiencies)>0)
+		if (count($cv->experiences) > 0)
 			$force += 20;
 
-		if (count($cv->skills)>0)
+		if (count($cv->skills) > 0)
 			$force += 20;
 
-		if (count($cv->langs)>0)
+		if (count($cv->langs) > 0)
 			$force += 20;
 
 		$cv->force = $force;
@@ -436,7 +432,7 @@ class Trabajos extends Service
 	{
 		$professions = [];
 		$r = Connection::query("SELECT * FROM _trabajos_cv_professions;");
-		foreach($r as $item)
+		foreach ($r as $item)
 			$professions[] = $item->profession;
 
 		return implode(',', $professions);
