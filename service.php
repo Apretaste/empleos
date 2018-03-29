@@ -34,19 +34,26 @@ class Trabajos extends Service
 		$title = trim($request->query);
 		$id = Connection::query("INSERT INTO _trabajos_job (email, title) VALUES ('{$request->email}','{$title}');");
 		$request->query = $id;
-		var_dump($id);
 		return $this->_trabajo($request);
 	}
 
+	/**
+	 * @param $request
+	 * @return Response
+	 */
 	public function _trabajo($request)
 	{
 		$id = intval(trim($request->query));
-		$job = Connection::query("SELECT * FROM _trabajos_job WHERE id = '$id';");
+		$job = Connection::query("SELECT *, 
+					(SELECT profession FROM _trabajos_cv_professions 
+						WHERE _trabajos_cv_professions.id = _trabajos_job.looking_for_profession) as looking 
+					FROM _trabajos_job WHERE id = '$id';");
 
 		if (!isset($job[0]))
 			return new Response();
 
 		$job = $job[0];
+
 		$job->username = $this->utils->getUsernameFromEmail($job->email);
 		$response = new Response();
 
