@@ -122,8 +122,17 @@ class Trabajos extends Service
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo])) {
-				$valor = Connection::escape($valor);
-				Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}' WHERE id = $id;");
+
+				switch($campo)
+				{
+					case 'buscando':
+						Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = (SELECT id from _trabajos_cv_professions WHERE profession = '{$valor}') WHERE id = $id;");
+						break;
+					default:
+						$valor = Connection::escape($valor);
+						Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = '{$valor}' WHERE id = $id;");
+						break;
+				}
 
 				switch ($tabla) {
 					case 'oferta':
