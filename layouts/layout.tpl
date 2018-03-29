@@ -56,8 +56,8 @@
 				<tr>
 					<td align="center" valign="middle">
 						<div style="font-family:Times; font-size:42px; font-weight:bold; margin:15px 0px; color:black;">
-							TRABAJOS
-							<span style="color:white; background-color:#C11414; padding:3px;">ONLINE</span>
+							RED
+							<span style="color:white; background-color:#C11414; padding:3px;">TRABAJOS</span>
 						</div>
 					</td>
 				</tr>
