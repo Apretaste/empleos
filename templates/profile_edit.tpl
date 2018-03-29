@@ -32,7 +32,7 @@
 {space10}
 
 <!--ABOUT ME-->
-<p align="center">{link href="TRABAJOS DESCRIPCION" popup="true" caption="{if $cv->description}{$cv->description}{else}[descripci&oacute;n]{/if}" desc="a:Descripci&oacute;n"}</p>
+<p align="center">{link href="TRABAJOS DESCRIPCION" popup="true" caption="{if $cv->description}{$cv->description}{else}[descripci&oacute;n]{/if}" desc="a:Descripci&oacute;n (hasta 255 caracteres)"}</p>
 
 {space10}
 
