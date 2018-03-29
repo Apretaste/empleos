@@ -1,6 +1,6 @@
 <service>
     <serviceName>trabajos</serviceName>
     <serviceDescription>Publicar tu curriculum vitae. Buscar y publicar ofertas de trabajo</serviceDescription>
-    <creatorEmail>kumahavana@gmail.com</creatorEmail>
+    <creatorEmail>intership@apretaste.com</creatorEmail>
     <serviceCategory>negocios</serviceCategory>
 </service>
