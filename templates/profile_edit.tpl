@@ -46,21 +46,16 @@
 {space10}
 
 <h1>Educaci&oacute;n</h1>
-
+<table width="100%">
 {foreach item=item from=$cv->educations}
-    {link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="{$item->graduation_year}" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"} -
-    {if $item->title} {$item->title} {else} agregar t&iacute;tulo {/if}
-    {link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="&#x270F;" popup="true" desc="t:T&iacute;tulo"}
-
-    {if $item->school}
-        {link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA" popup="true" desc="Escuela" caption="{$item->school}"} -
-        {else}
-        {link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA {$item->school}" popup="true" caption="[escuela]"}
-    {/if}
-
-    {link href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}<br/>
+    <tr>
+        <td>{$item->graduation_year} {link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="&#10000;" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"}</td>
+        <td>{if $item->title} {$item->title} {else} agregar t&iacute;tulo {/if} {link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="&#10000;" popup="true" desc="t:T&iacute;tulo"}</td>
+        <td>{if $item->school} {$item->school} {else} agregar escuela {/if} {link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA" popup="true" desc="Escuela" caption="&#10000;"}</td>
+        <td>{button size="small" href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="x"}</td>
+    </tr>
 {/foreach}
-
+</table>
 {button caption="Agregar" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}
 
 {space10}
