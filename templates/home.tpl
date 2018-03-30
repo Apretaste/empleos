@@ -18,10 +18,9 @@
 
             <br/>{link href="CHAT" caption="{$cv->messages_count} mensajes"}</td>
         <td>
+        <td align="center" valign="top">
             <font size="20">&#x1F4AC;</font><br/>
             {link href="TRABAJOS OFERTAS" caption="Mis ofertas de empleo ({$cv->jobs})"}<br/>
-
-
         </td>
     </tr>
 </table>
