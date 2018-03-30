@@ -87,7 +87,7 @@
 </p>
 
 {space10}
-<h2>Idiomas {link caption="+" href="TRABAJOS IDIOMA" popup="true" desc="t:idioma*|m:nivel[Nativo,Fluido,Conversacional,Escrito]*"}</h2>
+<h2>Idiomas {link caption="+" href="TRABAJOS IDIOMA" popup="true" desc="m:idioma[ESPA&Ntilde;OL,INGLES,FRANCES,ITALIANO,RUSO,CHINO,JAPONES]*|m:nivel[Nativo,Fluido,Conversacional,Escrito]*"}</h2>
 {foreach item=item from=$cv->langs}
     <p align="center">{$item->lang}, {$item->lang_level} {link href="TRABAJOS QUITAR IDIOMA {$item->id}" caption="x"}</p>
 {/foreach}
