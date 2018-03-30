@@ -18,10 +18,9 @@
 
             <br/>{link href="CHAT" caption="{$cv->messages_count} mensajes"}</td>
         <td>
-        <td>
             <font size="20">&#x1F4AC;</font><br/>
-            {link href="TRABAJOS OFERTAS" caption="Mis trabajos publicados ({$cv->jobs})"}<br/>
-            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="&#x2795;" desc="t:T&iacute;tulo*"}</td>
+            {link href="TRABAJOS OFERTAS" caption="Mis ofertas de empleo ({$cv->jobs})"}<br/>
+
 
         </td>
     </tr>

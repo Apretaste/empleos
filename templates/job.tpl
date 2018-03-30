@@ -20,5 +20,5 @@
 {space10}
 <p align="center">
     {button href="TRABAJOS" caption="INICIO"}
-    {button href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
+    {button href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR" popup="true"}
 </p>

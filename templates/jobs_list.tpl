@@ -8,3 +8,4 @@
     {/foreach}
 </table>
 
+{button href="TRABAJOS AGREGAR" popup="true" caption="&#x2795;" desc="t:T&iacute;tulo*"}</td>
