@@ -1,26 +1,26 @@
-<p align="center">
-    Hola <br/>
-    @{$username}
-</p>
+<h1>Hola <i>@{$username}</i></h1>
 
 <table cellspacing="0" cellpadding="10" border="0" width="100%">
     <tr>
-        <td>Fuerza de tu curr&iacute;culo
-        <br/>{link href="TRABAJOS EDITAR" caption="editar tu curr&iacute;culo"}</td>
-        <td>{$cv->force}%</td>
-    </tr>
-    <tr style="background-color:#F2F2F2;">
-        <td>Veces que han revisado tu curr&iacute;culo</td>
-        <td>{$cv->views}</td>
+        <td align="center" valign="top">
+            <font size="20">&#x1F4C4;</font><br/>
+            <big>{$cv->force}%</big>
+        <br/>{link href="TRABAJOS EDITAR" caption="Editar curr&iacute;culo"}
+        </td>
+        <td align="center" valign="top">
+            <font size="20">&#x1F4DD;</font><br/>
+            Tu CV ha sido visto {$cv->views} veces<br/>
+        </td>
     </tr>
     <tr>
-        <td>Mensajes recibidos
-            <br/>{link href="CHAT" caption="ver mensajes"}</td>
-        <td>{$cv->messages_count}</td>
-    </tr>
-    <tr style="background-color:#F2F2F2;">
-        <td>Mis trabajos publicados
-            <br/>{link href="TRABAJOS OFERTAS" caption="ver trabajos"}
+        <td align="center" valign="top">
+            <font size="20">&#x1F4AC;</font><br/>
+
+            <br/>{link href="CHAT" caption="{$cv->messages_count} mensajes"}</td>
+        <td>
+        <td>
+            <font size="20">&#x1F4AC;</font><br/>
+            {link href="TRABAJOS OFERTAS" caption="Mis trabajos publicados"}
             <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="t:T&iacute;tulo*"}</td>
         <td>{$cv->jobs}</td>
     </tr>

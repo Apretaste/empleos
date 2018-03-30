@@ -60,8 +60,8 @@
 					<!--notifications & profile-->
 					<td align="right" class="emoji" valign="middle" style="padding:10px 25px 0px 0px;">
                         &nbsp;
-                        {link href="TRABAJOS EDITAR" caption="👤" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
-                        {link href="CHAT" caption="💬" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
+                        {link href="TRABAJOS EDITAR" caption="&#x1F4C4;" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
+                        {link href="CHAT" caption="&#x1F4AC;" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
                         {link href="TRABAJOS OFERTAS" caption="&#x1F4CB;" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;
 					</td>
 				</tr>

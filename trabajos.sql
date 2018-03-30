@@ -75,8 +75,19 @@ CREATE TABLE _trabajos_cv_professions (
 );
 
 INSERT INTO _trabajos_cv_professions (profession) VALUES
-  ('Dise&ntilde;ador'),('Profesor'), ('Programador'), ('Escritor'), ('Fisiologi&iacute;a'), ('Cocinero'),
-  ('Belleza'), ('Traductor'), ('Fisiculturista'), ('Entrenador'), ('Medicina'), ('Veterinareo'), ('Multimedia');
+  ('Dise&ntilde;ador'),
+  ('Profesor'),
+  ('Programador'),
+  ('Escritor'),
+  ('Fisiologi&iacute;a'),
+  ('Cocinero'),
+  ('Belleza'),
+  ('Traductor'),
+  ('Fisiculturista'),
+  ('Entrenador'),
+  ('Medicina'),
+  ('Veterinareo'),
+  ('Multimedia');
 
 DROP TABLE IF EXISTS _trabajos_cv;
 CREATE TABLE _trabajos_cv (

@@ -434,16 +434,16 @@ class Trabajos extends Service
 			$force += 20;
 
 		if (count($cv->educations) > 0)
-			$force += 20;
+			$force += 10;
 
 		if (count($cv->experiences) > 0)
 			$force += 20;
 
 		if (count($cv->skills) > 0)
-			$force += 20;
+			$force += 10;
 
 		if (count($cv->langs) > 0)
-			$force += 20;
+			$force += 10;
 
 		$cv->force = $force;
 
