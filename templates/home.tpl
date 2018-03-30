@@ -20,9 +20,10 @@
         <td>
         <td>
             <font size="20">&#x1F4AC;</font><br/>
-            {link href="TRABAJOS OFERTAS" caption="Mis trabajos publicados"}
-            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="publicar trabajo" desc="t:T&iacute;tulo*"}</td>
-        <td>{$cv->jobs}</td>
+            {link href="TRABAJOS OFERTAS" caption="Mis trabajos publicados ({$cv->jobs})"}<br/>
+            <br/>{link href="TRABAJOS AGREGAR" popup="true" caption="&#x2795;" desc="t:T&iacute;tulo*"}</td>
+
+        </td>
     </tr>
 </table>
 <p align="center">
