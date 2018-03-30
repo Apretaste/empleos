@@ -8,7 +8,7 @@
 <h2 align="center">Detalles</h2>
 <p align="center">
     <b>Se busca:</b>
-    {link href="TRABAJOS EDITAR OFERTA {$job->id} BUSCANDO" caption="{if $job->looking_for_profession}{$job->looking_for_profession}{else}[buscando profesional]{/if}" popup="true" desc="m:Qu&eacute; profesional buscas?[{$professions}]"}<br/>
+    {link href="TRABAJOS EDITAR OFERTA {$job->id} BUSCANDO" caption="{if $job->looking_for_profession}{$job->looking}{else}[buscando profesional]{/if}" popup="true" desc="m:Qu&eacute; profesional buscas?[{$professions}]"}<br/>
 </p>
 
 <h2 align="center">Contacto</h2>

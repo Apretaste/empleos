@@ -55,7 +55,14 @@
 				<!--logo-->
 				<tr>
 					<td valign="middle" style="padding-left:25px;">
-                        {link href="TRABAJOS" caption="<i><b>T</b></i>" style="color:#00ff00; font-size:40px; font-family:Times; text-decoration: none;"}
+                        {link href="TRABAJOS" caption="<b>TRABAJOS</b>" style="color:#000000; font-size:40px; font-family:Times; text-decoration: none;"}
+					</td>
+					<!--notifications & profile-->
+					<td align="right" class="emoji" valign="middle" style="padding:10px 25px 0px 0px;">
+                        &nbsp;
+                        {link href="TRABAJOS EDITAR" caption="👤" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
+                        {link href="CHAT" caption="💬" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
+                        {link href="TRABAJOS OFERTAS" caption="📜" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;
 					</td>
 				</tr>
 
