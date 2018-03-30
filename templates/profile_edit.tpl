@@ -49,7 +49,7 @@
 
 {foreach item=item from=$cv->educations}
     {link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="{$item->graduation_year}" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"} -
-    {if $item->title} {$item->title} {else} agregar t&iacute;tulo {/?}
+    {if $item->title} {$item->title} {else} agregar t&iacute;tulo {/if}
     {link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="&#x270F;" popup="true" desc="t:T&iacute;tulo"}
 
     {if $item->school}
