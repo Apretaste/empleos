@@ -1,34 +1,43 @@
-<center>
-<!--PROFILE PICTURE-->
-{if $profile->picture}
-    <table cellpadding="3"><tr><td bgcolor="#202020">
-                {img src="{$profile->picture_internal}" alt="Picture" width="300"}
-            </td></tr></table>
-{else}
-    {noimage width="300" height="200" text="Tristemente ...<br/>Sin foto de perfil :'-("}
-{/if}
+<table width="100%">
+    <tr>
+        <td>
+            <!--PROFILE PICTURE-->
+            {if $profile->picture}
+                <table cellpadding="3"><tr><td bgcolor="#202020">
+                            {img src="{$profile->picture_internal}" alt="Picture" width="150"}
+                        </td></tr></table>
+            {else}
+                {noimage width="150" height="75" text="Tristemente ...<br/>Sin foto de perfil :'-("}
+            {/if}
+        </td>
+        <td>
 
-{link href="TRABAJOS NOMBRE" caption="{if $cv->full_name}{$cv->full_name}{else}[nombre]{/if}" desc="Cambiar nombre" popup="true"}<br/>
+            {link href="TRABAJOS NOMBRE" caption="{if $cv->full_name}{$cv->full_name}{else}[nombre]{/if}" desc="Cambiar nombre" popup="true"}<br/>
 
-{if $cv->profession1}
-    {link href="TRABAJOS PROFESION 1" caption="{$cv->profession1_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-    {else}
-    {link href="TRABAJOS PROFESION 1" caption="profesion #1" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-{/if}
+            {if $cv->profession1}
+                {link href="TRABAJOS PROFESION 1" caption="{$cv->profession1_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {else}
+                {button href="TRABAJOS PROFESION 1" caption="profesion #1" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {/if}
 
-{if $cv->profession2}
-    {link href="TRABAJOS PROFESION 2" caption="{$cv->profession2_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-{else}
-    {link href="TRABAJOS PROFESION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-{/if}
+            {if $cv->profession2}
+                {link href="TRABAJOS PROFESION 2" caption="{$cv->profession2_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {else}
+                {link href="TRABAJOS PROFESION 2" caption="profesion #2" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {/if}
 
-{if $cv->profession3}
-    {link href="TRABAJOS PROFESION 3" caption="{$cv->profession3_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-{else}
-    {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
-{/if}
-<br/>
-    {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="{if $cv->province}{$cv->province}{else}[provincia]{/if}" desc="m:Provincia[{$provinces}]*"}<br/>
+            {if $cv->profession3}
+                {link href="TRABAJOS PROFESION 3" caption="{$cv->profession3_title}" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {else}
+                {link href="TRABAJOS PROFESION 3" caption="profesion #3" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}
+            {/if}
+
+            <br/>
+            {link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="{if $cv->province}{$cv->province}{else}[provincia]{/if}" desc="m:Provincia[{$provinces}]*"}<br/>
+
+        </td>
+    </tr>
+</table>
 {space10}
 
 <!--ABOUT ME-->
@@ -36,7 +45,9 @@
 
 {space10}
 
-<h2>Educaci&oacute;n {link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}</h2>
+<h1>Educaci&oacute;n</h1>
+
+{link caption="+" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}
 
 {foreach item=item from=$cv->educations}
     {link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="{$item->graduation_year}" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"} -
@@ -56,7 +67,8 @@
 {/foreach}
 
 {space10}
-<h2>Experiencia {link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}</h2>
+<h1>Experiencia</h1>
+{link caption="+" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}
 
 {foreach item=item from=$cv->experiences}
     {link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="{$item->start_year}" popup="true" desc="n:A&ntilde;o desde"} -
