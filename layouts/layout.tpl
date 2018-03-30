@@ -68,7 +68,7 @@
 
 				<!--main section-->
 				<tr>
-					<td style="padding: 5px 10px 0px 10px;">
+					<td style="padding: 5px 10px 0px 10px;" colspan="3">
 						<div class="background">
 							{include file="$APRETASTE_USER_TEMPLATE"}
 						</div>
