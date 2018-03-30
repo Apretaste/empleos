@@ -54,11 +54,8 @@
 			<table id="container" bgcolor="#F2F2F2" border="0" cellpadding="0" cellspacing="0" valign="top" align="center" width="600">
 				<!--logo-->
 				<tr>
-					<td align="center" valign="middle">
-						<div style="font-family:Times; font-size:42px; font-weight:bold; margin:15px 0px; color:black;">
-							OFERTAS DE
-							<span style="color:white; background-color:navy; padding:3px;">TRABAJO</span>
-						</div>
+					<td valign="middle" style="padding-left:25px;">
+                        {link href="TRABAJOS" caption="<i><b>T</b></i>" style="color:#00ff00; font-size:40px; font-family:Times; text-decoration: none;"}
 					</td>
 				</tr>
 
