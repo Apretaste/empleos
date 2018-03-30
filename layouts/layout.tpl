@@ -62,7 +62,7 @@
                         &nbsp;
                         {link href="TRABAJOS EDITAR" caption="👤" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
                         {link href="CHAT" caption="💬" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;&nbsp;
-                        {link href="TRABAJOS OFERTAS" caption="📜" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;
+                        {link href="TRABAJOS OFERTAS" caption="&#x1F4CB;" style="color:#9E100A; text-decoration: none;"}&nbsp;&nbsp;
 					</td>
 				</tr>
 
