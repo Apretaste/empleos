@@ -55,7 +55,7 @@
 				<!--logo-->
 				<tr>
 					<td valign="middle" style="padding-left:25px;">
-                        {link href="TRABAJOS" caption="<b>TRABAJOS</b>" style="color:#000000; font-size:40px; font-family:Times; text-decoration: none;"}
+                        {link href="TRABAJOS" caption="<b>&#x1F4BC;</b>" style="color:#000000; font-size:40px; font-family:Times; text-decoration: none;"}
 					</td>
 					<!--notifications & profile-->
 					<td align="right" class="emoji" valign="middle" style="padding:10px 25px 0px 0px;">
