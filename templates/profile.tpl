@@ -9,7 +9,9 @@
             {else}
                 {noimage width="200" height="100" text="Tristemente ...<br/>Sin foto de perfil :'-("}
             {/if}
-
+            {if $editMode}
+            {button color="grey" href="PERFIL FOTO" desc="u:Adjunte su foto de perfil*" caption="Cambiar" size="small" wait="false" popup="true"}
+            {/if}
         </td>
         <td valign="top" align="right">
             <h1>{if $cv->full_name}{$cv->full_name}{else}(tu nombre){/if} {if $editMode}{link href="TRABAJOS NOMBRE" caption="&#10000;" desc="Cambiar nombre" popup="true"}{/if}</h1><br/>
@@ -18,8 +20,6 @@
             {if $cv->profession3} {$cv->profession3_title} {else} (profesion #3) {/if} {if $editMode}{link href="TRABAJOS PROFESION 3" caption="&#10000;" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}{/if}
             <br/>
             {if $cv->province}{$cv->province}{else}(provincia){/if} {if $editMode}{link href="TRABAJOS PROVINCIA" popup="true" desc="Provincia" caption="&#10000;" desc="m:Provincia[{$provinces}]*"}<br/>{/if}
-
-
         </td>
     </tr>
     <tr>
@@ -29,9 +29,12 @@
         </td>
     </tr>
 </table>
+{if $showStats}
 {space10}
-
-
+<p align="center">
+    Fuerza de tu curr&iacute;culo: {$cv->force}% &nbsp; Tu CV ha sido visto {$cv->views} veces
+</p>
+{/if}
 {space10}
 <hr/>
 <table width="100%">
@@ -87,7 +90,17 @@
 {space10}
 <hr/>
 <p align="center">
-    {button href="TRABAJOS" caption="INICIO"}
+    {button href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+    {if $employer == 1}
+    {button href="TRABAJOS EDITAR" caption="Editar CV"}
+    {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {/if}
+    {if $employer == 2}
+        {button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button href="TRABAJOS OFERTAS" caption="Mis ofertas"}
+    {/if}
+    {if !$showStats}
     {button href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
+    {/if}
 </p>
 </center>

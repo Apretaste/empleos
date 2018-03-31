@@ -8,6 +8,7 @@
     </p>
 {/foreach}
 
-<center>
-    {button href="TRABAJOS" caption="Inicio"}
-</center>
+<p align="center">
+    {button href="TRABAJOS INICIO" caption="INICIO"} &nbsp;
+
+</p>

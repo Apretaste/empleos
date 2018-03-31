@@ -9,21 +9,19 @@ class Trabajos extends Service
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function _main(Request $request)
+	public function _main(Request $request, $ignoreEmployer = false)
 	{
-		$q = Connection::query("SELECT employer FROM person WHERE email = '{$request->email}';");
 
-		$employer = 0;
-		if (isset($q[0])) $employer = intval($q[0]->employer);
 
-		if ($employer == 1) // employee
+		if (!$ignoreEmployer)
 		{
-			return $this->_empleado($request);
-		}
+			$employer = $this->getEmployer($request->email);
 
-		if ($employer == 2) // employer
-		{
-			return $this->_empleador($request);
+			if ($employer == 1) // employee
+				return $this->_empleado($request);
+
+			if ($employer == 2) // employer
+				return $this->_empleador($request);
 		}
 
 		$response = new Response();
@@ -64,13 +62,12 @@ class Trabajos extends Service
 		$job->username = $this->utils->getUsernameFromEmail($job->email);
 		$response = new Response();
 
-		$tpl = 'job';
-		if ($job->email == $request->email) $tpl = 'job_edit';
-
 		$response->setEmailLayout('layout.tpl');
-		$response->createFromTemplate("$tpl.tpl", [
+		$response->createFromTemplate("job.tpl", [
 			'job' => $job,
-			'professions' => $this->getProfessionsInline()
+			'professions' => $this->getProfessionsInline(),
+			'owner' => $request->email == $job->email,
+			'employer' => $this->getEmployer($request->email)
 		]);
 
 		return $response;
@@ -102,6 +99,7 @@ class Trabajos extends Service
 	{
 		$q = trim($request->query);
 		if ($q != '') {
+
 			$parts = explode(' ', $q);
 			$tabla = trim(strtolower($parts[0]));
 			$id = trim(strtolower($parts[1]));
@@ -132,13 +130,13 @@ class Trabajos extends Service
 				'detalles' => 'details',
 				'descripcion' => 'description',
 				'buscando' => 'looking_for_profession',
-				'details' => 'detalles'
+				'details' => 'detalles',
+				'nombre' => 'name'
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo])) {
 
-				switch($campo)
-				{
+				switch ($campo) {
 					case 'buscando':
 						Connection::query("UPDATE {$map[$tabla]} SET {$fieldMap[$campo]} = (SELECT id from _trabajos_cv_professions WHERE profession = '{$valor}') WHERE id = $id;");
 						break;
@@ -172,8 +170,10 @@ class Trabajos extends Service
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
 			'editMode' => true,
+			'employer' => $this->getEmployer($request->email),
 			'profile' => $profile,
 			'cv' => $cv,
+			'showStats' => true,
 			'professions' => $this->getProfessionsInline(),
 			'provinces' => str_replace('_', ' ', implode(',', ['PINAR_DEL_RIO', 'LA_HABANA', 'ARTEMISA', 'MAYABEQUE', 'MATANZAS', 'VILLA_CLARA', 'CIENFUEGOS', 'SANCTI_SPIRITUS', 'CIEGO_DE_AVILA', 'CAMAGUEY', 'LAS_TUNAS', 'HOLGUIN', 'GRANMA', 'SANTIAGO_DE_CUBA', 'GUANTANAMO', 'ISLA_DE_LA_JUVENTUD']))
 		]);
@@ -184,6 +184,9 @@ class Trabajos extends Service
 	public function _perfil($request)
 	{
 		$username = trim($request->query);
+
+		if ($username == '')
+			$username = $this->utils->getUsernameFromEmail($request->email);
 
 		$email = $this->utils->getEmailFromUsername($username);
 
@@ -201,6 +204,8 @@ class Trabajos extends Service
 		$response->createFromTemplate('profile.tpl', [
 			'editMode' => false,
 			'cv' => $cv,
+			'employer' => $this->getEmployer($request->email),
+			'showStats' => $cv->email == $request->email,
 			'profile' => $profile
 		]);
 
@@ -335,9 +340,12 @@ class Trabajos extends Service
 
 		$where .= 'TRUE';
 
-		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days FROM _trabajos_job WHERE end_date <= CURRENT_DATE $where;";
+		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days,
+			(select profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = _trabajos_job.looking_for_profession ) as looking_for 
+			FROM _trabajos_job WHERE (end_date <= CURRENT_DATE OR end_date IS NULL) AND $where;";
 
 		$jobs = Connection::query($q);
+
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('search_job.tpl', [
@@ -363,14 +371,20 @@ class Trabajos extends Service
 		$where .= 'TRUE';
 
 
-		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(concat((SELECT min(start_year) FROM _trabajos_cv_experience WHERE _trabajos_cv_experience.email = _trabajos_cv.email),'-01-01'), CURRENT_DATE)) /365 as experience_years FROM _trabajos_cv WHERE $where;";
+		$q = "SELECT *, 
+				coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession1),'') as profession1_title,
+				coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession2),'') as profession2_title,
+				coalesce((SELECT profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = profession3),'') as profession3_title,
+				datediff(CURRENT_DATE, coalesce(concat((SELECT min(start_year) FROM _trabajos_cv_experience WHERE _trabajos_cv_experience.email = _trabajos_cv.email),'-01-01'), CURRENT_DATE)) /365 as experience_years FROM _trabajos_cv WHERE $where;";
 		//echo $q;
-		$cvs = Connection::query($q);
-
-		foreach ($cvs as $k => $cv) {
-			$profile = $this->utils->getPerson($cv->email);
-			$cvs[$k]->profile = $profile;
-			$cvs[$k]->experience_years = intval($cvs[$k]->experience_years);
+		$r = Connection::query($q);
+		$cvs = [];
+		foreach ($r as $k => $cv) {
+			if ($cv->email == '') continue;
+			$cv->profile = $this->getProfile($cv->email, $request);
+			$cv->experience_years = intval($cv->experience_years);
+			$cv->province = ucwords(strtolower(str_replace('_', ' ', $cv->province)));
+			$cvs[$k] = $cv;
 		}
 
 		$response = new Response();
@@ -503,6 +517,8 @@ class Trabajos extends Service
 	{
 		Connection::query("UPDATE person SET employer = 2 WHERE email = '{$request->email}';");
 
+		return $this->_ofertas($request);
+/*
 		$cv = $this->getCV($request->email);
 
 		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
@@ -511,6 +527,7 @@ class Trabajos extends Service
 		$r = Connection::query("SELECT count(*) as total FROM _trabajos_cv WHERE email = '{$request->email}';");
 		$cv->jobs = $r[0]->total * 1;
 
+
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('home_employer.tpl', [
@@ -518,7 +535,7 @@ class Trabajos extends Service
 			"cv" => $cv
 		]);
 
-		return $response;
+		return $response;*/
 	}
 
 	private function getProfile($email, $request)
@@ -531,5 +548,18 @@ class Trabajos extends Service
 		$profile = $social->prepareUserProfile($person[0], $request->lang);
 
 		return $profile;
+	}
+
+	public function _inicio($request)
+	{
+		return $this->_main($request, true);
+	}
+
+	private function getEmployer($email)
+	{
+		$q = Connection::query("SELECT employer FROM person WHERE email = '{$email}';");
+		$employer = 0;
+		if (isset($q[0])) $employer = intval($q[0]->employer);
+		return $employer;
 	}
 }

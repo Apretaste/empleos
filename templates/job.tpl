@@ -1,24 +1,30 @@
-<h1 align="center">Oferta de empleo</h1>
-
-<p align="center">
-    <b>{$job->title}</b><br/>
-    {$job->details}
+<h1>{$job->title} {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} TITULO" caption="&#10000;" desc="t:T&iacute;tulo" popup="true"}{/if}</b></h1>
+<p align="justify">
+    {if $job->details}{$job->details}{else}[descripci&oacute;n]{/if}
+    {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} DETALLES" caption="&#10000;" desc="a:Descripci&oacute;n" popup="true"}{/if}
 </p>
-
-<h2 align="center">Detalles</h2>
-<p align="center">
-    <b>Se busca:</b>
-    {$job->looking_for_profession}<br/>
-</p>
-
-<h2 align="center">Contacto</h2>
-<p align="center">
-    {$job->name}<br/>
-    {$job->phone}
+<p align="left">
+    <b>Buscando:</b>
+    {if $job->looking_for_profession}{$job->looking}{else}(buscando profesional){/if}
+    {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} BUSCANDO" caption="&#10000;" popup="true" desc="m:Qu&eacute; profesional buscas?[{$professions}]"}{/if}
+    {separator}
+   {if $job->name}{$job->name}{else}(nombre){/if}  {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} NOMBRE" caption="&#10000;" popup="true"}{/if}
+    {separator}
+    {if $job->phone}{$job->phone}{else}(tel&eacute;fono){/if} {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} TELEFONO" caption="&#10000;" popup="true"}{/if}
 </p>
 
 {space10}
 <p align="center">
-    {button href="TRABAJOS" caption="INICIO"}
-    {button href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR" popup="true"}
+    {button href="TRABAJOS INICIO" caption="Inicio"}
+    {if $employer == 1}
+        {button href="TRABAJOS EDITAR" caption="Editar CV"}
+        {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {/if}
+    {if $employer == 2}
+        {button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button href="TRABAJOS OFERTAS" caption="Mis ofertas"}
+    {/if}
+    {if !$owner}
+        {button href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="Contactar"}
+    {/if}
 </p>

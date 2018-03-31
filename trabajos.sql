@@ -131,7 +131,7 @@ DROP TABLE IF EXISTS _trabajos_cv_langs;
 CREATE TABLE _trabajos_cv_langs (
   id int(11) auto_increment not null primary key,
   email varchar(255) not null,
-  lang enum ('ESPA&Ntilde;OL', 'INGLES', 'FRANCES', 'ITALIANO', 'RUSO', 'CHINO', 'JAPONES'),
+  lang enum ('ESPANOL', 'INGLES', 'FRANCES', 'ITALIANO', 'RUSO', 'CHINO', 'JAPONES'),
   lang_level enum('NATIVO','FLUIDO','CONVERSACIONAL','ESCRITO')
 );
 
