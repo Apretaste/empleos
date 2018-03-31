@@ -4,10 +4,10 @@
             <!--PROFILE PICTURE-->
             {if $profile->picture}
                 <table cellpadding="3"><tr><td bgcolor="#202020">
-                            {img src="{$profile->picture_internal}" alt="Picture" width="200"}
+                            {img src="{$profile->picture_internal}" alt="Picture" width="100"}
                         </td></tr></table>
             {else}
-                {noimage width="200" height="100" text="Tristemente ...<br/>Sin foto de perfil :'-("}
+                {noimage width="100" height="50" text="Tristemente ...<br/>Sin foto de perfil :'-("}
             {/if}
             {if $editMode}
             {button color="grey" href="PERFIL FOTO" desc="u:Adjunte su foto de perfil*" caption="Cambiar" size="small" wait="false" popup="true"}
