@@ -14,6 +14,6 @@
 {space10}
 <p align="center">
     {button size="small" href="TRABAJOS" caption="Atr&aacute;s"}
-    {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {button size="small" href="TRABAJOS BUSCAR" caption="Empleos" popup="true" desc="t:Buscar empleo"}
     {button size="small" href="TRABAJOS PERFIL" caption="Mi perfil" }
 </p>

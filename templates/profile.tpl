@@ -39,7 +39,7 @@
 <hr/>
 <table width="100%">
     <tr>
-        <td colspan="3"><h1>Educaci&oacute;n</h1></td>
+        <td colspan="3"><h2>Educaci&oacute;n</h2></td>
         <td align="right">{if $editMode}{button color="green" size="small" caption="agregar" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}{/if}</td>
     </tr>
     {foreach item=item from=$cv->educations}
@@ -55,7 +55,7 @@
 {space10}
 <hr/>
 <table width="100%">
-    <tr><td colspan="4"><h1>Experiencia</h1></td><td align="right">{if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}{/if}</td></tr>
+    <tr><td colspan="4"><h2>Experiencia</h2></td><td align="right">{if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}{/if}</td></tr>
     {foreach item=item from=$cv->experiences}
         <tr>
             <td>{if $item->start_year}{$item->start_year}{else}(desde){/if} {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="&#10000;" popup="true" desc="n:A&ntilde;o desde"}{/if}</td>
@@ -70,7 +70,7 @@
 {space10}
 <hr/>
 <table width="100%">
-    <tr><td colspan="3"><h1>Habilidades</h1></td><td align="right">{if $editMode}{button color="green" caption="agregar" size="small" href="TRABAJOS HABILIDAD" popup="true" desc="Habilidad"}{/if}</td></tr>
+    <tr><td colspan="3"><h2>Habilidades</h2></td><td align="right">{if $editMode}{button color="green" caption="agregar" size="small" href="TRABAJOS HABILIDAD" popup="true" desc="Habilidad"}{/if}</td></tr>
     {foreach item=item from=$cv->skills}
         <tr><td colspan="3">{$item->skill}</td><td align="right">{if $editMode}{button size="small" color="grey" href="TRABAJOS QUITAR HABILIDAD {$item->id}" caption="quitar"}{/if}</td></tr>
     {/foreach}
@@ -79,7 +79,7 @@
 {space10}
 <hr/>
 <table width="100%">
-    <tr><td colspan="2"><h1>Idiomas</h1></td>
+    <tr><td colspan="2"><h2>Idiomas</h2></td>
         <td align="right"> {if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS IDIOMA" popup="true" desc="m:idioma[ESPA&Ntilde;OL,INGLES,FRANCES,ITALIANO,RUSO,CHINO,JAPONES]*|m:nivel[Nativo,Fluido,Conversacional,Escrito]*"}{/if}</td></tr>
     {foreach item=item from=$cv->langs}
     <tr><td>{$item->lang}</td><td>{$item->lang_level}</td>
@@ -96,7 +96,7 @@
     {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
     {/if}
     {if $employer == 2}
-        {button size="small" href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button size="small" href="TRABAJOS TRABAJADOR" caption="Reclutar" popup="true" desc="t:Buscar"}
         {button size="small" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
     {/if}
     {if !$showStats}
