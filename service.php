@@ -171,7 +171,7 @@ class Trabajos extends Service
 
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
-			'editMode' => false,
+			'editMode' => true,
 			'profile' => $profile,
 			'cv' => $cv,
 			'professions' => $this->getProfessionsInline(),
@@ -199,9 +199,11 @@ class Trabajos extends Service
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
+			'editMode' => false,
 			'cv' => $cv,
 			'profile' => $profile
 		]);
+
 		return $response;
 	}
 
@@ -477,6 +479,8 @@ class Trabajos extends Service
 	{
 		Connection::query("UPDATE person SET employer = 1 WHERE email = '{$request->email}';");
 
+		return $this->_perfil($request);
+		/*
 		$cv = $this->getCV($request->email);
 
 		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
@@ -492,7 +496,7 @@ class Trabajos extends Service
 			"cv" => $cv
 		]);
 
-		return $response;
+		return $response;*/
 	}
 
 	public function _empleador($request)
