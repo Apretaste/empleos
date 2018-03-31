@@ -165,7 +165,7 @@ class Trabajos extends Service
 			$professions[] = $item->profession;
 
 		$response = new Response();
-		$profile = $this->utils->getPerson($request->email);
+		$profile = $this->getProfile($request->email, $request);
 		$cv = $this->getCV($request->email);
 		$cv->province = str_replace('_', ' ', $cv->province);
 
@@ -519,5 +519,17 @@ class Trabajos extends Service
 		]);
 
 		return $response;
+	}
+
+	private function getProfile($email, $request)
+	{
+		// get the person
+		$person = Connection::query("SELECT * FROM person WHERE email = '$email'");
+
+		// prepare the full profile
+		$social = new Social();
+		$profile = $social->prepareUserProfile($person[0], $request->lang);
+
+		return $profile;
 	}
 }
