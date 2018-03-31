@@ -149,3 +149,5 @@ CREATE TABLE _trabajos_job (
   contract enum('PROYECTO','SALARIO'),
   job_level enum('EXPERTO','AVANZADO','PRINCIPIANTE')
 );
+
+ALTER TABLE person ADD column employer int(1) default 0 NOT NULL;

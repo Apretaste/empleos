@@ -11,22 +11,29 @@ class Trabajos extends Service
 	 */
 	public function _main(Request $request)
 	{
-		$cv = $this->getCV($request->email);
+		$q = Connection::query("SELECT employer FROM person WHERE email = '{$request->email}';");
 
-		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
-		$cv->messages_count = $r[0]->total * 1;
+		$employer = 0;
+		if (isset($q[0])) $employer = intval($q[0]->employer);
 
-		$r = Connection::query("SELECT count(*) as total FROM _trabajos_cv WHERE email = '{$request->email}';");
-		$cv->jobs = $r[0]->total * 1;
+		if ($employer == 1) // employee
+		{
+			return $this->_empleado($request);
+		}
+
+		if ($employer == 2) // employer
+		{
+			return $this->_empleador($request);
+		}
 
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('home.tpl', [
-			"username" => $request->username,
-			"cv" => $cv
+			"username" => $request->username
 		]);
 
 		return $response;
+
 	}
 
 	public function _agregar($request)
@@ -163,7 +170,8 @@ class Trabajos extends Service
 		$cv->province = str_replace('_', ' ', $cv->province);
 
 		$response->setEmailLayout('layout.tpl');
-		$response->createFromTemplate('profile_edit.tpl', [
+		$response->createFromTemplate('profile.tpl', [
+			'editMode' => false,
 			'profile' => $profile,
 			'cv' => $cv,
 			'professions' => $this->getProfessionsInline(),
@@ -463,5 +471,49 @@ class Trabajos extends Service
 			$professions[] = $item->profession;
 
 		return implode(',', $professions);
+	}
+
+	public function _empleado($request)
+	{
+		Connection::query("UPDATE person SET employer = 1 WHERE email = '{$request->email}';");
+
+		$cv = $this->getCV($request->email);
+
+		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
+		$cv->messages_count = $r[0]->total * 1;
+
+		$r = Connection::query("SELECT count(*) as total FROM _trabajos_cv WHERE email = '{$request->email}';");
+		$cv->jobs = $r[0]->total * 1;
+
+		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
+		$response->createFromTemplate('home_worker.tpl', [
+			"username" => $request->username,
+			"cv" => $cv
+		]);
+
+		return $response;
+	}
+
+	public function _empleador($request)
+	{
+		Connection::query("UPDATE person SET employer = 2 WHERE email = '{$request->email}';");
+
+		$cv = $this->getCV($request->email);
+
+		$r = Connection::query("SELECT count(*) as total FROM _note WHERE to_user = '{$request->email}' AND read_date is null;");
+		$cv->messages_count = $r[0]->total * 1;
+
+		$r = Connection::query("SELECT count(*) as total FROM _trabajos_cv WHERE email = '{$request->email}';");
+		$cv->jobs = $r[0]->total * 1;
+
+		$response = new Response();
+		$response->setEmailLayout('layout.tpl');
+		$response->createFromTemplate('home_employer.tpl', [
+			"username" => $request->username,
+			"cv" => $cv
+		]);
+
+		return $response;
 	}
 }

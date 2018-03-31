@@ -1,30 +1,6 @@
 <h1>Hola <i>@{$username}</i></h1>
-
-<table cellspacing="0" cellpadding="10" border="0" width="100%">
-    <tr>
-        <td align="center" valign="top">
-            <font size="20">&#x1F4C4;</font><br/>
-            <big>{$cv->force}%</big>
-        <br/>{link href="TRABAJOS EDITAR" caption="Editar curr&iacute;culo"}
-        </td>
-        <td align="center" valign="top">
-            <font size="20">&#x1F4DD;</font><br/>
-            Tu CV ha sido visto {$cv->views} veces<br/>
-        </td>
-    </tr>
-    <tr>
-        <td align="center" valign="top">
-            <font size="20">&#x1F4AC;</font><br/>
-
-            <br/>{link href="CHAT" caption="{$cv->messages_count} mensajes"}
-        </td>
-        <td align="center" valign="top">
-            <font size="20">&#x1F4AC;</font><br/>
-            {link href="TRABAJOS OFERTAS" caption="Mis ofertas de empleo ({$cv->jobs})"}<br/>
-        </td>
-    </tr>
-</table>
+<p>Bienvenido. Este servicio permite dar soluciones laborales tanto para el que busca trabajo como para quien lo ofrece. Para empezar dinos qu&eacute; est&aacute;s buscando:</p>
 <p align="center">
-{button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
-{button href="TRABAJOS RECLUTAR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+    {button href="TRABAJOS EMPLEADO" caption="Busco empleo"} &nbsp;
+    {button href="TRABAJOS EMPLADOR" caption="Ofrezco empleo"}
 </p>

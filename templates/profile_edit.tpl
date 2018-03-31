@@ -27,7 +27,7 @@
 {space10}
 
 <!--ABOUT ME-->
-<p align="center">{if $cv->description}{$cv->description}{else}[descripci&oacute;n]{/if}
+<p align="center">{if $cv->description}{$cv->description}{else}(breve descripci&oacute;n de ti){/if}
 {link href="TRABAJOS DESCRIPCION" popup="true" caption="&#10000;" desc="a:Descripci&oacute;n (hasta 255 caracteres)"}</p>
 
 {space10}
