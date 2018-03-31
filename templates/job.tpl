@@ -15,16 +15,16 @@
 
 {space10}
 <p align="center">
-    {button href="TRABAJOS INICIO" caption="Inicio"}
+    {button size="small" href="TRABAJOS" caption="Atra&aacute;s"}
     {if $employer == 1}
-        {button href="TRABAJOS EDITAR" caption="Editar CV"}
-        {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+        {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
+        {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
     {/if}
     {if $employer == 2}
-        {button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
-        {button href="TRABAJOS OFERTAS" caption="Mis ofertas"}
+        {button size="small" href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button size="small" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
     {/if}
     {if !$owner}
-        {button href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="Contactar"}
+        {button size="small" href="CHAT @{$job->username} Quisiera contactar contigo para asuntos de trabajo" caption="Contactar"}
     {/if}
 </p>

@@ -13,7 +13,7 @@
 </table>
 {space10}
 <p align="center">
-    {button href="TRABAJOS INICIO" caption="Inicio"}
-    {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
-    {button href="TRABAJOS PERFIL" caption="Mi perfil" }
+    {button size="small" href="TRABAJOS" caption="Atr&aacute;s"}
+    {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {button size="small" href="TRABAJOS PERFIL" caption="Mi perfil" }
 </p>

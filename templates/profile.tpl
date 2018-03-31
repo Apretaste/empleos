@@ -90,17 +90,17 @@
 {space10}
 <hr/>
 <p align="center">
-    {button href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+    {button size="small" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
     {if $employer == 1}
-    {button href="TRABAJOS EDITAR" caption="Editar CV"}
-    {button href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
+    {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
     {/if}
     {if $employer == 2}
-        {button href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
-        {button href="TRABAJOS OFERTAS" caption="Mis ofertas"}
+        {button size="small" href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button size="small" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
     {/if}
     {if !$showStats}
-    {button href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
+    {button size="small" href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
     {/if}
 </p>
 </center>

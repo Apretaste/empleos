@@ -14,7 +14,7 @@
 </table>
 
 <p align="center">
-    {button href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
-    {button href="TRABAJOS RECLUTAR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+    {button size="small" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+    {button size="small" href="TRABAJOS RECLUTAR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
 </p>
 
