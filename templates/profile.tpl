@@ -1,19 +1,15 @@
 <table width="100%">
     <tr>
-        <td width="150">
+        <td width="150" align="center">
             <!--PROFILE PICTURE-->
             {if $profile->picture}
                 <table cellpadding="3"><tr><td bgcolor="#202020">
-                            {img src="{$profile->picture_internal}" alt="Picture" width="100"}
+                            {img src="{$profile->picture_internal}" alt="Picture" width="200"}
                         </td></tr></table>
             {else}
-                {noimage width="100" height="50" text="Tristemente ...<br/>Sin foto de perfil :'-("}
+                {noimage width="200" height="100" text="Tristemente ...<br/>Sin foto de perfil :'-("}
             {/if}
-            {if $editMode}
-            {button color="grey" href="PERFIL FOTO" desc="u:Adjunte su foto de perfil*" caption="Cambiar" size="small" wait="false" popup="true"}
-            {/if}
-        </td>
-        <td valign="top" align="right">
+
             <h1>{if $cv->full_name}{$cv->full_name}{else}(tu nombre){/if} {if $editMode}{link href="TRABAJOS NOMBRE" caption="&#10000;" desc="Cambiar nombre" popup="true"}{/if}</h1><br/>
             {if $cv->profession1} {$cv->profession1_title} {else} (profesion #1) {/if} {if $editMode}{link href="TRABAJOS PROFESION 1" caption="&#10000;" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}{/if}
             {if $cv->profession2} {$cv->profession2_title} {else} (profesion #2) {/if} {if $editMode}{link href="TRABAJOS PROFESION 2" caption="&#10000;" popup="true" desc="m:Profesi&oacute;n[{$professions}]*"}{/if}
@@ -23,7 +19,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2" valign="top" align="justify">
+        <td valign="top" align="justify">
             {if $cv->description}{$cv->description}{else}(breve descripci&oacute;n de ti){/if}
             {if $editMode}{link href="TRABAJOS DESCRIPCION" popup="true" caption="&#10000;" desc="a:Descripci&oacute;n (hasta 255 caracteres)"}{/if}
         </td>
@@ -90,7 +86,16 @@
 {space10}
 <hr/>
 <p align="center">
-    {button size="small" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+    {if $editMode}
+        {button size="small" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
+        {else}
+        {if $showStats}
+            {button size="small" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+            {else}
+            {button size="small" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
+        {/if}
+    {/if}
+
     {if $employer == 1}
     {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
     {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}

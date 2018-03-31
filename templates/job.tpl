@@ -15,7 +15,7 @@
 
 {space10}
 <p align="center">
-    {button size="small" href="TRABAJOS" caption="Atra&aacute;s"}
+    {button size="small" href="TRABAJOS" caption="Atra&acute;s"}
     {if $employer == 1}
         {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
         {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
