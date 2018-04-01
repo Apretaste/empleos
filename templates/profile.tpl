@@ -76,7 +76,7 @@
 <hr/>
 <table width="100%">
     <tr><td colspan="2"><h2>Idiomas</h2></td>
-        <td align="right"> {if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS IDIOMA" popup="true" desc="m:idioma[ESPA&Ntilde;OL,INGLES,FRANCES,ITALIANO,RUSO,CHINO,JAPONES]*|m:nivel[Nativo,Fluido,Conversacional,Escrito]*"}{/if}</td></tr>
+        <td align="right"> {if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS IDIOMA" popup="true" desc="m:idioma[ESPANOL,INGLES,FRANCES,ITALIANO,RUSO,CHINO,JAPONES]|m:nivel[Nativo,Fluido,Conversacional,Escrito]"}{/if}</td></tr>
     {foreach item=item from=$cv->langs}
     <tr><td>{$item->lang}</td><td>{$item->lang_level}</td>
         <td align="right"> {if $editMode}{button size="small" color="grey" href="TRABAJOS QUITAR IDIOMA {$item->id}" caption="quitar"}{/if}</td>
