@@ -36,13 +36,13 @@
 <table width="100%">
     <tr>
         <td colspan="3"><h2>Educaci&oacute;n</h2></td>
-        <td align="right">{if $editMode}{button color="green" size="small" caption="agregar" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo"}{/if}</td>
+        <td align="right">{if $editMode}{button color="green" size="small" caption="agregar" href="TRABAJOS EDUCACION" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n*|t:T&iacute;tulo|t:Escuela"}{/if}</td>
     </tr>
     {foreach item=item from=$cv->educations}
         <tr>
-            <td>{$item->graduation_year} {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="&#10000;" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"}{/if}</td>
-            <td>{if $item->title} {$item->title} {else} agregar t&iacute;tulo {/if} {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="&#10000;" popup="true" desc="t:T&iacute;tulo"}{/if}</td>
-            <td>{if $item->school} {$item->school} {else} agregar escuela {/if} {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA" popup="true" desc="Escuela" caption="&#10000;"}{/if}</td>
+            <td>{$item->graduation_year} {* {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} GRADUACION" caption="&#10000;" popup="true" desc="n:A&ntilde;o de graduaci&oacute;n"}{/if} *}</td>
+            <td>{if $item->title} {$item->title} {else} <small>(t&iacute;tulo)</small> {/if} {* {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} TITULO" caption="&#10000;" popup="true" desc="t:T&iacute;tulo"}{/if} *}</td>
+            <td>{if $item->school} {$item->school} {else} <small>(escuela)</small> {/if}{* {if $editMode}{link href="TRABAJOS EDITAR EDUCACION {$item->id} ESCUELA" popup="true" desc="Escuela" caption="&#10000;"}{/if} *}</td>
             {if $editMode}<td align="right">{button size="small" color="grey" href="TRABAJOS QUITAR EDUCACION {$item->id}" caption="quitar"}</td>{/if}
         </tr>
     {/foreach}
@@ -51,13 +51,15 @@
 {space10}
 <hr/>
 <table width="100%">
-    <tr><td colspan="4"><h2>Experiencia</h2></td><td align="right">{if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:A&ntilde;o de inicio*|t:Ocupaci&oacute;n"}{/if}</td></tr>
+    <tr><td colspan="4"><h2>Experiencia</h2></td>
+        <td align="right">
+            {if $editMode}{button size="small" color="green" caption="agregar" href="TRABAJOS EXPERIENCIA" popup="true" desc="n:Desde el a&ntilde;o*|n:Hasta el a&ntilde;o|t:Ocupaci&oacute;n|t:Compa&ntilde;&iacute;a o empresa"}{/if}</td></tr>
     {foreach item=item from=$cv->experiences}
         <tr>
-            <td>{if $item->start_year}{$item->start_year}{else}(desde){/if} {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="&#10000;" popup="true" desc="n:A&ntilde;o desde"}{/if}</td>
-            <td>{if $item->end_year}{$item->end_year}{else}(hasta){/if} {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="&#10000;" popup="true" desc="n:A&ntilde;o final"}{/if}</td>
-            <td>{if $item->title}{$item->title}{else}(t&iacute;tulo){/if} {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="&#10000;" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}{/if}</td>
-            <td>{if $item->company}{$item->company}{$item->company}{else}(compa&ntilde;&iacute;a){/if} {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="&#10000;" popup="true" desc="Compa&ntilde;&iacute;a"}{/if}</td>
+            <td>{if $item->start_year}{$item->start_year}{else}(desde){/if} {* {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} DESDE" caption="&#10000;" popup="true" desc="n:A&ntilde;o desde"}{/if} *}</td>
+            <td>{if $item->end_year}{$item->end_year}{else}(hasta){/if} {* {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} HASTA " caption="&#10000;" popup="true" desc="n:A&ntilde;o final"}{/if} *}</td>
+            <td>{if $item->title}{$item->title}{else}(t&iacute;tulo){/if} {* {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} TITULO " caption="&#10000;" popup="true" desc="T&iacute;tulo/Ocupaci&oacute;n/Cargo"}{/if} *}</td>
+            <td>{if $item->company}{$item->company}{else}(compa&ntilde;&iacute;a){/if} {* {if $editMode}{link href="TRABAJOS EDITAR EXPERIENCIA {$item->id} COMPANIA " caption="&#10000;" popup="true" desc="Compa&ntilde;&iacute;a"}{/if} *}</td>
             <td align="right">{if $editMode}{button href="TRABAJOS QUITAR EXPERIENCIA {$item->id}" caption="quitar" color="grey" size="small"}{/if}</td>
         </tr>
     {/foreach}
@@ -87,25 +89,25 @@
 <hr/>
 <p align="center">
     {if $editMode}
-        {button size="small" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
+        {button size="medium" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
         {else}
         {if $showStats}
-            {button size="small" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
+            {button size="medium" href="TRABAJOS INICIO" caption="Inicio"} &nbsp;
             {else}
-            {button size="small" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
+            {button size="medium" href="TRABAJOS" caption="Atr&aacute;s"} &nbsp;
         {/if}
     {/if}
 
     {if $employer == 1}
-    {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
-    {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {button size="medium" href="TRABAJOS EDITAR" caption="Editar CV"}
+    {button size="medium" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
     {/if}
     {if $employer == 2}
-        {button size="small" href="TRABAJOS TRABAJADOR" caption="Reclutar" popup="true" desc="t:Buscar"}
-        {button size="small" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
+        {button size="medium" href="TRABAJOS TRABAJADOR" caption="Reclutar" popup="true" desc="t:Buscar"}
+        {button size="medium" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
     {/if}
     {if !$showStats}
-    {button size="small" href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
+    {button size="medium" href="CHAT @{$profile->username} Quisiera contactar contigo para asuntos de trabajo" caption="CONTACTAR"}
     {/if}
 </p>
 </center>

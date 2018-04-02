@@ -34,10 +34,32 @@ class Trabajos extends Service
 
 	}
 
+	/**
+	 * Add new job
+	 *
+	 * @param $request
+	 * @return Response
+	 */
 	public function _agregar($request)
 	{
-		$title = trim($request->query);
-		$id = Connection::query("INSERT INTO _trabajos_job (email, title) VALUES ('{$request->email}','{$title}');");
+		var_dump($request->params);
+		$params = $this->proccessParams($request, [
+			"title" => trim($request->query),
+			"details" => null,
+			"name" => null,
+			"phone" => null,
+			"looking_for_profession" => function($value){
+				return $this->getProfessionId($value);
+			},
+			"end_date" => null,
+			"salary" => null,
+			"contract" => null,
+			"job_level" => null,
+			"email" => $request->email // important at the end!
+		]);
+
+		$sql = $this->getSQLInsert($params, '_trabajos_job');
+		$id = Connection::query($sql);
 		$request->query = $id;
 		return $this->_trabajo($request);
 	}
@@ -81,7 +103,8 @@ class Trabajos extends Service
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('jobs_list.tpl', [
-			"jobs" => $jobs
+			"jobs" => $jobs,
+			"professions" => $this->getProfessionsInline()
 		]);
 
 		return $response;
@@ -131,7 +154,8 @@ class Trabajos extends Service
 				'descripcion' => 'description',
 				'buscando' => 'looking_for_profession',
 				'details' => 'detalles',
-				'nombre' => 'name'
+				'nombre' => 'name',
+				'telefono' => 'phone'
 			];
 
 			if (isset($map[$tabla]) && isset($fieldMap[$campo])) {
@@ -241,25 +265,50 @@ class Trabajos extends Service
 
 	public function _educacion($request)
 	{
+		$params = $this->proccessParams($request, [
+			'graduation_year' => null,
+			'title' => $request->query,
+			'school' => null,
+			'email' => $request->email
+		]);
+
+		/*
 		$q = trim($request->query);
 		$data = explode(' ', $q);
 		$year = intval($data[0]);
 		$title = trim(substr($q, strlen($year)));
+		$sql = "INSERT INTO _trabajos_cv_education (email, graduation_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
+		*/
 
-		$q = "INSERT INTO _trabajos_cv_education (email, graduation_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
-		Connection::query($q);
+		$sql = $this->getSQLInsert($params, '_trabajos_cv_education');
+		Connection::query($sql);
 		$request->query = '';
 		return $this->_editar($request);
 	}
 
 	public function _experiencia($request)
 	{
+		$params = $this->proccessParams($request, [
+			'start_year' => null,
+			'end_year' => null,
+			'title' => $request->query,
+			'company' => null,
+			'email' => $request->email
+		]);
+
+		$sql = $this->getSQLInsert($params, '_trabajos_cv_experience');
+
+		/*
 		$q = trim($request->query);
 		$data = explode(' ', $q);
 		$year = intval($data[0]);
 		$title = trim(substr($q, strlen($year)));
-		$q = "INSERT INTO _trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
-		Connection::query($q);
+
+		$sql = "INSERT INTO _trabajos_cv_experience (email, start_year, title) VALUES ('{$request->email}','{$year}', '{$title}');";
+		*/
+
+		Connection::query($sql);
+
 		$request->query = '';
 		return $this->_editar($request);
 	}
@@ -312,15 +361,23 @@ class Trabajos extends Service
 			'educacion' => '_trabajos_cv_education',
 			'experiencia' => '_trabajos_cv_experience',
 			'habilidad' => '_trabajos_cv_skills',
-			'idioma' => '_trabajos_cv_langs'
+			'idioma' => '_trabajos_cv_langs',
+			'oferta' => '_trabajos_job'
 		];
 
 		if (isset($map[$what])) {
 			Connection::query("DELETE FROM {$map[$what]} WHERE id = $id;");
 		}
 
-		$request->query = '';
-		return $this->_editar($request);
+		switch ($what)
+		{
+			case 'oferta':
+				$request->query = '';
+				return $this->_ofertas($request);
+			default:
+				$request->query = '';
+				return $this->_editar($request);
+		}
 	}
 
 	public function _provincia($request)
@@ -561,5 +618,81 @@ class Trabajos extends Service
 		$employer = 0;
 		if (isset($q[0])) $employer = intval($q[0]->employer);
 		return $employer;
+	}
+
+	/**
+	 * Select profession ID from text
+	 *
+	 * @param $text
+	 * @return integer
+	 */
+	private function getProfessionId($text)
+	{
+		$text = strtolower($text);
+		$sql = "SELECT id FROM _trabajos_cv_professions WHERE lower(profession) = '$text';";
+		$q = Connection::query($sql);
+		if (isset($q[0]))
+			return $q[0]->id;
+
+		return null;
+	}
+
+	/**
+	 * Proccess params
+	 *
+	 * @param $request
+	 * @param $default
+	 * @return mixed
+	 */
+	private function proccessParams($request, $default)
+	{
+		$params = $default;
+		if (isset($request->params) && is_array($request->params))
+		{
+			$i = 0;
+			foreach($default as $param => $value)
+				if (isset($request->params[$i]))
+				{
+					$v = $request->params[$i];
+					if (is_callable($value))
+						$v = $value($v);
+
+					if ( ! empty($v) || ! is_null($value))
+					{
+						$params[$param] = $v;
+					}
+
+					$i++;
+				}
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Generate SQL insert from params
+	 *
+	 * @param $params
+	 * @param $tableName
+	 * @return string
+	 */
+	private function getSQLInsert($params, $tableName)
+	{
+		$parts = ['', ''];
+
+		foreach($params as $param => $value)
+		{
+			if (!is_null($value))
+			{
+				$parts[0] .= ",".$param;
+				$parts[1] .= ",'$value'";
+			}
+		}
+
+		$parts[0] = substr($parts[0],1);
+		$parts[1] = substr($parts[1],1);
+		$sql = "INSERT INTO $tableName ($parts[0]) VALUES ($parts[1])";
+
+		return $sql;
 	}
 }

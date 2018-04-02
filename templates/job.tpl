@@ -8,20 +8,20 @@
     {if $job->looking_for_profession}{$job->looking}{else}(buscando profesional){/if}
     {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} BUSCANDO" caption="&#10000;" popup="true" desc="m:Qu&eacute; profesional buscas?[{$professions}]"}{/if}
     {separator}
-   {if $job->name}{$job->name}{else}(nombre){/if}  {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} NOMBRE" caption="&#10000;" popup="true"}{/if}
+   {if $job->name}{$job->name}{else}(nombre){/if}  {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} NOMBRE" caption="&#10000;" popup="true" desc="Nombre de la persona que oferta"}{/if}
     {separator}
     {if $job->phone}{$job->phone}{else}(tel&eacute;fono){/if} {if $owner}{link href="TRABAJOS EDITAR OFERTA {$job->id} TELEFONO" caption="&#10000;" popup="true"}{/if}
 </p>
 
 {space10}
 <p align="center">
-    {button size="small" href="TRABAJOS" caption="Atra&acute;s"}
+    {button size="small" href="TRABAJOS" caption="Atr&aacute;s"}
     {if $employer == 1}
         {button size="small" href="TRABAJOS EDITAR" caption="Editar CV"}
         {button size="small" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
     {/if}
     {if $employer == 2}
-        {button size="small" href="TRABAJOS TRABAJADOR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
+        {button size="small" href="TRABAJOS RECLUTAR" caption="Buscar trabajador" popup="true" desc="t:Buscar"}
         {button size="small" href="TRABAJOS OFERTAS" caption="Mis ofertas"}
     {/if}
     {if !$owner}

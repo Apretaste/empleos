@@ -75,11 +75,11 @@ CREATE TABLE _trabajos_cv_professions (
 );
 
 INSERT INTO _trabajos_cv_professions (profession) VALUES
-  ('Dise&ntilde;ador'),
+  ('Disenador'),
   ('Profesor'),
   ('Programador'),
   ('Escritor'),
-  ('Fisiologi&iacute;a'),
+  ('Fisiologia'),
   ('Cocinero'),
   ('Belleza'),
   ('Traductor'),
