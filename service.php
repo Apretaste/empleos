@@ -12,7 +12,6 @@ class Trabajos extends Service
 	public function _main(Request $request, $ignoreEmployer = false)
 	{
 
-
 		if (!$ignoreEmployer)
 		{
 			$employer = $this->getEmployer($request->email);
@@ -31,7 +30,6 @@ class Trabajos extends Service
 		]);
 
 		return $response;
-
 	}
 
 	/**
@@ -42,7 +40,6 @@ class Trabajos extends Service
 	 */
 	public function _agregar($request)
 	{
-		var_dump($request->params);
 		$params = $this->proccessParams($request, [
 			"title" => trim($request->query),
 			"details" => null,
@@ -65,6 +62,8 @@ class Trabajos extends Service
 	}
 
 	/**
+	 * View job's details
+	 *
 	 * @param $request
 	 * @return Response
 	 */
@@ -191,9 +190,21 @@ class Trabajos extends Service
 		$cv = $this->getCV($request->email);
 		$cv->province = str_replace('_', ' ', $cv->province);
 
+		$step = 1000;
+
+		if (empty($cv->full_name)) $step = 1;
+		elseif (empty($cv->profession1) && empty($cv->profession2) && empty($cv->profession3)) $step = 2;
+		elseif (empty($cv->province)) $step = 3;
+		elseif (empty($cv->description)) $step = 4;
+		elseif (count($cv->educations) == 0) $step = 5;
+		elseif (count($cv->experiences) == 0) $step = 6;
+		elseif (count($cv->skills) == 0) $step = 7;
+		elseif (count($cv->langs) == 0) $step = 8;
+
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
 			'editMode' => true,
+			'step' => $step,
 			'employer' => $this->getEmployer($request->email),
 			'profile' => $profile,
 			'cv' => $cv,
@@ -223,14 +234,31 @@ class Trabajos extends Service
 		$cv = $this->getCV($email);
 		$profile = $this->utils->getPerson($email);
 
+		if (empty($cv->full_name)
+		|| (empty($cv->profession1) && empty($cv->profession2) && empty($cv->profession3))
+			|| empty($cv->province)
+			|| empty($cv->description)
+			|| count($cv->educations) == 0
+			|| count($cv->skills) == 0
+			|| count($cv->experiences) == 0
+			|| count($cv->langs) == 0
+		) {
+			return $this->_editar($request);
+		}
+
+		$step = 1000;
+		$editMode = false;
+
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('profile.tpl', [
-			'editMode' => false,
+			'editMode' => $editMode,
+			'step' => $step,
 			'cv' => $cv,
 			'employer' => $this->getEmployer($request->email),
 			'showStats' => $cv->email == $request->email,
-			'profile' => $profile
+			'profile' => $profile,
+			"professions" => $this->getProfessionsInline()
 		]);
 
 		return $response;
@@ -334,13 +362,16 @@ class Trabajos extends Service
 
 	public function _idioma($request)
 	{
-		$q = trim($request->query);
-		$data = explode(' ', $q);
+		$params = $this->proccessParams($request, [
+			'lang' => null,
+			'lang_level' => null,
+			'email' => $request->email
+			]);
 
-		$q = "INSERT INTO _trabajos_cv_langs (email, lang, lang_level) 
-				VALUES ('{$request->email}','{$data[0]}', '{$data[1]}');";
+		$sql = $this->getSQLInsert($params, '_trabajos_cv_langs');
 
-		Connection::query($q);
+		Connection::query($sql);
+
 		$request->query = '';
 		return $this->_editar($request);
 	}
@@ -390,12 +421,24 @@ class Trabajos extends Service
 
 	public function _buscar($request)
 	{
-		$words = $this->getWords($request->query);
+		$words = $this->getWords($request->params[0]);
 		$where = '';
 		foreach ($words as $w)
 			$where .= "concat(coalesce(title,''), ' ', coalesce(details,''), ' ', coalesce(looking_for_profession,''), ' ', coalesce(contract,''), ' ',coalesce(job_level,'')) LIKE '%{$w}%' AND ";
 
 		$where .= 'TRUE';
+
+		if (!empty($request->params[1]))
+			$where .= " AND looking_for_profession = (SELECT id FROM _trabajos_cv_professions WHERE profession = '{$request->params[1]}') ";
+
+		if (!empty($request->params[2]))
+			$where .= " AND salary >= '{$request->params[2]}' ";
+
+		if (!empty($request->params[3]))
+			$where .= " AND contract >= '{$request->params[3]}' ";
+
+		if (!empty($request->params[4]))
+			$where .= " AND job_level >= '{$request->params[4]}' ";
 
 		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days,
 			(select profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = _trabajos_job.looking_for_profession ) as looking_for 
@@ -406,11 +449,19 @@ class Trabajos extends Service
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('search_job.tpl', [
-			'jobs' => $jobs
+			'jobs' => $jobs,
+			'professions' => $this->getProfessionsInline()
 		]);
+
 		return $response;
 	}
 
+	/**
+	 * Search for CVs
+	 *
+	 * @param $request
+	 * @return Response
+	 */
 	public function _reclutar($request)
 	{
 		$r = Connection::query("SELECT * FROM _trabajos_cv_professions");
@@ -481,7 +532,7 @@ class Trabajos extends Service
 		else $cv = new stdClass();
 
 		$default_cv = [
-			'full_name' => $profile->full_name,
+			'full_name' => '',
 			'profession1' => '',
 			'profession2' => '',
 			'profession3' => '',
@@ -490,7 +541,6 @@ class Trabajos extends Service
 			'educations' => [],
 			'skills' => [],
 			'experiences' => [],
-			'professions' => [],
 			'langs' => []
 		];
 
@@ -694,5 +744,10 @@ class Trabajos extends Service
 		$sql = "INSERT INTO $tableName ($parts[0]) VALUES ($parts[1])";
 
 		return $sql;
+	}
+
+	private function wizzard($email)
+	{
+
 	}
 }
