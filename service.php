@@ -257,7 +257,8 @@ class Trabajos extends Service
 			'cv' => $cv,
 			'employer' => $this->getEmployer($request->email),
 			'showStats' => $cv->email == $request->email,
-			'profile' => $profile
+			'profile' => $profile,
+			"professions" => $this->getProfessionsInline()
 		]);
 
 		return $response;
@@ -420,12 +421,24 @@ class Trabajos extends Service
 
 	public function _buscar($request)
 	{
-		$words = $this->getWords($request->query);
+		$words = $this->getWords($request->params[0]);
 		$where = '';
 		foreach ($words as $w)
 			$where .= "concat(coalesce(title,''), ' ', coalesce(details,''), ' ', coalesce(looking_for_profession,''), ' ', coalesce(contract,''), ' ',coalesce(job_level,'')) LIKE '%{$w}%' AND ";
 
 		$where .= 'TRUE';
+
+		if (!empty($request->params[1]))
+			$where .= " AND looking_for_profession = (SELECT id FROM _trabajos_cv_professions WHERE profession = '{$request->params[1]}') ";
+
+		if (!empty($request->params[2]))
+			$where .= " AND salary >= '{$request->params[2]}' ";
+
+		if (!empty($request->params[3]))
+			$where .= " AND contract >= '{$request->params[3]}' ";
+
+		if (!empty($request->params[4]))
+			$where .= " AND job_level >= '{$request->params[4]}' ";
 
 		$q = "SELECT *, datediff(CURRENT_DATE, coalesce(end_date, CURRENT_DATE)) as days,
 			(select profession FROM _trabajos_cv_professions WHERE _trabajos_cv_professions.id = _trabajos_job.looking_for_profession ) as looking_for 
@@ -436,11 +449,19 @@ class Trabajos extends Service
 		$response = new Response();
 		$response->setEmailLayout('layout.tpl');
 		$response->createFromTemplate('search_job.tpl', [
-			'jobs' => $jobs
+			'jobs' => $jobs,
+			'professions' => $this->getProfessionsInline()
 		]);
+
 		return $response;
 	}
 
+	/**
+	 * Search for CVs
+	 *
+	 * @param $request
+	 * @return Response
+	 */
 	public function _reclutar($request)
 	{
 		$r = Connection::query("SELECT * FROM _trabajos_cv_professions");

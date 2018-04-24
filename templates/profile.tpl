@@ -149,7 +149,7 @@
 
     {if $employer == 1}
     {button size="medium" href="TRABAJOS EDITAR" caption="Editar CV"}
-    {button size="medium" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar"}
+    {button size="medium" href="TRABAJOS BUSCAR" caption="Buscar trabajo" popup="true" desc="t:Buscar por las palabras|m:Filtrar por profesi&oacute;n[{$professions}]|n:Salario m&iacute;nimo|m:Filtrar por tipo de contrato[PROYECTO,SALARIO]|m:Filtrar por nivel esperado[EXPERTO,AVANZADO,PRINCIPIANTE]"}
     {/if}
     {if $employer == 2}
         {button size="medium" href="TRABAJOS TRABAJADOR" caption="Reclutar" popup="true" desc="t:Buscar"}
