@@ -219,22 +219,26 @@ class Trabajos extends Service
 	public function _perfil($request)
 	{
 		$username = trim($request->query);
-
+		
 		if ($username == '')
 			$username = $this->utils->getUsernameFromEmail($request->email);
+		
 
 		$email = $this->utils->getEmailFromUsername($username);
-
+	
 		if ($email === false)
 			return new Response();
 
 		if ($email != $request->email)
 			Connection::query("UPDATE _trabajos_cv SET views = views + 1 WHERE email = '$email';");
+			
+		
 
 		$cv = $this->getCV($email);
-		$profile = $this->utils->getPerson($email);
 
-		if (empty($cv->full_name)
+		$profile = $this->utils->getPerson($email);
+		
+		if ((empty($cv->full_name)
 		|| (empty($cv->profession1) && empty($cv->profession2) && empty($cv->profession3))
 			|| empty($cv->province)
 			|| empty($cv->description)
@@ -242,7 +246,7 @@ class Trabajos extends Service
 			|| count($cv->skills) == 0
 			|| count($cv->experiences) == 0
 			|| count($cv->langs) == 0
-		) {
+		)&& $email == $request->email) {
 			return $this->_editar($request);
 		}
 
@@ -649,6 +653,7 @@ class Trabajos extends Service
 	{
 		// get the person
 		$person = Connection::query("SELECT * FROM person WHERE email = '$email'");
+		var_dump($email);
 
 		// prepare the full profile
 		$social = new Social();
