@@ -1,0 +1,201 @@
+<div class="row">
+	<div class="col s12">
+		<ul class="tabs tabs-fixed-width">
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS OFFERS'})">Ofertas</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS PEOPLE'})">Personal</a></li>
+			<li class="tab"><a href="#" class="active">CV</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col s12">
+		<span>Llene su currículum profesional para recibir oportunidades laborales.</span>
+
+		<ul class="collection one-line">
+			<!-- Name -->
+			<li class="collection-item avatar">
+				<i class="fas fa-male circle"></i>
+				<span class="title"><%= name %></span>
+				<p class="blue-grey-text">Nombre</p>
+				<a href="#editNameModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
+
+			<!-- Professions -->
+			<%
+				var cats = []; 
+				professions.forEach(function(item) {
+					cats.push(categories[item]);
+				})
+			%>
+			<li class="collection-item avatar">
+				<i class="fas fa-tags circle"></i>
+				<span class="title"><%=  cats.join(', ') %></span>
+				<p class="blue-grey-text">Profesión</p>
+				<a href="#editProfessionModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
+
+			<!--  Bio -->
+			<li class="collection-item avatar">
+				<i class="fas fa-address-card circle"></i>
+				<span class="title"><%= bio %></span>
+				<p class="blue-grey-text">Biografía</p>
+				<a href="#editAboutModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
+
+			<!-- Educations -->
+			<% education.forEach(function(item) { %>
+				<li id="education-<%= item.id %>" class="collection-item avatar">
+					<i class="fas fa-graduation-cap circle"></i>
+					<span class="title"><%= item.degree %></span>
+					<p>
+						<%= item.grad_year ? 'Graduado en el ' + item.grad_year : 'Actualmente cursando' %><br>
+						<span class="blue-grey-text"><%= item.school %></span>
+					</p>
+					<a href="#!" onclick="trash('<%= item.id %>', 'education')" class="secondary-content green-text"><i class="fas fa-trash"></i></a>
+				</li>
+			<% }) %>
+
+			<!--  Add New Education -->
+			<li class="collection-item">
+				<span class="title green-text">Insertar lugar de educación</span>
+				<a href="#addEducationModal" class="secondary-content green-text modal-trigger"><i class="fas fa-plus"></i></a>
+			</li>
+
+			<!-- Experiences -->
+			<% experience.forEach(function(item) { %>
+				<li id="experience-<%= item.id %>" class="collection-item avatar">
+					<i class="fas fa-briefcase circle"></i>
+					<span class="title"><%= item.position %></span>
+					<p class="blue-grey-text"><%= item.workplace %></p>
+					<a href="#!" onclick="trash('<%= item.id %>', 'experience')" class="secondary-content green-text"><i class="fas fa-trash"></i></a>
+				</li>
+			<% }) %>
+
+			<!--  Add New Experience -->
+			<li class="collection-item">
+				<span class="title green-text">Insertar experiencia laboral</span>
+				<a href="#addExperienceModal" class="secondary-content green-text modal-trigger"><i class="fas fa-plus"></i></a>
+			</li>
+
+			<!--  Skills -->
+			<li class="collection-item avatar">
+				<i class="fas fa-brain circle"></i>
+				<span class="title"><%= skills.join(', ') %></span>
+				<p class="blue-grey-text">Habilidades</p>
+				<a href="#editSkillsModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<!-- MODAL EDIT NAME -->
+<div id="editNameModal" class="modal">
+	<div class="modal-content">
+		<div class="input-field">
+			<input id="name" class="remainder" maxlength="30" type="text" />
+			<label for="name">Título (<span>0</span>/30)</label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>
+
+<!-- MODAL EDIT PROFESSION -->
+<div id="editProfessionModal" class="modal fullscreen">
+	<div class="modal-content">
+		<div class="input-field">
+			<p class="grey-text">Profesión primaria</p>
+			<select class="materialize-select">
+				<option value=""></option>
+				<% Object.keys(categories).forEach(function(item) { %>
+					<option value="<%= item %>"><%= categories[item] %></option>
+				<% }) %>
+			</select>
+		</div>
+		<div class="input-field">
+			<p class="grey-text">Profesión secundaria</p>
+			<select class="materialize-select">
+				<option value=""></option>
+				<% Object.keys(categories).forEach(function(item) { %>
+					<option value="<%= item %>"><%= categories[item] %></option>
+				<% }) %>
+			</select>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>
+
+<!-- MODAL EDIT ABOUT -->
+<div id="editAboutModal" class="modal">
+	<div class="modal-content">
+		<div class="input-field">
+			<textarea id="desc" maxlength="200" class="remainder materialize-textarea"></textarea>
+			<label for="desc">Hable de usted (<span>0</span>/200)</label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>
+
+<!-- MODAL ADD EDUCATION -->
+<div id="addEducationModal" class="modal">
+	<div class="modal-content">
+		<div class="input-field">
+			<input id="grad_year" type="number" class="remainder" maxlength="4" />
+			<label for="grad_year">Año de graduación (<span>0</span>/4)</label>
+		</div>
+		<div class="input-field">
+			<input id="degree" class="remainder" maxlength="30" type="text" />
+			<label for="degree">Título (<span>0</span>/30)</label>
+		</div>
+		<div class="input-field">
+			<input id="school" class="remainder" maxlength="30" type="text" />
+			<label for="school">Título (<span>0</span>/30)</label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>
+
+<!-- MODAL ADD EXPERIENCE -->
+<div id="addExperienceModal" class="modal">
+	<div class="modal-content">
+		<div class="input-field">
+			<input id="position" class="remainder" maxlength="30" type="text" />
+			<label for="position">Posición (<span>0</span>/30)</label>
+		</div>
+		<div class="input-field">
+			<input id="workplace" class="remainder" maxlength="30" type="text" />
+			<label for="workplace">Centro laboral (<span>0</span>/30)</label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>
+
+<!-- MODAL ADD EXPERIENCE -->
+<div id="editSkillsModal" class="modal">
+	<div class="modal-content">
+		<p>Liste las técnicas y herramientas que maneja separado por coma. Por ejemplo: php,photoshop,word.</p>
+		<div class="input-field">
+			<textarea id="skills" maxlength="500" class="remainder materialize-textarea"></textarea>
+			<label for="skills">Técnicas y herramientas (<span>0</span>/500)</label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
+	</div>
+</div>

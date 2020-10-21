@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="col s12">
+		<h1>Nueva oferta</h1>
+		<p>Cree una nueva oferta laboral para atraer posibles trabajadores interesados.</p>
+
+		<!-- title -->
+		<div class="input-field">
+			<input id="title" class="remainder" maxlength="140" type="text"/>
+			<label for="title">Escriba un título (<span>0</span>/140)</label>
+		</div>
+
+		<!-- description -->
+		<div class="input-field">
+			<textarea id="desc" maxlength="1000" class="remainder materialize-textarea"></textarea>
+			<label for="desc">Describa su trabajo (<span>0</span>/1000)</label>
+		</div>
+
+		<!-- categories -->
+		<div class="input-field">
+			<select id="category" class="materialize-select">
+				<option value=""></option>
+				<% Object.keys(categories).forEach(function(item) { %>
+					<option value="<%= item %>"><%= categories[item] %></option>
+				<% }) %>
+			</select>
+			<label for="category">Escoja una categoría</label>
+		</div>
+
+		<!-- email -->
+		<div class="input-field">
+			<input id="email" type="email"/>
+			<label for="email">Su correo electrónico</label>
+		</div>
+	</div>
+</div>
+
+<div class="bottom-space"></div>
+
+<!-- BUTTON -->
+<div id="btn" class="fixed-action-btn">
+	<a class="btn-floating waves-effect waves-light grey second" href="#!" onclick="apretaste.send({'command':'TRABAJOS OFERTAS'})">
+		<i class="material-icons">arrow_back</i>
+	</a>
+	<a class="btn-floating btn-large waves-effect waves-light green" href="#!" onclick="apretaste.send({'command':'TRABAJOS SAVEJOB'})">
+		<i class="material-icons">save</i>
+	</a>
+</div>

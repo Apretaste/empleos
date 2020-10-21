@@ -1,0 +1,64 @@
+<div class="row">
+	<div class="col s12">
+		<ul class="collection one-line">
+			<!-- Name -->
+			<li class="collection-item avatar">
+				<i class="fas fa-male circle"></i>
+				<span class="title"><%= name %></span>
+				<p class="blue-grey-text">Nombre</p>
+				<a class="secondary-content green-text" onclick="apretaste.send({command:'TRABAJOS CHAT'})"><i class="fas fa-comments"></i></a>
+			</li>
+
+			<!-- Professions -->
+			<li class="collection-item avatar">
+				<i class="fas fa-tags circle"></i>
+				<span class="title"><%= professions %></span>
+				<p class="blue-grey-text">Profesión</p>
+			</li>
+
+			<!--  Bio -->
+			<li class="collection-item avatar">
+				<i class="fas fa-address-card circle"></i>
+				<span class="title"><%= bio %></span>
+				<p class="blue-grey-text">Biografía</p>
+			</li>
+
+			<!-- Educations -->
+			<% education.forEach(function(item) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-graduation-cap circle"></i>
+					<span class="title"><%= item.degree %></span>
+					<p>
+						<%= item.grad_year ? 'Graduación en el ' + item.grad_year : 'Actualmente cursando' %><br>
+						<span class="blue-grey-text"><%= item.school %></span>
+					</p>
+				</li>
+			<% }) %>
+
+			<!-- Experiences -->
+			<% experience.forEach(function(item) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-briefcase circle"></i>
+					<span class="title"><%= item.position %></span>
+					<p class="blue-grey-text"><%= item.workplace %></p>
+				</li>
+			<% }) %>
+
+			<!--  Skills -->
+			<li class="collection-item avatar">
+				<i class="fas fa-brain circle"></i>
+				<span class="title"><%= skills %></span>
+				<p class="blue-grey-text">Habilidades</p>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="bottom-space"></div>
+
+<div class="fixed-action-btn">
+	<a class="btn-floating btn-large waves-effect waves-light green" href="#!" onclick="apretaste.back()">
+		<i class="material-icons">arrow_back</i>
+	</a>
+</div>

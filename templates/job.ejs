@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="col s12">
+		<h1><%= title %></h1>
+
+		<span class="chip clear spacing"><i class="fas fa-tag"></i> <%= categories[category] %></span>
+		<span class="chip clear"><i class="fas fa-calendar"></i> <%= moment(inserted).format('D [de] MMMM [del] YYYY') %></span>
+
+		<p><%= desc %></p>
+	</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="bottom-space"></div>
+
+<div class="fixed-action-btn">
+	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.back()">
+		<i class="material-icons">arrow_back</i>
+	</a>
+	<a href="#!" class="btn-floating btn-large waves-effect waves-light green" onclick="apretaste.send({command:'TRABAJOS CHAT'})">
+		<i class="fas fa-comments"></i>
+	</a>
+</div>

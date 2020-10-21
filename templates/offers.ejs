@@ -1,0 +1,89 @@
+<div class="row">
+	<div class="col s12">
+		<ul class="tabs tabs-fixed-width">
+			<li class="tab"><a href="#" class="active">Ofertas</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS PEOPLE'})">Personal</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS CURRICULUM'})">CV</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<!-- FILTERS -->
+	<% if(filters.length > 0) { %>
+		<div class="col s12">
+			<% filters.forEach(function(item) { %>
+				<span class="chip tiny"><%= item %></span>
+			<% }) %>
+		</div>
+	<% } %>
+
+	<!-- RESULTS -->
+	<div class="col s12">
+		<% offers.forEach(function(item) { %>
+			<div class="card">
+				<div class="card-person grey lighten-5">
+					<span class="chip tiny clear"><i class="fas fa-tag"></i> <%= categories[item.category] %></span>
+					<span class="chip tiny clear right"><i class="fas fa-calendar"></i> <%= moment(item.inserted).format('D [de] MMMM [del] YYYY') %></span>
+				</div>
+				<div class="card-content">
+					<span><%= item.title %></span>
+				</div>
+				<div class="card-action grey lighten-4">
+					<a class="green-text" href="#!" onclick="apretaste.send({command:'TRABAJOS JOB'})">Ver oferta</a>
+				</div>
+			</div>
+		<% }) %>
+	</div>
+</div>
+
+<!-- PAGINATION -->
+<% if(pages > 1) { %>
+	<div class="row">
+		<div class="col s12 center-align">
+			<ul class="pagination">
+				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				<li class="waves-effect"><%= page %> / <%= pages %></li>
+				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+			</ul>
+		</div>
+	</div>
+<% } %>
+
+<div class="bottom-space"></div>
+
+<!-- BUTTONS -->
+<div class="fixed-action-btn">
+	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.send({command:'TRABAJOS NEWJOB'})">
+		<i class="material-icons">add</i>
+	</a>
+	<a href="#searchModal" class="btn-floating btn-large waves-effect waves-light green modal-trigger">
+		<i class="material-icons">search</i>
+	</a>
+</div>
+
+<!-- MODAL SEARCH -->
+<div id="searchModal" class="modal bottom-sheet fullscreen">
+	<div class="modal-content">
+		<!-- title -->
+		<div class="input-field">
+			<input id="title" value="" class="" />
+			<label for="title">Buscar por título</label>
+		</div>
+
+		<!-- categories -->
+		<div class="input-field">
+			<select id="category" class="materialize-select">
+				<option value="">Todas</option>
+				<% Object.keys(categories).forEach(function(item) { %>
+					<option value="<%= item %>"><%= categories[item] %></option>
+				<% }) %>
+				<label for="category">Escoja una categoría</label>
+			</select>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+		<a onclick="apretaste.send({command:'TODO'})" class="modal-close waves-effect green-text btn-flat">Buscar</a>
+	</div>
+</div>
