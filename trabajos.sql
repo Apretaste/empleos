@@ -75,3 +75,5 @@ CREATE TABLE _trabajos_conversation (
     to_user bigint(11),
     message varchar(4096)
 );
+
+alter table _trabajos_conversation add column offer_id char(36);

@@ -29,10 +29,18 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		var form = $(this);
+		var valid = true;
+		var data = getDataForm(form);
+
+		if (form.hasAttribute('validator'))  {
+			var validator = form.attr('validator');
+			eval('valid = ' + validator +'(data)');
+			if (!valid) return;
+		}
 
 		apretaste.send({
 			command: form.attr('action'),
-			data: getDataForm(form)
+			data: data
 		});
 	});
 });
@@ -68,6 +76,7 @@ function chat() {
 	var message = $('#message').val().trim();
 	var toId = $('#message').attr('to');
 	var name = $('#message').attr('name');
+	var offerId = $('#message').attr('name');
 
 	// do not allow short messages
 	if (message.length < 2) {
@@ -78,7 +87,7 @@ function chat() {
 	// send the chat
 	apretaste.send({
 		command: 'TRABAJOS COMMENT',
-		data: {to:toId, message:message},
+		data: {to:toId, message:message, offerId: offerId},
 		redirect: false
 	});
 

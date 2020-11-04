@@ -392,19 +392,14 @@ class Service
 	{
 		// get data to create a comment
 		$toId = $request->input->data->to;
+		$offerId = $request->input->data->offerId ?? null;
 		$message = Database::escape($request->input->data->message);
 
-		$curriculum = $this->getCurriculum($request->person->id, false);
-
 		// save the message to the database
-		Database::query("INSERT INTO _trabajos_conversation (id,  from_user, to_user, message) VALUES (uuid(), {$request->person->id}, $toId, '$message');");
+		Database::query("INSERT INTO _trabajos_conversation (id,  from_user, to_user, message, offer_id) VALUES (uuid(), {$request->person->id}, $toId, '$message','$offerId');");
 
 		// send a push notification to the other user
 		Notifications::alert($toId, 'Tienes un mensaje nuevo en conversaciones de Trabajos');
-
-		$request->input->data->with = $toId;
-
-		$this->_chat($request, $response);
 	}
 
 	/**
@@ -466,5 +461,14 @@ class Service
 			'experience' => $experience,
 			'skills' => $skills
 		];
+	}
+
+	/**
+	 * Chat list
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function _chatlist(Request $request, Response $response) {
+
 	}
 }
