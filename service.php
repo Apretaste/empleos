@@ -349,7 +349,7 @@ class Service
 	public function _chat(Request $request, Response $response)
 	{
 		$with = $request->input->data->with ?? null;
-		$offerId = $request->input->data->with ?? null;
+		$offerId = $request->input->data->offerId ?? null;
 
 		// get the list of chats
 		$chats = Database::query("SELECT *, IF(from_user = {$request->person->id}, 'right', 'left') AS position FROM _trabajos_conversation
