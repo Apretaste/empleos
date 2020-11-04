@@ -19,7 +19,7 @@
 						<span class="grey-text text-darken-4"><%= item.name %></span>
 						<span class="date"><%= moment(item.inserted).format('MMM D, YYYY h:mm A') %></span>
 					</div>
-					<span class="text"><%= item.comment %></span>
+					<span class="text"><%= item.message %></span>
 				</li>
 			<% }) %>
 		</ul>
@@ -39,7 +39,7 @@
 <div class="bottom-space"></div>
 
 <div class="fixed-action-btn">
-	<a class="btn-floating waves-effect waves-light grey second" href="#!" onclick="apretaste.back()">
+	<a class="btn-floating waves-effect waves-light grey second" href="#!" onclick="apretaste.send({command: 'TRABAJOS'});">
 		<i class="material-icons">arrow_back</i>
 	</a>
 	<a href="#chatModal" class="btn-floating btn-large green waves-effect waves-light modal-trigger">

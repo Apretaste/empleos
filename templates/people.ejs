@@ -12,7 +12,7 @@
 	<!-- FILTERS -->
 	<% if(filters) { %>
 		<div class="col s12">
-			<span class="chip tiny"><%= categories[filters] %></span>
+			<span class="chip tiny"><%- typeof categories[filters] === 'undefined' ? 'Todas las categor&iacute;as' : categories[filters]%></span>
 		</div>
 	<% } %>
 
@@ -30,7 +30,7 @@
 					<i class="fas fa-male circle"></i>
 					<span class="title"><%= item.name %></span>
 					<p class="blue-grey-text"><%=  cats.join(', ') %></p>
-					<a href="#!" class="secondary-content green-text" onclick="apretaste.send({command:'TRABAJOS PROFILE'})"><i class="fas fa-arrow-right"></i></a>
+					<a href="#!" class="secondary-content green-text" onclick="apretaste.send({command:'TRABAJOS PROFILE', data:{id: <%= item.id %>}})"><i class="fas fa-arrow-right"></i></a>
 				</li>
 			<% }) %>
 		</ul>
@@ -42,9 +42,13 @@
 	<div class="row">
 		<div class="col s12 center-align">
 			<ul class="pagination">
-				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				<% if (page > 1) { %>
+					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS PEOPLE',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
-				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+				<% if (page < pages) { %>
+					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS PEOPLE',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+				<% } %>
 			</ul>
 		</div>
 	</div>
@@ -61,19 +65,21 @@
 
 <!-- MODAL SEARCH -->
 <div id="searchModal" class="modal bottom-sheet fullscreen">
-	<div class="modal-content">
-		<div class="input-field">
-			<select id="category" class="materialize-select">
-				<option value="">Todas</option>
-				<% Object.keys(categories).forEach(function(item) { %>
-					<option value="<%= item %>"><%= categories[item] %></option>
-				<% }) %>
-				<label for="category">Escoja una categoría</label>
-			</select>
+	<form class="ap-form" action="TRABAJOS PEOPLE">
+		<div class="modal-content">
+			<div class="input-field">
+				<select id="category" name="category" class="materialize-select">
+					<option value="">Todas</option>
+					<% for(var item in categories) { %>
+						<option value="<%= item %>"><%= categories[item] %></option>
+					<% } %>
+					<label for="category">Escoja una categoría</label>
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="apretaste.send({command:'TODO'})" class="modal-close waves-effect green-text btn-flat">Buscar</a>
-	</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Buscar</button>
+		</div>
+	</form>
 </div>

@@ -5,7 +5,7 @@
 		<span class="chip clear spacing"><i class="fas fa-tag"></i> <%= categories[category] %></span>
 		<span class="chip clear"><i class="fas fa-calendar"></i> <%= moment(inserted).format('D [de] MMMM [del] YYYY') %></span>
 
-		<p><%= desc %></p>
+		<p><%= description %></p>
 	</div>
 </div>
 
@@ -16,7 +16,7 @@
 	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.back()">
 		<i class="material-icons">arrow_back</i>
 	</a>
-	<a href="#!" class="btn-floating btn-large waves-effect waves-light green" onclick="apretaste.send({command:'TRABAJOS CHAT'})">
+	<a href="#!" class="btn-floating btn-large waves-effect waves-light green" onclick="apretaste.send({command:'TRABAJOS CHAT', data: {with: <%= person_id %> }})">
 		<i class="fas fa-comments"></i>
 	</a>
 </div>

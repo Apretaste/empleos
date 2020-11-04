@@ -13,14 +13,16 @@
 	<% if(filters.length > 0) { %>
 		<div class="col s12">
 			<% filters.forEach(function(item) { %>
+				<% if (item+'' != '' && item+'' != 'null') { %>
 				<span class="chip tiny"><%= item %></span>
+				<% } %>
 			<% }) %>
 		</div>
 	<% } %>
 
 	<!-- RESULTS -->
 	<div class="col s12">
-		<% offers.forEach(function(item) { %>
+		<% for(var i in offers) {var item = offers[i]; %>
 			<div class="card">
 				<div class="card-person grey lighten-5">
 					<span class="chip tiny clear"><i class="fas fa-tag"></i> <%= categories[item.category] %></span>
@@ -30,10 +32,10 @@
 					<span><%= item.title %></span>
 				</div>
 				<div class="card-action grey lighten-4">
-					<a class="green-text" href="#!" onclick="apretaste.send({command:'TRABAJOS JOB'})">Ver oferta</a>
+					<a class="green-text" href="#!" onclick="apretaste.send({command:'TRABAJOS JOB', data: {id: '<%= item.id %>' }})">Ver oferta</a>
 				</div>
 			</div>
-		<% }) %>
+		<% } %>
 	</div>
 </div>
 
@@ -42,9 +44,13 @@
 	<div class="row">
 		<div class="col s12 center-align">
 			<ul class="pagination">
-				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				<% if (page > 1) { %>
+					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS OFFERS',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
-				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+				<% if (page < pages) { %>
+					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS OFFERS',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+				<% } %>
 			</ul>
 		</div>
 	</div>
@@ -64,26 +70,28 @@
 
 <!-- MODAL SEARCH -->
 <div id="searchModal" class="modal bottom-sheet fullscreen">
-	<div class="modal-content">
-		<!-- title -->
-		<div class="input-field">
-			<input id="title" value="" class="" />
-			<label for="title">Buscar por título</label>
-		</div>
+	<form class="ap-form" action="TRABAJOS OFFERS">
+		<div class="modal-content">
+			<!-- title -->
+			<div class="input-field">
+				<input id="title" value="" class="" name="title"/>
+				<label for="title">Buscar por título</label>
+			</div>
 
-		<!-- categories -->
-		<div class="input-field">
-			<select id="category" class="materialize-select">
-				<option value="">Todas</option>
-				<% Object.keys(categories).forEach(function(item) { %>
-					<option value="<%= item %>"><%= categories[item] %></option>
-				<% }) %>
-				<label for="category">Escoja una categoría</label>
-			</select>
+			<!-- categories -->
+			<div class="input-field">
+				<select id="category" name="category" class="materialize-select">
+					<option value="">Todas</option>
+					<% for(var item in categories) { %>
+						<option value="<%= item %>"><%= categories[item] %></option>
+					<% } %>
+					<label for="category">Escoja una categoría</label>
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="apretaste.send({command:'TODO'})" class="modal-close waves-effect green-text btn-flat">Buscar</a>
-	</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type = "submit" class="modal-close waves-effect green-text btn-flat">Buscar</button>
+		</div>
+	</form>
 </div>

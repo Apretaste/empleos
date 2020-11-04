@@ -44,7 +44,7 @@
 			</li>
 
 			<!-- Educations -->
-			<% education.forEach(function(item) { %>
+			<% for(var ix in education) { var item = education[ix];  %>
 				<li id="education-<%= item.id %>" class="collection-item avatar">
 					<i class="fas fa-graduation-cap circle"></i>
 					<span class="title"><%= item.degree %></span>
@@ -54,7 +54,7 @@
 					</p>
 					<a href="#!" onclick="trash('<%= item.id %>', 'education')" class="secondary-content green-text"><i class="fas fa-trash"></i></a>
 				</li>
-			<% }) %>
+			<% } %>
 
 			<!--  Add New Education -->
 			<li class="collection-item">
@@ -91,111 +91,116 @@
 
 <!-- MODAL EDIT NAME -->
 <div id="editNameModal" class="modal">
-	<div class="modal-content">
-		<div class="input-field">
-			<input id="name" class="remainder" maxlength="30" type="text" />
-			<label for="name">Título (<span>0</span>/30)</label>
+	<form id="editNameForm" class="ap-form" action="TRABAJOS SAVE">
+		<div class="modal-content">
+			<div class="input-field">
+				<input id="name" name="name" class="remainder" maxlength="30" type="text" value="<%= name %>"/>
+				<label for="name">Título (<span>0</span>/30)</label>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button class="modal-close waves-effect green-text btn-flat" type="submit">Editar</button>
+		</div>
+	</form>
 </div>
 
 <!-- MODAL EDIT PROFESSION -->
 <div id="editProfessionModal" class="modal fullscreen">
-	<div class="modal-content">
-		<div class="input-field">
-			<p class="grey-text">Profesión primaria</p>
-			<select class="materialize-select">
-				<option value=""></option>
-				<% Object.keys(categories).forEach(function(item) { %>
-					<option value="<%= item %>"><%= categories[item] %></option>
-				<% }) %>
-			</select>
+	<form class="ap-form" id="editProfessionForm" action="TRABAJOS SAVE">
+		<div class="modal-content">
+			<% for(var i =0, professionsCategory = ['Profesión primaria', 'Profesión secundaria']; i < professionsCategory.length; i++) { %>
+				<div class="input-field">
+					<p class="grey-text"><%= professionsCategory[i] %></p>
+					<select name="professions[]" class="materialize-select">
+						<option value=""></option>
+						<% for(var item in categories) { %>
+							<option value="<%= item %>" <% if (professions[i] == item) {%> selected <% } %>><%= categories[item] %></option>
+						<% } %>
+					</select>
+				</div>
+			<% } %>
 		</div>
-		<div class="input-field">
-			<p class="grey-text">Profesión secundaria</p>
-			<select class="materialize-select">
-				<option value=""></option>
-				<% Object.keys(categories).forEach(function(item) { %>
-					<option value="<%= item %>"><%= categories[item] %></option>
-				<% }) %>
-			</select>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Editar</button>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+	</form>
 </div>
 
 <!-- MODAL EDIT ABOUT -->
 <div id="editAboutModal" class="modal">
-	<div class="modal-content">
-		<div class="input-field">
-			<textarea id="desc" maxlength="200" class="remainder materialize-textarea"></textarea>
-			<label for="desc">Hable de usted (<span>0</span>/200)</label>
+	<form class="ap-form" action="TRABAJOS SAVE">
+		<div class="modal-content">
+			<div class="input-field">
+				<textarea id="desc" name="bio" maxlength="200" class="remainder materialize-textarea"><%= bio %></textarea>
+				<label for="desc">Hable de usted (<span>0</span>/200)</label>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Editar</button>
+		</div>
+	</form>
 </div>
 
 <!-- MODAL ADD EDUCATION -->
 <div id="addEducationModal" class="modal">
-	<div class="modal-content">
-		<div class="input-field">
-			<input id="grad_year" type="number" class="remainder" maxlength="4" />
-			<label for="grad_year">Año de graduación (<span>0</span>/4)</label>
+	<form class="ap-form" action="TRABAJOS EDUCATION">
+		<div class="modal-content">
+			<div class="input-field">
+				<input id="grad_year" name="grad_year" type="number" class="remainder" maxlength="4" />
+				<label for="grad_year">Año de graduación (<span>0</span>/4)</label>
+			</div>
+			<div class="input-field">
+				<input id="degree" name="degree" class="remainder" maxlength="30" type="text" />
+				<label for="degree">Título (<span>0</span>/30)</label>
+			</div>
+			<div class="input-field">
+				<input id="school" name="school" class="remainder" maxlength="30" type="text" />
+				<label for="school">Escuela (<span>0</span>/30)</label>
+			</div>
 		</div>
-		<div class="input-field">
-			<input id="degree" class="remainder" maxlength="30" type="text" />
-			<label for="degree">Título (<span>0</span>/30)</label>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Guardar</button>
 		</div>
-		<div class="input-field">
-			<input id="school" class="remainder" maxlength="30" type="text" />
-			<label for="school">Título (<span>0</span>/30)</label>
-		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+	</form>
 </div>
 
 <!-- MODAL ADD EXPERIENCE -->
 <div id="addExperienceModal" class="modal">
-	<div class="modal-content">
-		<div class="input-field">
-			<input id="position" class="remainder" maxlength="30" type="text" />
-			<label for="position">Posición (<span>0</span>/30)</label>
+	<form class="ap-form" action="TRABAJOS EXPERIENCE">
+		<div class="modal-content">
+			<div class="input-field">
+				<input name="position" id="position" class="remainder" maxlength="30" type="text" />
+				<label for="position">Posición (<span>0</span>/30)</label>
+			</div>
+			<div class="input-field">
+				<input name="workplace" id="workplace" class="remainder" maxlength="30" type="text" />
+				<label for="workplace">Centro laboral (<span>0</span>/30)</label>
+			</div>
 		</div>
-		<div class="input-field">
-			<input id="workplace" class="remainder" maxlength="30" type="text" />
-			<label for="workplace">Centro laboral (<span>0</span>/30)</label>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Guardar</button>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+	</form>
 </div>
 
 <!-- MODAL ADD EXPERIENCE -->
 <div id="editSkillsModal" class="modal">
-	<div class="modal-content">
-		<p>Liste las técnicas y herramientas que maneja separado por coma. Por ejemplo: php,photoshop,word.</p>
-		<div class="input-field">
-			<textarea id="skills" maxlength="500" class="remainder materialize-textarea"></textarea>
-			<label for="skills">Técnicas y herramientas (<span>0</span>/500)</label>
+	<form class="ap-form" action="TRABAJOS SAVE">
+		<div class="modal-content">
+			<p>Liste las técnicas y herramientas que maneja separado por coma. Por ejemplo: php,photoshop,word.</p>
+			<div class="input-field">
+				<textarea name="skills" id="skills" maxlength="500" class="remainder materialize-textarea"></textarea>
+				<label for="skills">Técnicas y herramientas (<span>0</span>/500)</label>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-		<a onclick="alert('edited!')" class="modal-close waves-effect green-text btn-flat">Editar</a>
-	</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button type="submit" class="modal-close waves-effect green-text btn-flat">Guardar</button>
+		</div>
+	</form>
 </div>

@@ -1,18 +1,3 @@
-// list of categories
-//
-var categories = [];
-categories['professor'] = 'Profesor';
-categories['design'] = 'Diseño';
-categories['marketing'] = 'Marketing';
-categories['coding'] = 'Programación';
-categories['copywrite'] = 'Escritura';
-categories['translation'] = 'Traducción';
-categories['research'] = 'Investigación';
-categories['testing'] = 'Muestreo';
-categories['other'] = 'Otro';
-
-// onload 
-//
 $(document).ready(function() {
 	// start components
 	$('.tabs').tabs();
@@ -38,7 +23,43 @@ $(document).ready(function() {
 		// update the counter with the remainder amount
 		counter.html(message.length);
 	})
+
+	// forms
+	$(".ap-form").submit(function(e) {
+		e.preventDefault();
+
+		var form = $(this);
+
+		apretaste.send({
+			command: form.attr('action'),
+			data: getDataForm(form)
+		});
+	});
 });
+
+/**
+ *
+ * @param form
+ * @returns {{}}
+ */
+function getDataForm(form) {
+	var serial = form.serializeArray();
+	var data = {};
+
+	for (var field in serial) {
+		var fn = serial[field].name;
+
+		if (fn.indexOf('[]') > 0) {
+			fn = fn.replace('[]', '');
+			if (typeof data[fn] === 'undefined') data[fn] = [];
+			data[fn].push(serial[field].value);
+		} else {
+			data[serial[field].name] = serial[field].value;
+		}
+	}
+
+	return data;
+}
 
 // send a new chat
 //
@@ -81,6 +102,7 @@ function chat() {
 	$('html, body').animate({
 		scrollTop: $("#last").offset().top
 	}, 1000);
+
 }
 
 // delete an education or experience

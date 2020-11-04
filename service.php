@@ -2,20 +2,26 @@
 
 use Apretaste\Request;
 use Apretaste\Response;
+use Framework\Database;
+use Apretaste\Notifications;
 
 class Service
 {
 	/* list of categories, must match the JS file */
-	private $categories = [
-		'professor' => 'Profesor',
-		'design' => 'Diseño',
-		'marketing' => 'Marketing',
-		'coding' => 'Programación',
-		'copywrite' => 'Escritura',
-		'translation' => 'Traducción',
-		'research' => 'Investigación',
-		'testing' => 'Muestreo',
-		'other' => 'Otro'];
+	private $categories = [];
+
+	/**
+	 * Service constructor.
+	 * @throws \Framework\Alert
+	 */
+	public function __construct()
+	{
+		$categories = Database::query("SELECT * FROM _trabajos_categories;");
+		$this->categories = [];
+		foreach ($categories as $category) {
+			$this->categories[$category->code] = $category->description;
+		}
+	}
 
 	/**
 	 * A possible home screen
@@ -30,23 +36,29 @@ class Service
 	 */
 	public function _offers(Request $request, Response $response)
 	{
-		// get search filters, if exist
-		$filters = [$this->categories['coding'], 'php'];
+		$limit = 10;
+		$page = $request->input->data->offset ?? 1;
+		$offset = ($page - 1) * $limit;
+		$category = $request->input->data->category ?? null;
+		$title = $request->input->data->title ?? null;
+		$filters = [$category, $title];
 
-		// get all job offers
-		$offers = [
-			['id' => 123, 'title' => 'Busco programador de C++ para un trabajo super dificil ahi', 'category' => 'coding', 'inserted' => '2020-06-30 18:20:15'],
-			['id' => 223, 'title' => 'Busco programador de JavaScript para un trabajo super dificil ahi', 'category' => 'coding', 'inserted' => '2020-06-30 18:20:15'],
-			['id' => 323, 'title' => 'Busco programador de PHP para un trabajo super dificil ahi', 'category' => 'coding', 'inserted' => '2020-06-30 18:20:15'],
-			['id' => 423, 'title' => 'Necesito un diseñador que sepa usar Photoshop sin lios', 'category' => 'coding', 'inserted' => '2020-06-30 18:20:15'],
-		];
+		$offers = Database::query("SELECT * FROM _trabajos_offers 
+		WHERE (category = '$category' OR '$category' = '') 
+			AND ('$title' = '' OR title LIKE '%$title%')
+		ORDER BY inserted DESC LIMIT $offset,$limit;");
+
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _trabajos_offers")->cnt;
+
+		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
 		// create content for the view
 		$content = [
-			'filters' => $filters, 
-			'offers' => $offers, 
-			'page' => 1, 
-			'pages' => 3
+			'filters' => $filters,
+			'offers' => $offers,
+			'page' => $page,
+			'pages' => $pages,
+			'categories' => $this->categories
 		];
 
 		// send data to the view
@@ -58,17 +70,22 @@ class Service
 	 */
 	public function _job(Request $request, Response $response)
 	{
-		// get the job offer
-		$job = [
-			'id' => 12345,
-			'title' => 'Busco programador de C++ para un trabajo super dificil ahi',
-			'desc' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.',
-			'category' => 'coding',
-			'inserted' => '2020-06-30 18:20:15',
-		];
+		$id = $request->input->data->id ?? null;
 
-		// send data to the view
-		$response->setTemplate("job.ejs", $job);
+		$job = Database::queryFirst("SELECT * FROM _trabajos_offers WHERE id = '$id';");
+
+		if ($job) {
+			$job->categories = $this->categories;
+			return $response->setTemplate("job.ejs", $job);
+		}
+
+		$response->setTemplate('message.ejs', [
+			"header" => "Oferta no encontrada",
+			"icon" => "sentiment_very_dissatisfied",
+			"text" => "No encontramos la oferta solicitada",
+			"btnCaption" => "Ofertas",
+			"btnLink" => "TRABAJOS"
+		]);
 	}
 
 	/**
@@ -77,7 +94,9 @@ class Service
 	public function _newjob(Request $request, Response $response)
 	{
 		// send data to the view
-		$response->setTemplate("newjob.ejs");
+		$response->setTemplate("newjob.ejs", [
+			'categories' => $this->categories
+		]);
 	}
 
 	/**
@@ -85,6 +104,14 @@ class Service
 	 */
 	public function _savejob(Request $request, Response $response)
 	{
+
+		$title = Database::escape($request->input->data->title ?? '');
+		$description = Database::escape($request->input->data->desc ?? '');
+		$category = Database::escape($request->input->data->category ?? '');
+		$email = Database::escape($request->input->data->email ?? '');
+
+		Database::query("INSERT INTO _trabajos_offers (id, title, description, category, email, person_id) VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id})");
+
 		$response->setTemplate('message.ejs', [
 			'header' => 'Oferta creada',
 			'icon' => 'thumb_up',
@@ -94,52 +121,124 @@ class Service
 	}
 
 	/**
-	 * Edit your currirulum
+	 * Save curriculum
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws \Framework\Alert
 	 */
-	public function _curriculum(Request $request, Response $response)
+	public function _save(Request $request, Response $response)
 	{
-		// get professional name
-		// NOTE: should be different from the platform's name
-		$name = 'Salvador Pascual';
 
-		// get the person's bio
-		$bio = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim';
+		Database::query("INSERT IGNORE INTO _trabajos_profile (person_id) VALUES ({$request->person->id});");
 
-		// get the list of person's professions
-		$professions = ['coding', 'professor'];
+		// update name
+		$name = $request->input->data->name ?? null;
+		if ($name !== null) {
+			$name = Database::escape($name);
+			Database::query("UPDATE _trabajos_profile SET name = '$name' WHERE person_id = {$request->person->id}");
+		}
 
-		// get the person's ecucation
-		$education = [
-			['id' => 1234, 'grad_year' => '2004', 'school' => 'Osvaldo Herrera', 'degree' => 'Técnico Medio en Electrónica'],
-			['id' => 2234, 'grad_year' => '2006', 'school' => 'Instituto Superior Politécnico José Antonio Echevarría', 'degree' => 'Ingeniero Informático'],
-			['id' => 3234, 'grad_year' => '', 'school' => 'Florida International University', 'degree' => 'Master in Computer Science'],
-		];
+		// update bio
+		$bio = $request->input->data->bio ?? null;
+		if ($bio !== null) {
+			$bio = Database::escape($bio);
+			Database::query("UPDATE _trabajos_profile SET bio = '$bio' WHERE person_id = {$request->person->id}");
+		}
 
-		// get the person's experience
-		$experience = [
-			['id' => 1234, 'workplace' => 'Instituto de la Educación Internacional', 'position' => 'Programador Principal'],
-			['id' => 2234, 'workplace' => 'Unirsidad Espectacular', 'position' => 'Profesor de Ciencias'],
-		];
+		$professions = $request->input->data->professions ?? null;
+		if ($professions !== null) {
 
-		// get the person's profesional skills
-		$skills = ['php', 'JavaScript', 'Apache2', 'Zoom', 'Photoshop', 'Illustrator', 'Google Analytics'];
+			// clean all professions
+			Database::query("DELETE FROM _trabajos_profile_professions WHERE person_id = {$request->person->id}");
 
-		// create content for the view
-		$content = [
-			'name' => $name,
-			'bio' => $bio,
-			'professions' => $professions,
-			'education' => $education,
-			'experience' => $experience,
-			'skills' => $skills
-		];
+			// insert new professions
+			foreach ($professions as $profession) {
+				if (!empty($profession)) {
+					Database::query("INSERT INTO _trabajos_profile_professions (id, person_id, profession) VALUES (uuid(), {$request->person->id}, '$profession');");
+				}
+			}
+		}
 
-		// send data to the view
-		$response->setTemplate("curriculum.ejs", $content);
+		// skills
+		$skills = $request->input->data->skills ?? null;
+		if ($skills !== null) {
+			$skills = trim($skills);
+			$skills = explode(',', $skills);
+
+			// clean all skills
+			Database::query("DELETE FROM _trabajos_profile_skills WHERE person_id = {$request->person->id}");
+
+			// insert new professions
+			foreach ($skills as $skill) {
+				$skill = strtolower(trim($skill));
+
+				if (!empty($skill)) {
+					Database::query("INSERT INTO _trabajos_profile_skills (id, person_id, skill) VALUES (uuid(), {$request->person->id}, '$skill');");
+				}
+			}
+		}
+		$this->_curriculum($request, $response);
 	}
 
 	/**
-	 * Delete an education or experiencie from the user curriculum
+	 * Save new education
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws \Framework\Alert
+	 */
+	public function _education(Request $request, Response $response)
+	{
+
+		$grad_year = Database::escape($request->input->data->grad_year ?? null);
+		$degree = Database::escape($request->input->data->degree ?? null);
+		$school = Database::escape($request->input->data->school ?? null);
+
+		Database::query("INSERT INTO _trabajos_profile_education (id, person_id, grad_year, school, degree) 
+						 VALUES (uuid(), {$request->person->id}, '$grad_year', '$degree', '$school');");
+
+		$this->_curriculum($request, $response);
+	}
+
+
+	/**
+	 * Save new experience
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws \Framework\Alert
+	 */
+	public function _experience(Request $request, Response $response)
+	{
+
+		$workplace = Database::escape($request->input->data->workplace ?? null);
+		$position = Database::escape($request->input->data->position ?? null);
+
+		Database::query("INSERT INTO _trabajos_profile_experience (id, person_id, workplace, position) 
+						 VALUES (uuid(), {$request->person->id}, '$workplace', '$position');");
+
+		$this->_curriculum($request, $response);
+	}
+
+	/**
+	 * Edit your curriculum
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws \Framework\Alert
+	 */
+	public function _curriculum(Request $request, Response $response)
+	{
+		$curriculum = $this->getCurriculum($request->person->id);
+		$curriculum->categories = $this->categories;
+		$response->setTemplate("curriculum.ejs", $curriculum);
+	}
+
+	/**
+	 * Delete an education or experience from the user curriculum
+	 * @param Request $request
+	 * @param Response $response
 	 */
 	public function _delete(Request $request, Response $response)
 	{
@@ -147,8 +246,11 @@ class Service
 		$id = $request->input->data->id;
 		$type = $request->input->data->type;
 
-		// delete the education or experiencie
-		// TODO
+		if (in_array($type, ['education', 'experience'])) {
+			Database::query("DELETE FROM _trabajos_profile_$type WHERE id = '$id'");
+		}
+
+		$this->_curriculum($request, $response);
 	}
 
 	/**
@@ -157,21 +259,33 @@ class Service
 	public function _people(Request $request, Response $response)
 	{
 		// get search filters, if exist, else should be false
-		$filters = 'design';
+		$filters = [$request->input->data->category ?? ''];
+		$limit = 10;
+		$page = $request->input->data->offset ?? 1;
+		$offset = ($page - 1) * $limit;
 
 		// get the list of people
-		$workers = [
-			['id' => 1234, 'name' => 'Jhon Jonson', 'categories' => ['coding', 'copywrite', 'professor']],
-			['id' => 2234, 'name' => 'Tom Thomas', 'categories' => ['marketing', 'translation']],
-			['id' => 3234, 'name' => 'Peter Parker', 'categories' => ['testing', 'copywrite', 'design']],
-		];
+		$workers = Database::query("SELECT person_id as id, name FROM _trabajos_profile 
+		WHERE '{$filters[0]}' = '' OR EXISTS(SELECT * FROM _trabajos_profile_professions 
+				WHERE _trabajos_profile.person_id = _trabajos_profile_professions.person_id
+		    	AND profession = '{$filters[0]}')
+		LIMIT $offset,10");
+
+		foreach ($workers as $worker) {
+			$worker->categories = $this->getProfessions($worker->id);
+		}
+
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _trabajos_offers")->cnt;
+
+		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
 		// create content for the view
 		$content = [
 			'filters' => $filters,
 			'workers' => $workers,
-			'page' => 1, 
-			'pages' => 3
+			'page' => $page,
+			'pages' => $pages,
+			'categories' => $this->categories
 		];
 
 		// send data to the view
@@ -183,47 +297,21 @@ class Service
 	 */
 	public function _profile(Request $request, Response $response)
 	{
-		// get professional name
-		$name = 'Salvador Pascual';
+		$id = $request->input->data->id ?? null;
+		$curriculum = $this->getCurriculum($id);
 
-		// get the person's bio
-		$bio = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim';
+		if ($id === null) {
+			return $response->setTemplate('message.ejs', [
+				'header' => 'Perfil no encontrado',
+				"icon" => "sentiment_very_dissatisfied",
+				"text" => "No encontramos el perfil solicitado",
+				"btnCaption" => "Ofertas",
+				"btnLink" => "TRABAJOS"
+			]);
+		}
 
-		// get the person's professions
-		$professions = 'Profesor, Diseño';
-
-		// get the person's ecucation
-		$education = [
-			['grad_year' => '2004', 'school' => 'Osvaldo Herrera', 'degree' => 'Técnico Medio en Electrónica'],
-			['grad_year' => '2006', 'school' => 'Instituto Superior Politécnico José Antonio Echevarría', 'degree' => 'Ingeniero Informático'],
-			['grad_year' => '', 'school' => 'Florida International University', 'degree' => 'Master in Computer Science'],
-		];
-
-		// get the person's experience
-		$experience = [
-			['workplace' => 'Instituto de la Educación Internacional', 'position' => 'Programador Principal'],
-			['workplace' => 'Unirsidad Espectacular', 'position' => 'Profesor de Ciencias'],
-		];
-
-		// get the person's profesional skills
-		$skills = 'php, JavaScript, Apache2, Zoom, Photoshop, Illustrator';
-
-		// get the person's languages and proficiency
-		$languages = 'Francés, Español';
-
-		// create content for the view
-		$content = [
-			'id' => $request->person->id,
-			'name' => $name,
-			'bio' => $bio,
-			'professions' => $professions,
-			'education' => $education,
-			'experience' => $experience,
-			'skills' => $skills
-		];
-
-		// send data to the view
-		$response->setTemplate("profile.ejs", $content);
+		$curriculum->id = $request->person->id;
+		$response->setTemplate("profile.ejs", $curriculum);
 	}
 
 	/**
@@ -231,23 +319,29 @@ class Service
 	 */
 	public function _chat(Request $request, Response $response)
 	{
+		$with = $request->input->data->with ?? null;
+
 		// get the list of chats
-		$chats = [
-			['position' => 'right', 'name' => 'Maria Fernandez', 'inserted' => '2020-10-20 3:34:12', 'comment' => 'Hola. ¿Aún está abierta la posicion?'],
-			['position' => 'left', 'name' => 'Pedro Cansoas', 'inserted' => '2020-10-20 3:34:12', 'comment' => 'Sí, necesitamos un programador'],
-			['position' => 'right', 'name' => 'Maria Fernandez', 'inserted' => '2020-10-20 3:34:12', 'comment' => '¿El trabajo es desde casa o en persona?'],
-		];
+		$chats = Database::query("SELECT *, IF(from_user = {$request->person->id}, 'right', 'left') AS position FROM _trabajos_conversation
+									WHERE (from_user = {$request->person->id} AND to_user = $with) 
+										OR (to_user = {$request->person->id} AND from_user = $with) 
+									ORDER BY inserted DESC 
+										limit 50");
+		$chats = array_reverse($chats);
 
 		// get your name and id
-		$from = [
-			'id' => 2234,
-			'name' => 'Maria Fernandez',
+		$from = $this->getCurriculum($request->person->id, false);
+
+		if ($from === null) $from = (object)[
+			'id' => $request->person->id,
+			'name' => 'Tu'
 		];
 
-		// get the other person's name and id
-		$to = [
-			'id' => 1234,
-			'name' => 'Pedro Cansoas',
+		$to = $this->getCurriculum($with, false);
+
+		if ($to === null) $to = (object)[
+			'id' => $with,
+			'name' => 'Desconocido'
 		];
 
 		// create content for the view
@@ -268,12 +362,79 @@ class Service
 	{
 		// get data to create a comment
 		$toId = $request->input->data->to;
-		$message = $request->input->data->message;
+		$message = Database::escape($request->input->data->message);
+
+		$curriculum = $this->getCurriculum($request->person->id, false);
 
 		// save the message to the database
-		// TODO
+		Database::query("INSERT INTO _trabajos_conversation (id,  from_user, to_user, message) VALUES (uuid(), {$request->person->id}, $toId, '$message');");
 
 		// send a push notification to the other user
-		// TODO
+		Notifications::alert($toId, 'Tienes un mensaje nuevo en conversaciones de Trabajos');
+
+		$request->input->data->with = $toId;
+
+		$this->_chat($request, $response);
+	}
+
+	/**
+	 * @param Request $request
+	 * @return array
+	 * @throws \Framework\Alert
+	 */
+	private function getProfessions($personId): array
+	{
+		// get the list of person's professions
+		$r = Database::query("SELECT * FROM _trabajos_profile_professions WHERE person_id = {$personId}");
+		$professions = [];
+		foreach ($r as $pro) $professions[] = $pro->profession;
+		return $professions;
+	}
+
+	/**
+	 * @param $personId
+	 * @param bool $full
+	 * @throws \Framework\Alert
+	 */
+	private function getCurriculum($personId, $full = true)
+	{
+		// get basic data
+		$curriculum = Database::queryFirst("SELECT * FROM _trabajos_profile WHERE person_id = {$personId}");
+
+		if ($curriculum === null) {
+			return null;
+		}
+
+		$name = $curriculum->name ?? '';
+		$bio = $curriculum->bio ?? '';
+		$professions = [];
+		$education = [];
+		$experience = [];
+		$skills = [];
+
+		// get full profile
+		if ($full) {
+			$professions = $this->getProfessions($personId);
+
+			// get the person's ecucation
+			$education = Database::query("SELECT * FROM _trabajos_profile_education WHERE person_id = {$personId}");
+
+			// get the person's experience
+			$experience = Database::query("SELECT * FROM _trabajos_profile_experience WHERE person_id = {$personId}");
+
+			// get the person's profesional skills
+			$r = Database::query("SELECT * FROM _trabajos_profile_skills WHERE person_id = {$personId}");
+			$skills = [];
+			foreach ($r as $pro) $skills[] = $pro->skill;
+		}
+
+		return (object)[
+			'name' => $name,
+			'bio' => $bio,
+			'professions' => $professions,
+			'education' => $education,
+			'experience' => $experience,
+			'skills' => $skills
+		];
 	}
 }
