@@ -12,13 +12,13 @@
 
 			<!-- description -->
 			<div class="input-field">
-				<textarea id="desc" name="desc" maxlength="1000" class="remainder materialize-textarea" required="" aria-required="true"></textarea>
+				<textarea id="desc" name="desc" maxlength="1000" class="remainder materialize-textarea"></textarea>
 				<label for="desc">Describa su trabajo (<span>0</span>/1000)</label>
 			</div>
 
 			<!-- categories -->
 			<div class="input-field">
-				<select id="category" name="category" class="materialize-select">
+				<select id="category" name="category" class="materialize-select" required="" aria-required="true">
 					<option value=""></option>
 					<% for(var item in categories) { %>
 						<option value="<%= item %>"><%= categories[item] %></option>
@@ -29,7 +29,7 @@
 
 			<!-- email -->
 			<div class="input-field">
-				<input id="email" name="email" type="email" value="<%= email %>"/>
+				<input id="email" name="email" type="email" value="<%= email %>" required="" aria-required="true"/>
 				<label for="email">Su correo electrónico</label>
 			</div>
 		</div>
