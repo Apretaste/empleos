@@ -95,7 +95,8 @@ class Service
 	{
 		// send data to the view
 		$response->setTemplate("newjob.ejs", [
-			'categories' => $this->categories
+			'categories' => $this->categories,
+			'email' => $request->person->email
 		]);
 	}
 
