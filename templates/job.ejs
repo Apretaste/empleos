@@ -16,7 +16,7 @@
 	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.send({command:'TRABAJOS', data: {}})">
 		<i class="material-icons">arrow_back</i>
 	</a>
-	<a href="#!" class="btn-floating btn-large waves-effect waves-light green" onclick="apretaste.send({command:'TRABAJOS CHAT', data: {with: <%= person_id %> }})">
+	<a href="#!" class="btn-floating btn-large waves-effect waves-light green" onclick="apretaste.send({command:'TRABAJOS CHAT', data: {with: <%= person_id %>, offerId: '<%= id %>' }})">
 		<i class="fas fa-comments"></i>
 	</a>
 </div>

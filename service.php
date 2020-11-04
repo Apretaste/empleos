@@ -1,5 +1,6 @@
 <?php
 
+use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
 use Framework\Database;
@@ -316,11 +317,39 @@ class Service
 	}
 
 	/**
+	 * @param $personId
+	 * @param null $offerId
+	 * @return mixed
+	 * @throws \Framework\Alert
+	 */
+	private function getBetterName($personId, $offerId = null) {
+		$cv = Database::queryFirst("SELECT name FROM _trabajos_profile WHERE person_id = $personId");
+		$name = 'Desconocido';
+		if ($cv) {
+			return $cv->name;
+		} else {
+			$profile = Person::find($personId);
+			if (!empty($profile->fullName))
+				$name = $profile->fullName;
+		}
+
+		if ($offerId !== null) {
+			$offer = Database::queryFirst("SELECT title FROM _trabajos_offers WHERE id = '$offerId'");
+			if ($offer) {
+				$name .= "({$offer->title})";
+			}
+		}
+
+		return $name;
+	}
+
+	/**
 	 * Chat between creators and applicants
 	 */
 	public function _chat(Request $request, Response $response)
 	{
 		$with = $request->input->data->with ?? null;
+		$offerId = $request->input->data->with ?? null;
 
 		// get the list of chats
 		$chats = Database::query("SELECT *, IF(from_user = {$request->person->id}, 'right', 'left') AS position FROM _trabajos_conversation
@@ -335,14 +364,14 @@ class Service
 
 		if ($from === null) $from = (object)[
 			'id' => $request->person->id,
-			'name' => 'Tu'
+			'name' => $this->getBetterName($request->person->id)
 		];
 
 		$to = $this->getCurriculum($with, false);
 
 		if ($to === null) $to = (object)[
 			'id' => $with,
-			'name' => 'Desconocido'
+			'name' =>  $this->getBetterName($with, $offerId)
 		];
 
 		// create content for the view
