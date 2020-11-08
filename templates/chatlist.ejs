@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs tabs-fixed-width">
+            <li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS OFFERS'})">Ofertas</a></li>
+            <li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS PEOPLE'})">Personal</a></li>
+            <li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS CURRICULUM'})">CV</a></li>
+            <li class="tab"><a href="#" class="active">Chat</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="col s12">
+    <% conversations.forEach(function(conversation){ %>
+        <div class="col s4 m2">
+            <div class="card user-card center-align">
+                <div class="content" onclick="openProfile('<%= conversation.id %>')">
+                    <div class="person-avatar circle" face="<%= conversation.avatar %>" color="<%= conversation.avatarColor %>"
+                         size="40" online="<%= conversation.online %>">
+                        <% if(conversation.unreadCount > 0){ %>
+                            <div class="icon-alert"></div>
+                        <% } %>
+                    </div>
+                    <span class="<%= conversation.gender %>">@<%= conversation.username %></span>
+                </div>
+                <div class="action grey lighten-2 green-text">
+                    <a href="#!">
+                        <i class="material-icons"
+                           onclick="apretaste.send({command: 'chat', data: {userId: '<%= conversation.id %>'}})">
+                            chat
+                        </i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+
+    <% if(conversations.length == 0){ %>
+        <p class="middle-center center grey-text">Usted aún no tiene conversaciones.</p>
+    <% } %>
+</div>

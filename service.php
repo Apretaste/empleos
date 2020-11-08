@@ -469,6 +469,28 @@ class Service
 	 * @param Response $response
 	 */
 	public function _chatlist(Request $request, Response $response) {
+		$persons = Database::query("SELECT distinct to_user as person_id FROM _trabajos_conversation where from_user = {$request->person->id}
+			UNION
+			SELECT distinct from_user as person_id FROM _trabajos_conversation where to_user = {$request->person->id}");
 
+
+		foreach ($persons as &$person) {
+			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$person->person_id}' LIMIT 1");
+			$person = $user;
+
+			// get the person's avatar
+			$person->avatar = $person->avatar ?? ($person->gender === 'F' ? 'chica' : 'hombre');
+
+			// get the person's avatar color
+			$person->avatarColor = $person->avatarColor ?? 'verde';
+			$person->unreadCount =(int) Database::query("
+				SELECT count(*) AS cantidad
+				FROM _trabajos_conversation
+				WHERE from_user={$person->id}  AND to_user = {$request->person->id} AND read_date is NULL")[0]->cantidad;
+		}
+
+		$response->setTemplate('chatlist.ejs', [
+			'conversations' => $persons
+		]);
 	}
 }
