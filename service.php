@@ -427,7 +427,14 @@ class Service
 		$curriculum = Database::queryFirst("SELECT * FROM _trabajos_profile WHERE person_id = {$personId}");
 
 		if ($curriculum === null) {
-			return null;
+			return (object) [
+				'name' => '',
+				'bio' => '',
+				'professions' => [],
+				'education' => [],
+				'experience' => [],
+				'skills' => []
+			];
 		}
 
 		$name = $curriculum->name ?? '';
