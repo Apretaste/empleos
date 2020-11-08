@@ -475,8 +475,9 @@ class Service
 
 
 		foreach ($persons as &$person) {
-			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$person->person_id}' LIMIT 1");
+			$user = Database::queryFirst("SELECT id, gender, avatar, avatarColor, online FROM person WHERE id='{$person->person_id}' LIMIT 1");
 			$person = $user;
+			$person->username = $this->getBetterName($person->id);
 
 			// get the person's avatar
 			$person->avatar = $person->avatar ?? ($person->gender === 'F' ? 'chica' : 'hombre');
