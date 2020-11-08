@@ -32,7 +32,7 @@ $(document).ready(function() {
 		var valid = true;
 		var data = getDataForm(form);
 
-		if (form.hasAttribute('validator'))  {
+		if (form.hasAttr('validator'))  {
 			var validator = form.attr('validator');
 			eval('valid = ' + validator +'(data)');
 			if (!valid) return;
