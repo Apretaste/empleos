@@ -32,8 +32,8 @@ $(document).ready(function() {
 		var valid = true;
 		var data = getDataForm(form);
 
-		if (form.hasAttr('validator'))  {
-			var validator = form.attr('validator');
+		var validator = form.attr('validator');
+		if (validator)  {
 			eval('valid = ' + validator +'(data)');
 			if (!valid) return;
 		}
