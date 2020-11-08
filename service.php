@@ -398,7 +398,7 @@ class Service
 		Database::query("INSERT INTO _trabajos_conversation (id,  from_user, to_user, message, offer_id) VALUES (uuid(), {$request->person->id}, $toId, '$message','$offerId');");
 
 		// send a push notification to the other user
-		Notifications::alert($toId, 'Tienes un mensaje nuevo en conversaciones de Trabajos');
+		Notifications::alert($toId, 'Tienes un mensaje nuevo en conversaciones de Trabajos',  $icon = 'info_outline', $link = '{command: "TRABAJOS CHAT", data: {with: '.$request->person->id.'}}');
 	}
 
 	/**
