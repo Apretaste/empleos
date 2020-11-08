@@ -365,14 +365,14 @@ class Service
 		if ($from === null) $from = (object)[
 			'id' => $request->person->id,
 			'name' => $this->getBetterName($request->person->id)
-		];
+		]; else $from->id = $request->person->id;
 
 		$to = $this->getCurriculum($with, false);
 
 		if ($to === null) $to = (object)[
 			'id' => $with,
 			'name' =>  $this->getBetterName($with, $offerId)
-		];
+		]; else $to->id = $with;
 
 		// create content for the view
 		$content = [
