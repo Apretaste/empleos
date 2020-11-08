@@ -8,33 +8,34 @@
         </ul>
     </div>
 </div>
-
-<div class="col s12">
-    <% conversations.forEach(function(conversation){ %>
-        <div class="col s4 m2">
-            <div class="card user-card center-align">
-                <div class="content" onclick="openProfile('<%= conversation.id %>')">
-                    <div class="person-avatar circle" face="<%= conversation.avatar %>" color="<%= conversation.avatarColor %>"
-                         size="40" online="<%= conversation.online %>">
-                        <% if(conversation.unreadCount > 0){ %>
-                            <div class="icon-alert"></div>
-                        <% } %>
+<div class="row">
+    <div class="col s12">
+        <% conversations.forEach(function(conversation){ %>
+            <div class="col s4 m2">
+                <div class="card user-card center-align">
+                    <div class="content" onclick="openProfile('<%= conversation.id %>')">
+                        <div class="person-avatar circle" face="<%= conversation.avatar %>" color="<%= conversation.avatarColor %>"
+                             size="40" online="<%= conversation.online %>">
+                            <% if(conversation.unreadCount > 0){ %>
+                                <div class="icon-alert"></div>
+                            <% } %>
+                        </div>
+                        <span class="<%= conversation.gender %>"><%= conversation.username %></span>
                     </div>
-                    <span class="<%= conversation.gender %>"><%= conversation.username %></span>
-                </div>
-                <div class="action grey lighten-2 green-text">
-                    <a href="#!">
-                        <i class="material-icons"
-                           onclick="apretaste.send({command: 'TRABAJOS CHAT', data: {with: '<%= conversation.id %>'}})">
-                            chat
-                        </i>
-                    </a>
+                    <div class="action grey lighten-2 green-text">
+                        <a href="#!">
+                            <i class="material-icons"
+                               onclick="apretaste.send({command: 'TRABAJOS CHAT', data: {with: '<%= conversation.id %>'}})">
+                                chat
+                            </i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    <% }) %>
+        <% }) %>
 
-    <% if(conversations.length == 0){ %>
-        <p class="middle-center center grey-text">Usted aún no tiene conversaciones.</p>
-    <% } %>
+        <% if(conversations.length == 0){ %>
+            <p class="middle-center center grey-text">Usted aún no tiene conversaciones.</p>
+        <% } %>
+    </div>
 </div>
