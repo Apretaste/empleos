@@ -343,65 +343,6 @@ class Service
 	}
 
 	/**
-	 * Chat between creators and applicants
-	 */
-	public function _chat(Request $request, Response $response)
-	{
-		$with = $request->input->data->with ?? null;
-		$offerId = $request->input->data->offerId ?? null;
-
-		// get the list of chats
-		$chats = Database::query("SELECT *, IF(from_user = {$request->person->id}, 'right', 'left') AS position FROM _trabajos_conversation
-									WHERE (from_user = {$request->person->id} AND to_user = $with) 
-										OR (to_user = {$request->person->id} AND from_user = $with) 
-									ORDER BY inserted DESC 
-										limit 50");
-		$chats = array_reverse($chats);
-
-		// get your name and id
-		$from = $this->getCurriculum($request->person->id, false);
-
-		if ($from === null) $from = (object)[
-			'id' => $request->person->id,
-			'name' => $this->getBetterName($request->person->id)
-		];
-
-		$to = $this->getCurriculum($with, false);
-
-		if ($to === null) $to = (object)[
-			'id' => $with,
-			'name' =>  $this->getBetterName($with, $offerId)
-		];
-
-		// create content for the view
-		$content = [
-			'chats' => $chats,
-			'from' => $from,
-			'to' => $to
-		];
-
-		// send data to the view
-		$response->setTemplate('chat.ejs', $content);
-	}
-
-	/**
-	 * Post a comment in the chat
-	 */
-	public function _comment(Request $request, Response $response)
-	{
-		// get data to create a comment
-		$toId = $request->input->data->to;
-		$offerId = $request->input->data->offerId ?? null;
-		$message = Database::escape($request->input->data->message);
-
-		// save the message to the database
-		Database::query("INSERT INTO _trabajos_conversation (id,  from_user, to_user, message, offer_id) VALUES (uuid(), {$request->person->id}, $toId, '$message','$offerId');");
-
-		// send a push notification to the other user
-		Notifications::alert($toId, 'Tienes un mensaje nuevo en conversaciones de Trabajos',  'info_outline', '{command: "TRABAJOS CHAT", data: {with: '.$request->person->id.'}}');
-	}
-
-	/**
 	 * @param Request $request
 	 * @return array
 	 * @throws \Framework\Alert
@@ -469,37 +410,5 @@ class Service
 			'experience' => $experience,
 			'skills' => $skills
 		];
-	}
-
-	/**
-	 * Chat list
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public function _chatlist(Request $request, Response $response) {
-		$persons = Database::query("SELECT distinct to_user as person_id FROM _trabajos_conversation where from_user = {$request->person->id}
-			UNION
-			SELECT distinct from_user as person_id FROM _trabajos_conversation where to_user = {$request->person->id}");
-
-
-		foreach ($persons as &$person) {
-			$user = Database::queryFirst("SELECT id, gender, avatar, avatarColor, online FROM person WHERE id='{$person->person_id}' LIMIT 1");
-			$person = $user;
-			$person->username = $this->getBetterName($person->id);
-
-			// get the person's avatar
-			$person->avatar = $person->avatar ?? ($person->gender === 'F' ? 'chica' : 'hombre');
-
-			// get the person's avatar color
-			$person->avatarColor = $person->avatarColor ?? 'verde';
-			$person->unreadCount =(int) Database::query("
-				SELECT count(*) AS cantidad
-				FROM _trabajos_conversation
-				WHERE from_user={$person->id}  AND to_user = {$request->person->id} AND read_date is NULL")[0]->cantidad;
-		}
-
-		$response->setTemplate('chatlist.ejs', [
-			'conversations' => $persons
-		]);
 	}
 }
