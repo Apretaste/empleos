@@ -4,7 +4,7 @@ use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
 use Framework\Database;
-use Apretaste\Notifications;
+use Framework\GoogleAnalytics;
 
 class Service
 {
@@ -114,6 +114,8 @@ class Service
 
 		Database::query("INSERT INTO _empleos_offers (id, title, description, category, email, person_id) VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id})");
 
+		GoogleAnalytics::event('jobs_create', '');
+
 		$response->setTemplate('message.ejs', [
 			'header' => 'Oferta creada',
 			'icon' => 'thumb_up',
@@ -139,6 +141,7 @@ class Service
 		if ($name !== null) {
 			$name = Database::escape($name);
 			Database::query("UPDATE _empleos_profile SET name = '$name' WHERE person_id = {$request->person->id}");
+			GoogleAnalytics::event('jobs_resume', 'name');
 		}
 
 		// update bio
@@ -146,6 +149,7 @@ class Service
 		if ($bio !== null) {
 			$bio = Database::escape($bio);
 			Database::query("UPDATE _empleos_profile SET bio = '$bio' WHERE person_id = {$request->person->id}");
+			GoogleAnalytics::event('jobs_resume', 'bio');
 		}
 
 		$professions = $request->input->data->professions ?? null;
@@ -160,6 +164,8 @@ class Service
 					Database::query("INSERT INTO _empleos_profile_professions (id, person_id, profession) VALUES (uuid(), {$request->person->id}, '$profession');");
 				}
 			}
+
+			GoogleAnalytics::event('jobs_resume', 'profession');
 		}
 
 		// skills
@@ -179,6 +185,8 @@ class Service
 					Database::query("INSERT INTO _empleos_profile_skills (id, person_id, skill) VALUES (uuid(), {$request->person->id}, '$skill');");
 				}
 			}
+
+			GoogleAnalytics::event('jobs_resume', 'skills');
 		}
 		$this->_curriculum($request, $response);
 	}
@@ -200,6 +208,8 @@ class Service
 		Database::query("INSERT INTO _empleos_profile_education (id, person_id, grad_year, school, degree) 
 						 VALUES (uuid(), {$request->person->id}, '$grad_year', '$degree', '$school');");
 
+		GoogleAnalytics::event('jobs_resume', 'education');
+
 		$this->_curriculum($request, $response);
 	}
 
@@ -219,6 +229,8 @@ class Service
 
 		Database::query("INSERT INTO _empleos_profile_experience (id, person_id, workplace, position) 
 						 VALUES (uuid(), {$request->person->id}, '$workplace', '$position');");
+
+		GoogleAnalytics::event('jobs_resume', 'workplace');
 
 		$this->_curriculum($request, $response);
 	}

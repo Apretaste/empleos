@@ -14,7 +14,11 @@
 		<div class="col s12">
 			<% filters.forEach(function(item) { %>
 				<% if (item+'' != '' && item+'' != 'null') { %>
-				<span class="chip tiny"><%= item %></span>
+					<% if(typeof categories[item] !== 'undefined') { %>
+						<span class="chip tiny"><%= categories[item] %></span>
+					<% } else { %>
+						<span class="chip tiny"><%= item %></span>
+					<% } %>
 				<% } %>
 			<% }) %>
 		</div>

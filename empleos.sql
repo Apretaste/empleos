@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS _empleos_categories CASCADE;
 CREATE TABLE _empleos_categories (
     code varchar(50) primary key,
     description varchar(100)
@@ -31,9 +32,11 @@ CREATE TABLE _empleos_profile (
     person_id bigint(11) primary key,
     name varchar(100),
     bio varchar(4096),
+    email varchar(255),
     inserted timestamp default CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS _empleos_profile_education CASCADE;
 CREATE TABLE _empleos_profile_education (
     id char(36) primary key,
     person_id bigint(11),
@@ -43,6 +46,7 @@ CREATE TABLE _empleos_profile_education (
     inserted timestamp default CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS _empleos_profile_experience CASCADE;
 CREATE TABLE _empleos_profile_experience (
      id char(36) primary key,
      person_id bigint(11),
@@ -51,6 +55,7 @@ CREATE TABLE _empleos_profile_experience (
      inserted timestamp default CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS _empleos_profile_professions CASCADE;
 CREATE TABLE _empleos_profile_professions (
       id char(36) primary key,
       person_id bigint(11),
@@ -58,22 +63,10 @@ CREATE TABLE _empleos_profile_professions (
       inserted timestamp default CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS _empleos_profile_skills CASCADE;
 CREATE TABLE _empleos_profile_skills (
       id char(36) primary key,
       person_id bigint(11),
       skill varchar(100),
       inserted timestamp default CURRENT_TIMESTAMP
 );
-
-DROP TABLE _empleos_conversation CASCADE;
-
-CREATE TABLE _empleos_conversation (
-    id char(36) primary key,
-    inserted timestamp default CURRENT_TIMESTAMP,
-    read_date timestamp null,
-    from_user bigint(11),
-    to_user bigint(11),
-    message varchar(4096)
-);
-
-alter table _empleos_conversation add column offer_id char(36);
