@@ -17,7 +17,7 @@ class Service
 	 */
 	public function __construct()
 	{
-		$categories = Database::query("SELECT * FROM _trabajos_categories;");
+		$categories = Database::query("SELECT * FROM _empleos_categories;");
 		$this->categories = [];
 		foreach ($categories as $category) {
 			$this->categories[$category->code] = $category->description;
@@ -44,12 +44,12 @@ class Service
 		$title = $request->input->data->title ?? null;
 		$filters = [$category, $title];
 
-		$offers = Database::query("SELECT * FROM _trabajos_offers 
+		$offers = Database::query("SELECT * FROM _empleos_offers 
 		WHERE (category = '$category' OR '$category' = '') 
 			AND ('$title' = '' OR title LIKE '%$title%')
 		ORDER BY inserted DESC LIMIT $offset,$limit;");
 
-		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _trabajos_offers")->cnt;
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_offers")->cnt;
 
 		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
@@ -73,7 +73,7 @@ class Service
 	{
 		$id = $request->input->data->id ?? null;
 
-		$job = Database::queryFirst("SELECT * FROM _trabajos_offers WHERE id = '$id';");
+		$job = Database::queryFirst("SELECT * FROM _empleos_offers WHERE id = '$id';");
 
 		if ($job) {
 			$job->categories = $this->categories;
@@ -85,7 +85,7 @@ class Service
 			"icon" => "sentiment_very_dissatisfied",
 			"text" => "No encontramos la oferta solicitada",
 			"btnCaption" => "Ofertas",
-			"btnLink" => "TRABAJOS"
+			"btnLink" => "EMPLEOS"
 		]);
 	}
 
@@ -112,13 +112,13 @@ class Service
 		$category = Database::escape($request->input->data->category ?? '');
 		$email = Database::escape($request->input->data->email ?? '');
 
-		Database::query("INSERT INTO _trabajos_offers (id, title, description, category, email, person_id) VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id})");
+		Database::query("INSERT INTO _empleos_offers (id, title, description, category, email, person_id) VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id})");
 
 		$response->setTemplate('message.ejs', [
 			'header' => 'Oferta creada',
 			'icon' => 'thumb_up',
 			'text' => 'Su oferta laboral se ha creado correctamente, y pronto deberá recibir peticiones de trabajo. Los interesados le contactarán a través del correo electrónico.',
-			'btnLink' => 'TRABAJOS OFFERS',
+			'btnLink' => 'EMPLEOS OFFERS',
 			'btnCaption' => 'Ofertas']);
 	}
 
@@ -132,32 +132,32 @@ class Service
 	public function _save(Request $request, Response $response)
 	{
 
-		Database::query("INSERT IGNORE INTO _trabajos_profile (person_id) VALUES ({$request->person->id});");
+		Database::query("INSERT IGNORE INTO _empleos_profile (person_id) VALUES ({$request->person->id});");
 
 		// update name
 		$name = $request->input->data->name ?? null;
 		if ($name !== null) {
 			$name = Database::escape($name);
-			Database::query("UPDATE _trabajos_profile SET name = '$name' WHERE person_id = {$request->person->id}");
+			Database::query("UPDATE _empleos_profile SET name = '$name' WHERE person_id = {$request->person->id}");
 		}
 
 		// update bio
 		$bio = $request->input->data->bio ?? null;
 		if ($bio !== null) {
 			$bio = Database::escape($bio);
-			Database::query("UPDATE _trabajos_profile SET bio = '$bio' WHERE person_id = {$request->person->id}");
+			Database::query("UPDATE _empleos_profile SET bio = '$bio' WHERE person_id = {$request->person->id}");
 		}
 
 		$professions = $request->input->data->professions ?? null;
 		if ($professions !== null) {
 
 			// clean all professions
-			Database::query("DELETE FROM _trabajos_profile_professions WHERE person_id = {$request->person->id}");
+			Database::query("DELETE FROM _empleos_profile_professions WHERE person_id = {$request->person->id}");
 
 			// insert new professions
 			foreach ($professions as $profession) {
 				if (!empty($profession)) {
-					Database::query("INSERT INTO _trabajos_profile_professions (id, person_id, profession) VALUES (uuid(), {$request->person->id}, '$profession');");
+					Database::query("INSERT INTO _empleos_profile_professions (id, person_id, profession) VALUES (uuid(), {$request->person->id}, '$profession');");
 				}
 			}
 		}
@@ -169,14 +169,14 @@ class Service
 			$skills = explode(',', $skills);
 
 			// clean all skills
-			Database::query("DELETE FROM _trabajos_profile_skills WHERE person_id = {$request->person->id}");
+			Database::query("DELETE FROM _empleos_profile_skills WHERE person_id = {$request->person->id}");
 
 			// insert new professions
 			foreach ($skills as $skill) {
 				$skill = strtolower(trim($skill));
 
 				if (!empty($skill)) {
-					Database::query("INSERT INTO _trabajos_profile_skills (id, person_id, skill) VALUES (uuid(), {$request->person->id}, '$skill');");
+					Database::query("INSERT INTO _empleos_profile_skills (id, person_id, skill) VALUES (uuid(), {$request->person->id}, '$skill');");
 				}
 			}
 		}
@@ -197,7 +197,7 @@ class Service
 		$degree = Database::escape($request->input->data->degree ?? null);
 		$school = Database::escape($request->input->data->school ?? null);
 
-		Database::query("INSERT INTO _trabajos_profile_education (id, person_id, grad_year, school, degree) 
+		Database::query("INSERT INTO _empleos_profile_education (id, person_id, grad_year, school, degree) 
 						 VALUES (uuid(), {$request->person->id}, '$grad_year', '$degree', '$school');");
 
 		$this->_curriculum($request, $response);
@@ -217,7 +217,7 @@ class Service
 		$workplace = Database::escape($request->input->data->workplace ?? null);
 		$position = Database::escape($request->input->data->position ?? null);
 
-		Database::query("INSERT INTO _trabajos_profile_experience (id, person_id, workplace, position) 
+		Database::query("INSERT INTO _empleos_profile_experience (id, person_id, workplace, position) 
 						 VALUES (uuid(), {$request->person->id}, '$workplace', '$position');");
 
 		$this->_curriculum($request, $response);
@@ -249,7 +249,7 @@ class Service
 		$type = $request->input->data->type;
 
 		if (in_array($type, ['education', 'experience'])) {
-			Database::query("DELETE FROM _trabajos_profile_$type WHERE id = '$id'");
+			Database::query("DELETE FROM _empleos_profile_$type WHERE id = '$id'");
 		}
 
 		$this->_curriculum($request, $response);
@@ -267,9 +267,9 @@ class Service
 		$offset = ($page - 1) * $limit;
 
 		// get the list of people
-		$workers = Database::query("SELECT person_id as id, name FROM _trabajos_profile 
-		WHERE '{$filters[0]}' = '' OR EXISTS(SELECT * FROM _trabajos_profile_professions 
-				WHERE _trabajos_profile.person_id = _trabajos_profile_professions.person_id
+		$workers = Database::query("SELECT person_id as id, name FROM _empleos_profile 
+		WHERE '{$filters[0]}' = '' OR EXISTS(SELECT * FROM _empleos_profile_professions 
+				WHERE _empleos_profile.person_id = _empleos_profile_professions.person_id
 		    	AND profession = '{$filters[0]}')
 		LIMIT $offset,10");
 
@@ -277,7 +277,7 @@ class Service
 			$worker->categories = $this->getProfessions($worker->id);
 		}
 
-		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _trabajos_offers")->cnt;
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_offers")->cnt;
 
 		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
@@ -308,7 +308,7 @@ class Service
 				"icon" => "sentiment_very_dissatisfied",
 				"text" => "No encontramos el perfil solicitado",
 				"btnCaption" => "Ofertas",
-				"btnLink" => "TRABAJOS"
+				"btnLink" => "EMPLEOS"
 			]);
 		}
 
@@ -322,7 +322,7 @@ class Service
 	 * @throws \Framework\Alert
 	 */
 	private function getBetterName($personId, $offerId = null) {
-		$cv = Database::queryFirst("SELECT name FROM _trabajos_profile WHERE person_id = $personId");
+		$cv = Database::queryFirst("SELECT name FROM _empleos_profile WHERE person_id = $personId");
 		$name = 'Desconocido';
 		if ($cv) {
 			return $cv->name;
@@ -333,7 +333,7 @@ class Service
 		}
 
 		if ($offerId !== null) {
-			$offer = Database::queryFirst("SELECT title FROM _trabajos_offers WHERE id = '$offerId'");
+			$offer = Database::queryFirst("SELECT title FROM _empleos_offers WHERE id = '$offerId'");
 			if ($offer) {
 				$name .= "({$offer->title})";
 			}
@@ -350,7 +350,7 @@ class Service
 	private function getProfessions($personId): array
 	{
 		// get the list of person's professions
-		$r = Database::query("SELECT * FROM _trabajos_profile_professions WHERE person_id = {$personId}");
+		$r = Database::query("SELECT * FROM _empleos_profile_professions WHERE person_id = {$personId}");
 		$professions = [];
 		foreach ($r as $pro) $professions[] = $pro->profession;
 		return $professions;
@@ -364,7 +364,7 @@ class Service
 	private function getCurriculum($personId, $full = true)
 	{
 		// get basic data
-		$curriculum = Database::queryFirst("SELECT * FROM _trabajos_profile WHERE person_id = {$personId}");
+		$curriculum = Database::queryFirst("SELECT * FROM _empleos_profile WHERE person_id = {$personId}");
 
 		if ($curriculum === null) {
 			return (object) [
@@ -390,13 +390,13 @@ class Service
 			$professions = $this->getProfessions($personId);
 
 			// get the person's ecucation
-			$education = Database::query("SELECT * FROM _trabajos_profile_education WHERE person_id = {$personId}");
+			$education = Database::query("SELECT * FROM _empleos_profile_education WHERE person_id = {$personId}");
 
 			// get the person's experience
-			$experience = Database::query("SELECT * FROM _trabajos_profile_experience WHERE person_id = {$personId}");
+			$experience = Database::query("SELECT * FROM _empleos_profile_experience WHERE person_id = {$personId}");
 
 			// get the person's profesional skills
-			$r = Database::query("SELECT * FROM _trabajos_profile_skills WHERE person_id = {$personId}");
+			$r = Database::query("SELECT * FROM _empleos_profile_skills WHERE person_id = {$personId}");
 			$skills = [];
 			foreach ($r as $pro) $skills[] = $pro->skill;
 		}

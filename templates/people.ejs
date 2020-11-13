@@ -1,9 +1,9 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs tabs-fixed-width">
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS OFFERS'})">Ofertas</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS OFFERS'})">Ofertas</a></li>
 			<li class="tab"><a href="#" class="active">Personal</a></li>
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS CURRICULUM'})">Currículum</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS CURRICULUM'})">Currículum</a></li>
 		</ul>
 	</div>
 </div>
@@ -30,7 +30,7 @@
 					<i class="fas fa-male circle"></i>
 					<span class="title"><%= item.name %></span>
 					<p class="blue-grey-text"><%=  cats.join(', ') %></p>
-					<a href="#!" class="secondary-content green-text" onclick="apretaste.send({command:'TRABAJOS PROFILE', data:{id: <%= item.id %>}})"><i class="fas fa-arrow-right"></i></a>
+					<a href="#!" class="secondary-content green-text" onclick="apretaste.send({command:'EMPLEOS PROFILE', data:{id: <%= item.id %>}})"><i class="fas fa-arrow-right"></i></a>
 				</li>
 			<% }) %>
 		</ul>
@@ -43,11 +43,11 @@
 		<div class="col s12 center-align">
 			<ul class="pagination">
 				<% if (page > 1) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS PEOPLE',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
 				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
 				<% if (page < pages) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS PEOPLE',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			</ul>
 		</div>
@@ -65,7 +65,7 @@
 
 <!-- MODAL SEARCH -->
 <div id="searchModal" class="modal bottom-sheet fullscreen">
-	<form class="ap-form" action="TRABAJOS PEOPLE">
+	<form class="ap-form" action="EMPLEOS PEOPLE">
 		<div class="modal-content">
 			<div class="input-field">
 				<select id="category" name="category" class="materialize-select">

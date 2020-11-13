@@ -86,7 +86,7 @@ function chat() {
 
 	// send the chat
 	apretaste.send({
-		command: 'TRABAJOS COMMENT',
+		command: 'EMPLEOS COMMENT',
 		data: {to:toId, message:message, offerId: offerId},
 		redirect: false
 	});
@@ -122,7 +122,7 @@ function trash(id, type) {
 
 	// send delete request
 	apretaste.send({
-		command: 'TRABAJOS DELETE',
+		command: 'EMPLEOS DELETE',
 		data: {id:id, type:type},
 		redirect: false
 	});

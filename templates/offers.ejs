@@ -2,8 +2,8 @@
 	<div class="col s12">
 		<ul class="tabs tabs-fixed-width">
 			<li class="tab"><a href="#" class="active">Ofertas</a></li>
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS PEOPLE'})">Personal</a></li>
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS CURRICULUM'})">Currículum</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS PEOPLE'})">Personal</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS CURRICULUM'})">Currículum</a></li>
 		</ul>
 	</div>
 </div>
@@ -32,7 +32,7 @@
 					<span><%= item.title %></span>
 				</div>
 				<div class="card-action grey lighten-4">
-					<a class="green-text" href="#!" onclick="apretaste.send({command:'TRABAJOS JOB', data: {id: '<%= item.id %>' }})">Ver oferta</a>
+					<a class="green-text" href="#!" onclick="apretaste.send({command:'EMPLEOS JOB', data: {id: '<%= item.id %>' }})">Ver oferta</a>
 				</div>
 			</div>
 		<% } %>
@@ -45,11 +45,11 @@
 		<div class="col s12 center-align">
 			<ul class="pagination">
 				<% if (page > 1) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS OFFERS',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
 				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
 				<% if (page < pages) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'TRABAJOS OFFERS',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			</ul>
 		</div>
@@ -60,7 +60,7 @@
 
 <!-- BUTTONS -->
 <div class="fixed-action-btn">
-	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.send({command:'TRABAJOS NEWJOB'})">
+	<a class="btn-floating waves-effect waves-light grey second" onclick="apretaste.send({command:'EMPLEOS NEWJOB'})">
 		<i class="material-icons">add</i>
 	</a>
 	<a href="#searchModal" class="btn-floating btn-large waves-effect waves-light green modal-trigger">
@@ -70,7 +70,7 @@
 
 <!-- MODAL SEARCH -->
 <div id="searchModal" class="modal bottom-sheet fullscreen">
-	<form class="ap-form" action="TRABAJOS OFFERS">
+	<form class="ap-form" action="EMPLEOS OFFERS">
 		<div class="modal-content">
 			<!-- title -->
 			<div class="input-field">

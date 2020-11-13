@@ -1,8 +1,8 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs tabs-fixed-width">
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS OFFERS'})">Ofertas</a></li>
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'TRABAJOS PEOPLE'})">Personal</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS OFFERS'})">Ofertas</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS PEOPLE'})">Personal</a></li>
 			<li class="tab"><a href="#" class="active">Currículum</a></li>
 		</ul>
 	</div>
@@ -91,7 +91,7 @@
 
 <!-- MODAL EDIT NAME -->
 <div id="editNameModal" class="modal">
-	<form id="editNameForm" class="ap-form" action="TRABAJOS SAVE">
+	<form id="editNameForm" class="ap-form" action="EMPLEOS SAVE">
 		<div class="modal-content">
 			<div class="input-field">
 				<input id="name" name="name" class="remainder" maxlength="30" type="text" value="<%= name %>"/>
@@ -107,7 +107,7 @@
 
 <!-- MODAL EDIT PROFESSION -->
 <div id="editProfessionModal" class="modal fullscreen">
-	<form class="ap-form" id="editProfessionForm" action="TRABAJOS SAVE">
+	<form class="ap-form" id="editProfessionForm" action="EMPLEOS SAVE">
 		<div class="modal-content">
 			<% for(var i =0, professionsCategory = ['Profesión primaria', 'Profesión secundaria']; i < professionsCategory.length; i++) { %>
 				<div class="input-field">
@@ -130,7 +130,7 @@
 
 <!-- MODAL EDIT ABOUT -->
 <div id="editAboutModal" class="modal">
-	<form class="ap-form" action="TRABAJOS SAVE">
+	<form class="ap-form" action="EMPLEOS SAVE">
 		<div class="modal-content">
 			<div class="input-field">
 				<textarea id="desc" name="bio" maxlength="200" class="remainder materialize-textarea"><%= bio %></textarea>
@@ -146,7 +146,7 @@
 
 <!-- MODAL ADD EDUCATION -->
 <div id="addEducationModal" class="modal">
-	<form class="ap-form" action="TRABAJOS EDUCATION">
+	<form class="ap-form" action="EMPLEOS EDUCATION">
 		<div class="modal-content">
 			<div class="input-field">
 				<input id="grad_year" name="grad_year" type="number" class="remainder" maxlength="4" />
@@ -170,7 +170,7 @@
 
 <!-- MODAL ADD EXPERIENCE -->
 <div id="addExperienceModal" class="modal">
-	<form class="ap-form" action="TRABAJOS EXPERIENCE">
+	<form class="ap-form" action="EMPLEOS EXPERIENCE">
 		<div class="modal-content">
 			<div class="input-field">
 				<input name="position" id="position" class="remainder" maxlength="30" type="text" />
@@ -190,7 +190,7 @@
 
 <!-- MODAL ADD EXPERIENCE -->
 <div id="editSkillsModal" class="modal">
-	<form class="ap-form" action="TRABAJOS SAVE">
+	<form class="ap-form" action="EMPLEOS SAVE">
 		<div class="modal-content">
 			<p>Liste las técnicas y herramientas que maneja separado por coma. Por ejemplo: php,photoshop,word.</p>
 			<div class="input-field">

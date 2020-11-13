@@ -1,9 +1,9 @@
-CREATE TABLE _trabajos_categories (
+CREATE TABLE _empleos_categories (
     code varchar(50) primary key,
     description varchar(100)
 );
 
-insert into _trabajos_categories (code, description)
+insert into _empleos_categories (code, description)
 values
     ('professor', 'Profesor'),
     ('design', 'Diseño'),
@@ -15,8 +15,8 @@ values
     ('testing', 'Muestreo'),
     ('other', 'Otro');
 
-DROP TABLE IF EXISTS _trabajos_offers CASCADE;
-CREATE TABLE _trabajos_offers(
+DROP TABLE IF EXISTS _empleos_offers CASCADE;
+CREATE TABLE _empleos_offers(
     id char(36) primary key,
     title varchar(255),
     description varchar(4096),
@@ -26,15 +26,15 @@ CREATE TABLE _trabajos_offers(
     inserted timestamp default CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS _trabajos_profile CASCADE;
-CREATE TABLE _trabajos_profile (
+DROP TABLE IF EXISTS _empleos_profile CASCADE;
+CREATE TABLE _empleos_profile (
     person_id bigint(11) primary key,
     name varchar(100),
     bio varchar(4096),
     inserted timestamp default CURRENT_TIMESTAMP
 );
 
-CREATE TABLE _trabajos_profile_education (
+CREATE TABLE _empleos_profile_education (
     id char(36) primary key,
     person_id bigint(11),
     grad_year bigint,
@@ -43,7 +43,7 @@ CREATE TABLE _trabajos_profile_education (
     inserted timestamp default CURRENT_TIMESTAMP
 );
 
-CREATE TABLE _trabajos_profile_experience (
+CREATE TABLE _empleos_profile_experience (
      id char(36) primary key,
      person_id bigint(11),
      workplace varchar(500),
@@ -51,23 +51,23 @@ CREATE TABLE _trabajos_profile_experience (
      inserted timestamp default CURRENT_TIMESTAMP
 );
 
-CREATE TABLE _trabajos_profile_professions (
+CREATE TABLE _empleos_profile_professions (
       id char(36) primary key,
       person_id bigint(11),
       profession varchar(50),
       inserted timestamp default CURRENT_TIMESTAMP
 );
 
-CREATE TABLE _trabajos_profile_skills (
+CREATE TABLE _empleos_profile_skills (
       id char(36) primary key,
       person_id bigint(11),
       skill varchar(100),
       inserted timestamp default CURRENT_TIMESTAMP
 );
 
-DROP TABLE _trabajos_conversation CASCADE;
+DROP TABLE _empleos_conversation CASCADE;
 
-CREATE TABLE _trabajos_conversation (
+CREATE TABLE _empleos_conversation (
     id char(36) primary key,
     inserted timestamp default CURRENT_TIMESTAMP,
     read_date timestamp null,
@@ -76,4 +76,4 @@ CREATE TABLE _trabajos_conversation (
     message varchar(4096)
 );
 
-alter table _trabajos_conversation add column offer_id char(36);
+alter table _empleos_conversation add column offer_id char(36);
