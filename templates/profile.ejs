@@ -8,11 +8,13 @@
 				<p class="blue-grey-text">Nombre</p>
 			</li>
 
-			<li class="collection-item avatar">
-				<i class="fas fa-envelope-open-text circle"></i>
-				<span class="title"><%= email %></span>
-				<p class="blue-grey-text">Correo electr&oacute;nico</p>
-			</li>
+			<% if (email) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-envelope-open-text circle"></i>
+					<span class="title"><%= email %></span>
+					<p class="blue-grey-text">Correo electr&oacute;nico</p>
+				</li>
+			<% } %>
 
 			<!-- Professions -->
 			<li class="collection-item avatar">
