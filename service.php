@@ -390,6 +390,7 @@ class Service
 			return (object) [
 				'id' => $personId,
 				'name' => '',
+				'email' => '',
 				'bio' => '',
 				'professions' => [],
 				'education' => [],
@@ -400,6 +401,7 @@ class Service
 
 		$name = $curriculum->name ?? '';
 		$bio = $curriculum->bio ?? '';
+		$email = $curriculum->email ?? '';
 		$professions = [];
 		$education = [];
 		$experience = [];
@@ -425,6 +427,7 @@ class Service
 			'id' => $personId,
 			'name' => $name,
 			'bio' => $bio,
+			'email' => $email,
 			'professions' => $professions,
 			'education' => $education,
 			'experience' => $experience,
