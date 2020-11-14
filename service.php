@@ -144,6 +144,14 @@ class Service
 			GoogleAnalytics::event('jobs_resume', 'name');
 		}
 
+		// update email
+		$email = $request->input->data->email ?? null;
+		if ($email !== null) {
+			$email = Database::escape($email);
+			Database::query("UPDATE _empleos_profile SET email = '$email' WHERE person_id = {$request->person->id}");
+			GoogleAnalytics::event('jobs_resume', 'email');
+		}
+
 		// update bio
 		$bio = $request->input->data->bio ?? null;
 		if ($bio !== null) {

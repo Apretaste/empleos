@@ -21,6 +21,15 @@
 				<a href="#editNameModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
 			</li>
 
+			<!-- Name -->
+			<li class="collection-item avatar">
+				<i class="fas fa-envelope-o circle"></i>
+				<span class="title"><%= email %></span>
+				<p class="blue-grey-text">Correo electr&oacute;nico de contacto:</p>
+				<a href="#editEmailModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
+
+
 			<!-- Professions -->
 			<%
 				var cats = []; 
@@ -95,7 +104,24 @@
 		<div class="modal-content">
 			<div class="input-field">
 				<input id="name" name="name" class="remainder" maxlength="30" type="text" value="<%= name %>"/>
-				<label for="name">Título (<span>0</span>/30)</label>
+				<label for="name">Nombre (<span>0</span>/30)</label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button class="modal-close waves-effect green-text btn-flat" type="submit">Editar</button>
+		</div>
+	</form>
+</div>
+
+
+<!-- MODAL EMAIL NAME -->
+<div id="editEmailModal" class="modal">
+	<form id="editEmailForm" class="ap-form" action="EMPLEOS SAVE">
+		<div class="modal-content">
+			<div class="input-field">
+				<input id="email" name="email" class="remainder" maxlength="255" type="email" value="<%= email %>"/>
+				<label for="name">Correo electr&oacute;nico</label>
 			</div>
 		</div>
 		<div class="modal-footer">
