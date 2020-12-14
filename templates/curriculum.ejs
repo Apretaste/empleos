@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs tabs-fixed-width">
-			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS OFFERS'})">Ofertas</a></li>
+			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS OFFERS'})">Anuncios</a></li>
 			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS PEOPLE'})">Personal</a></li>
 			<li class="tab"><a href="#" class="active">Currículum</a></li>
 		</ul>
@@ -10,7 +10,7 @@
 
 <div class="row">
 	<div class="col s12">
-		<span>Llene su currículum profesional para recibir oportunidades laborales.</span>
+		<span>Llene su currículum profesional para recibir oportunidades laborales. Los campos "nombre", "correo" y "profesión" son necesarios para poder mostrar su perfil públicamente.</span>
 
 		<ul class="collection one-line">
 			<!-- Name -->
@@ -21,14 +21,21 @@
 				<a href="#editNameModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
 			</li>
 
-			<!-- Name -->
+			<!-- Email -->
 			<li class="collection-item avatar">
 				<i class="fas fa-envelope-open-text circle"></i>
-				<span class="title"><%= email %></span>
-				<p class="blue-grey-text">Correo electr&oacute;nico de contacto:</p>
+				<span class="title"><a href="mailto:<%= email %>"><%= email %></a></span>
+				<p class="blue-grey-text">Email</p>
 				<a href="#editEmailModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
 			</li>
 
+			<!-- Phone -->
+			<li class="collection-item avatar">
+				<i class="fas fa-envelope-open-text circle"></i>
+				<span class="title"><%= phone %></span>
+				<p class="blue-grey-text">Tel&eacute;fono</p>
+				<a href="#editPhoneModal" class="secondary-content green-text modal-trigger"><i class="fas fa-pen"></i></a>
+			</li>
 
 			<!-- Professions -->
 			<%
@@ -116,16 +123,32 @@
 
 <!-- MODAL EMAIL NAME -->
 <div id="editEmailModal" class="modal">
-	<form id="editEmailForm" class="ap-form" action="EMPLEOS SAVE">
+	<form id="editEmailForm" class="ap-form" action="EMPLEOS SAVE" data-validator="validateEmail">
 		<div class="modal-content">
 			<div class="input-field">
-				<input id="email" name="email" class="remainder" maxlength="255" type="email" value="<%= email %>"/>
-				<label for="email">Correo electr&oacute;nico</label>
+				<input id="email" name="email" class="remainder" maxlength="255" type="text" value="<%= email %>"/>
+				<label for="email">Email</label>
 			</div>
 		</div>
 		<div class="modal-footer">
 			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
-			<button class="modal-close waves-effect green-text btn-flat" type="submit">Editar</button>
+			<button class="waves-effect green-text btn-flat" type="submit">Editar</button>
+		</div>
+	</form>
+</div>
+
+<!-- MODAL EMAIL NAME -->
+<div id="editPhoneModal" class="modal">
+	<form id="editPhoneForm" class="ap-form" action="EMPLEOS SAVE">
+		<div class="modal-content">
+			<div class="input-field">
+				<input id="phone" name="phone" class="remainder" maxlength="255" type="text" value="<%= phone %>"/>
+				<label for="phone">Tel&eacute;fono</label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+			<button class="waves-effect green-text btn-flat" type="submit">Editar</button>
 		</div>
 	</form>
 </div>

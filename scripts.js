@@ -32,15 +32,24 @@ $(document).ready(function() {
 		var valid = true;
 		var data = getDataForm(form);
 
-		var validator = form.attr('validator');
+		var validator = form.attr('data-validator');
 		if (validator)  {
 			eval('valid = ' + validator +'(data)');
 			if (!valid) return;
 		}
 
+		var redirect = form.attr('data-redirect');
+		if (typeof redirect === 'undefined') { redirect = true; }
+		else redirect = redirect !== 'false';
+
+		var callback = form.attr('data-callback');
+		if (typeof callback === 'undefined') callback = null;
+
 		apretaste.send({
 			command: form.attr('action'),
-			data: data
+			data: data,
+			redirect: redirect,
+			callback: {name: callback}
 		});
 	});
 });
@@ -126,4 +135,37 @@ function trash(id, type) {
 		data: {id:id, type:type},
 		redirect: false
 	});
+}
+
+function toast(message){
+	M.toast({html: message});
+}
+
+function validateEmail(data) {
+	const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if (!re.test(data.email)) {
+		toast('Introduzca un email valido');
+		return false;
+	}
+	return true;
+}
+
+function capitalize (s) {
+	if (typeof s !== 'string') return ''
+	return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+function newJobValidator(data) {
+
+	if (data.kind.trim() === '') {
+		toast("Especifica el tipo de anuncio");
+		return false;
+	}
+
+	if (data.category.trim() === '') {
+		toast("Especifica la cateogor&iacute;a");
+		return false;
+	}
+
+	return true;
 }

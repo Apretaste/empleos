@@ -2,9 +2,10 @@
 	<div class="col s12">
 		<h1><%= title %></h1>
 		<span class="chip clear spacing"><i class="fas fa-tag"></i> <%= categories[category] %></span>
+		<span class="chip clear spacing"><i class="fas fa-clipboard"></i> <%= capitalize(kind.toLowerCase())  %></span>
 		<span class="chip clear"><i class="fas fa-calendar"></i> <%= moment(inserted).format('D [de] MMMM [del] YYYY') %></span>
 		<p><%= description %></p>
-		<p>Email: <%= email %></p>
+		<p>Email: <a href="mailto:<%= email %>"><%= email %></a></p>
 	</div>
 </div>
 
@@ -12,7 +13,7 @@
 <div class="bottom-space"></div>
 
 <div class="fixed-action-btn">
-	<a class="btn-floating waves-effect waves-light" onclick="apretaste.send({command:'EMPLEOS', data: {}})">
+	<button class="btn-floating btn-large waves-effect waves-light green modal-trigger" onclick="apretaste.send({command:'EMPLEOS', data: {}})">
 		<i class="material-icons">arrow_back</i>
-	</a>
+	</button>
 </div>

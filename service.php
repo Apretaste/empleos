@@ -38,15 +38,17 @@ class Service
 	public function _offers(Request $request, Response $response)
 	{
 		$limit = 10;
-		$page = $request->input->data->offset ?? 1;
+		$page = $request->input->data->page ?? 1;
 		$offset = ($page - 1) * $limit;
 		$category = $request->input->data->category ?? null;
 		$title = $request->input->data->title ?? null;
-		$filters = [$category, $title];
+		$kind = $request->input->data->kind ?? '*';
+		$filters = [ucfirst($kind), $category, $title];
 
 		$offers = Database::query("SELECT * FROM _empleos_offers 
 		WHERE (category = '$category' OR '$category' = '') 
 			AND ('$title' = '' OR title LIKE '%$title%')
+			AND (kind = '$kind' OR '$kind' = '' OR '$kind' = '*') 
 		ORDER BY inserted DESC LIMIT $offset,$limit;");
 
 		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_offers")->cnt;
@@ -84,7 +86,7 @@ class Service
 			"header" => "Oferta no encontrada",
 			"icon" => "sentiment_very_dissatisfied",
 			"text" => "No encontramos la oferta solicitada",
-			"btnCaption" => "Ofertas",
+			"btnCaption" => "Anuncios",
 			"btnLink" => "EMPLEOS"
 		]);
 	}
@@ -111,8 +113,10 @@ class Service
 		$description = Database::escape($request->input->data->desc ?? '');
 		$category = Database::escape($request->input->data->category ?? '');
 		$email = Database::escape($request->input->data->email ?? '');
+		$kind = Database::escape($request->input->data->kind ?? '');
 
-		Database::query("INSERT INTO _empleos_offers (id, title, description, category, email, person_id) VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id})");
+		Database::query("INSERT INTO _empleos_offers (id, title, description, category, email, person_id, kind) 
+		VALUES (uuid(), '$title', '$description', '$category', '$email', {$request->person->id},'$kind')");
 
 		GoogleAnalytics::event('jobs_create', '');
 
@@ -121,7 +125,7 @@ class Service
 			'icon' => 'thumb_up',
 			'text' => 'Su oferta laboral se ha creado correctamente, y pronto deberá recibir peticiones de trabajo. Los interesados le contactarán a través del correo electrónico.',
 			'btnLink' => 'EMPLEOS OFFERS',
-			'btnCaption' => 'Ofertas']);
+			'btnCaption' => 'Anuncios']);
 	}
 
 	/**
@@ -150,6 +154,14 @@ class Service
 			$email = Database::escape($email);
 			Database::query("UPDATE _empleos_profile SET email = '$email' WHERE person_id = {$request->person->id}");
 			GoogleAnalytics::event('jobs_resume', 'email');
+		}
+
+		// update phone
+		$phone = $request->input->data->phone ?? null;
+		if ($phone !== null) {
+			$phone = Database::escape($phone);
+			Database::query("UPDATE _empleos_profile SET phone = '$phone' WHERE person_id = {$request->person->id}");
+			GoogleAnalytics::event('jobs_resume', 'phone');
 		}
 
 		// update bio
@@ -244,6 +256,18 @@ class Service
 	}
 
 	/**
+	 * @param $text
+	 * @return string|string[]|null
+	 */
+	private function emailize($text)
+	{
+		$regex = '/(\S+@\S+\.\S+)/';
+		$replace = '<a href="mailto:$1">$1</a>';
+
+		return preg_replace($regex, $replace, $text);
+	}
+
+	/**
 	 * Edit your curriculum
 	 *
 	 * @param Request $request
@@ -288,16 +312,20 @@ class Service
 
 		// get the list of people
 		$workers = Database::query("SELECT person_id as id, name FROM _empleos_profile 
-		WHERE '{$filters[0]}' = '' OR EXISTS(SELECT * FROM _empleos_profile_professions 
+		WHERE (('{$filters[0]}' = '') OR EXISTS(SELECT * FROM _empleos_profile_professions 
 				WHERE _empleos_profile.person_id = _empleos_profile_professions.person_id
-		    	AND profession = '{$filters[0]}')
+		    	AND profession = '{$filters[0]}'))
+			AND trim(coalesce(_empleos_profile.name,'')) <> '' 
+			AND trim(coalesce(_empleos_profile.email,'')) <> ''
+			AND EXISTS(SELECT id FROM _empleos_profile_professions 
+				WHERE _empleos_profile.person_id = _empleos_profile_professions.person_id)
 		LIMIT $offset,10");
 
 		foreach ($workers as $worker) {
 			$worker->categories = $this->getProfessions($worker->id);
 		}
 
-		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_offers")->cnt;
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_profile")->cnt;
 
 		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
@@ -322,12 +350,17 @@ class Service
 		$id = $request->input->data->id ?? null;
 		$curriculum = $this->getCurriculum($id);
 
+		if ($request->input->appVersion >= 7.1 || $request->input->environment == 'web') {
+			$curriculum->externalLinks = true;
+			$curriculum->email = $this->emailize($curriculum->email);
+		}
+
 		if ($id === null) {
 			return $response->setTemplate('message.ejs', [
 				'header' => 'Perfil no encontrado',
 				"icon" => "sentiment_very_dissatisfied",
 				"text" => "No encontramos el perfil solicitado",
-				"btnCaption" => "Ofertas",
+				"btnCaption" => "Anuncios",
 				"btnLink" => "EMPLEOS"
 			]);
 		}
@@ -395,13 +428,15 @@ class Service
 				'professions' => [],
 				'education' => [],
 				'experience' => [],
-				'skills' => []
+				'skills' => [],
+				'phone' => ''
 			];
 		}
 
 		$name = $curriculum->name ?? '';
 		$bio = $curriculum->bio ?? '';
 		$email = $curriculum->email ?? '';
+		$phone = $curriculum->phone ?? '';
 		$professions = [];
 		$education = [];
 		$experience = [];
@@ -431,7 +466,8 @@ class Service
 			'professions' => $professions,
 			'education' => $education,
 			'experience' => $experience,
-			'skills' => $skills
+			'skills' => $skills,
+			'phone' => $phone
 		];
 	}
 }

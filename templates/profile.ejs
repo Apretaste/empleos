@@ -2,33 +2,49 @@
 	<div class="col s12">
 		<ul class="collection one-line">
 			<!-- Name -->
-			<li class="collection-item avatar">
-				<i class="fas fa-male circle"></i>
-				<span class="title"><%= name %></span>
-				<p class="blue-grey-text">Nombre</p>
-			</li>
+			<% if (name) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-male circle"></i>
+					<span class="title"><%= name %></span>
+					<p class="blue-grey-text">Nombre</p>
+				</li>
+			<% } %>
 
+			<!-- Email -->
 			<% if (email) { %>
 				<li class="collection-item avatar">
 					<i class="fas fa-envelope-open-text circle"></i>
-					<span class="title"><%= email %></span>
-					<p class="blue-grey-text">Correo electr&oacute;nico</p>
+					<span class="title"><%- email %></span>
+					<p class="blue-grey-text">Email</p>
+				</li>
+			<% } %>
+
+			<!-- Phone -->
+			<% if (phone) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-phone circle"></i>
+					<span class="title"><%- phone %></span>
+					<p class="blue-grey-text">Phone</p>
 				</li>
 			<% } %>
 
 			<!-- Professions -->
-			<li class="collection-item avatar">
-				<i class="fas fa-tags circle"></i>
-				<span class="title"><%= professions %></span>
-				<p class="blue-grey-text">Profesión</p>
-			</li>
+			<% if (professions) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-tags circle"></i>
+					<span class="title"><%= professions %></span>
+					<p class="blue-grey-text">Profesión</p>
+				</li>
+			<% } %>
 
 			<!--  Bio -->
-			<li class="collection-item avatar">
-				<i class="fas fa-address-card circle"></i>
-				<span class="title"><%= bio %></span>
-				<p class="blue-grey-text">Biografía</p>
-			</li>
+			<% if (bio) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-address-card circle"></i>
+					<span class="title"><%= bio %></span>
+					<p class="blue-grey-text">Biografía</p>
+				</li>
+			<% } %>
 
 			<!-- Educations -->
 			<% education.forEach(function(item) { %>
@@ -52,11 +68,13 @@
 			<% }) %>
 
 			<!--  Skills -->
-			<li class="collection-item avatar">
-				<i class="fas fa-brain circle"></i>
-				<span class="title"><%= skills %></span>
-				<p class="blue-grey-text">Habilidades</p>
-			</li>
+			<% if (bio) { %>
+				<li class="collection-item avatar">
+					<i class="fas fa-brain circle"></i>
+					<span class="title"><%= skills %></span>
+					<p class="blue-grey-text">Habilidades</p>
+				</li>
+			<% } %>
 		</ul>
 	</div>
 </div>

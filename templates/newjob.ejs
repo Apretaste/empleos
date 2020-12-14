@@ -1,8 +1,18 @@
-<form class="ap-form" action="EMPLEOS SAVEJOB">
+<form class="ap-form" action="EMPLEOS SAVEJOB" data-validator="newJobValidator">
 	<div class="row">
 		<div class="col s12">
 			<h1>Nueva oferta</h1>
 			<p>Cree una nueva oferta laboral para atraer posibles trabajadores interesados.</p>
+
+			<!-- kind -->
+			<div class="input-field">
+				<select id="kind" name="kind" class="materialize-select">
+					<option value=""></option>
+					<option value="OFERTA">Oferta de empleo</option>
+					<option value="SOLICITUD">Solicitud de empleo</option>
+				</select>
+				<label for="category">Escoja el tipo de anuncio</label>
+			</div>
 
 			<!-- title -->
 			<div class="input-field">
@@ -18,7 +28,7 @@
 
 			<!-- categories -->
 			<div class="input-field">
-				<select id="category" name="category" class="materialize-select" required="" aria-required="true">
+				<select id="category" name="category" class="materialize-select">
 					<option value=""></option>
 					<% for(var item in categories) { %>
 						<option value="<%= item %>"><%= categories[item] %></option>
@@ -29,8 +39,8 @@
 
 			<!-- email -->
 			<div class="input-field">
-				<input id="email" name="email" type="email" value="<%= email %>" required="" aria-required="true"/>
-				<label for="email">Su correo electrónico</label>
+				<input id="email" name="email" type="text" value="<%= email %>" required="" aria-required="true"/>
+				<label for="email">Informaci&oacute;n de contacto (email, tel&eacute;fono) </label>
 			</div>
 		</div>
 	</div>

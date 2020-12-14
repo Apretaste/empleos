@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs tabs-fixed-width">
-			<li class="tab"><a href="#" class="active">Ofertas</a></li>
+			<li class="tab"><a href="#" class="active">Anuncios</a></li>
 			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS PEOPLE'})">Personal</a></li>
 			<li class="tab"><a href="#" onclick="apretaste.send({command: 'EMPLEOS CURRICULUM'})">Currículum</a></li>
 		</ul>
@@ -13,11 +13,11 @@
 	<% if(filters.length > 0) { %>
 		<div class="col s12">
 			<% filters.forEach(function(item) { %>
-				<% if (item+'' != '' && item+'' != 'null') { %>
+				<% if (item+'' != '' && item+'' != 'null' && item != '*') { %>
 					<% if(typeof categories[item] !== 'undefined') { %>
 						<span class="chip tiny"><%= categories[item] %></span>
 					<% } else { %>
-						<span class="chip tiny"><%= item %></span>
+						<span class="chip tiny"><%= capitalize(item.toLowerCase()) %></span>
 					<% } %>
 				<% } %>
 			<% }) %>
@@ -29,14 +29,15 @@
 		<% for(var i in offers) {var item = offers[i]; %>
 			<div class="card">
 				<div class="card-person grey lighten-5">
-					<span class="chip tiny clear"><i class="fas fa-tag"></i> <%= categories[item.category] %></span>
-					<span class="chip tiny clear right"><i class="fas fa-calendar"></i> <%= moment(item.inserted).format('D [de] MMMM [del] YYYY') %></span>
+					<span class="chip clear spacing"><i class="fas fa-tag"></i> <%= categories[item.category] %></span>
+					<span class="chip clear spacing"><i class="fas fa-clipboard"></i> <%= capitalize(item.kind.toLowerCase()) %></span>
+					<span class="chip clear spacing right"><i class="fas fa-calendar"></i> <%= moment(item.inserted).format('D [de] MMMM [del] YYYY') %></span>
 				</div>
 				<div class="card-content">
 					<span><%= item.title %></span>
 				</div>
 				<div class="card-action grey lighten-4">
-					<a class="green-text" href="#!" onclick="apretaste.send({command:'EMPLEOS JOB', data: {id: '<%= item.id %>' }})">Ver oferta</a>
+					<a class="green-text" href="#!" onclick="apretaste.send({command:'EMPLEOS JOB', data: {id: '<%= item.id %>' }})">Ver</a>
 				</div>
 			</div>
 		<% } %>
@@ -49,11 +50,11 @@
 		<div class="col s12 center-align">
 			<ul class="pagination">
 				<% if (page > 1) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+					<li class="waves-effect"><a onclick="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
 				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
 				<% if (page < pages) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+					<li class="waves-effect"><a onclick="apretaste.send({command:'EMPLEOS OFFERS',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			</ul>
 		</div>
@@ -76,6 +77,17 @@
 <div id="searchModal" class="modal bottom-sheet fullscreen">
 	<form class="ap-form" action="EMPLEOS OFFERS">
 		<div class="modal-content">
+
+			<!-- kind -->
+			<div class="input-field">
+				<select id="kind" name="kind" class="materialize-select" required="" aria-required="true">
+					<option value="*">Todos</option>
+					<option value="OFERTA">Oferta de empleo</option>
+					<option value="SOLICITUD">Solicitud de empleo</option>
+				</select>
+				<label for="category">Escoja el tipo de anuncio</label>
+			</div>
+
 			<!-- title -->
 			<div class="input-field">
 				<input id="title" value="" class="" name="title"/>

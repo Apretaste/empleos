@@ -70,3 +70,6 @@ CREATE TABLE _empleos_profile_skills (
       skill varchar(100),
       inserted timestamp default CURRENT_TIMESTAMP
 );
+
+alter table _empleos_offers add column extra text;
+alter table _empleos_offers add column kind enum('OFERTA', 'SOLICITUD') not null default 'OFERTA';
