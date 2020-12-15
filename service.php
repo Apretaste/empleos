@@ -221,12 +221,12 @@ class Service
 	public function _education(Request $request, Response $response)
 	{
 
-		$grad_year = Database::escape($request->input->data->grad_year ?? null);
+		$grad_year = intval(Database::escape($request->input->data->grad_year ?? 0));
 		$degree = Database::escape($request->input->data->degree ?? null);
 		$school = Database::escape($request->input->data->school ?? null);
 
 		Database::query("INSERT INTO _empleos_profile_education (id, person_id, grad_year, school, degree) 
-						 VALUES (uuid(), {$request->person->id}, '$grad_year', '$degree', '$school');");
+						 VALUES (uuid(), {$request->person->id}, $grad_year, '$degree', '$school');");
 
 		GoogleAnalytics::event('jobs_resume', 'education');
 
