@@ -352,7 +352,7 @@ class Service
 
 		if ($request->input->appVersion >= 7.1 || $request->input->environment == 'web') {
 			$curriculum->externalLinks = true;
-			$curriculum->email = $this->emailize($curriculum->email);
+			//$curriculum->email = $this->emailize($curriculum->email);
 		}
 
 		if ($id === null) {
