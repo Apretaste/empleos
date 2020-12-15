@@ -364,7 +364,7 @@ class Service
 				"btnLink" => "EMPLEOS"
 			]);
 		}
-
+		$curriculum->categories = $this->categories;
 		$response->setTemplate("profile.ejs", $curriculum);
 	}
 
