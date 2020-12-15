@@ -32,7 +32,7 @@
 			<% if (professions) { %>
 				<li class="collection-item avatar">
 					<i class="fas fa-tags circle"></i>
-					<span class="title"><%= professions %></span>
+					<span class="title"><%=  professions.map(function(item){ return categories[item];}).join(', ') %></span>
 					<p class="blue-grey-text">Profesión</p>
 				</li>
 			<% } %>
@@ -68,7 +68,7 @@
 			<% }) %>
 
 			<!--  Skills -->
-			<% if (bio) { %>
+			<% if (skills) { %>
 				<li class="collection-item avatar">
 					<i class="fas fa-brain circle"></i>
 					<span class="title"><%= skills %></span>

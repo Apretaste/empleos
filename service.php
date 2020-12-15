@@ -197,7 +197,7 @@ class Service
 			// clean all skills
 			Database::query("DELETE FROM _empleos_profile_skills WHERE person_id = {$request->person->id}");
 
-			// insert new professions
+			// insert new skill
 			foreach ($skills as $skill) {
 				$skill = strtolower(trim($skill));
 
