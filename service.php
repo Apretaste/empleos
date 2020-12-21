@@ -199,7 +199,7 @@ class Service
 
 			// insert new skill
 			foreach ($skills as $skill) {
-				$skill = strtolower(trim($skill));
+				$skill = substr(strtolower(trim($skill)),0,100);
 
 				if (!empty($skill)) {
 					Database::query("INSERT INTO _empleos_profile_skills (id, person_id, skill) VALUES (uuid(), {$request->person->id}, '$skill');");
