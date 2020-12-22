@@ -307,7 +307,7 @@ class Service
 		// get search filters, if exist, else should be false
 		$filters = [$request->input->data->category ?? ''];
 		$limit = 10;
-		$page = $request->input->data->offset ?? 1;
+		$page = $request->input->data->page ?? 1;
 		$offset = ($page - 1) * $limit;
 
 		// get the list of people
