@@ -43,11 +43,11 @@
 		<div class="col s12 center-align">
 			<ul class="pagination">
 				<% if (page > 1) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
+					<li class="waves-effect"><a onclick="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page - 1 %>}});"><i class="material-icons">chevron_left</i></a></li>
 				<% } %>
 				<li class="waves-effect"><%= page %> / <%= pages %></li>
 				<% if (page < pages) { %>
-					<li class="waves-effect"><a href="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
+					<li class="waves-effect"><a onclick="apretaste.send({command:'EMPLEOS PEOPLE',data: {page: <%= page + 1 %>}});"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			</ul>
 		</div>
