@@ -45,13 +45,14 @@ class Service
 		$kind = $request->input->data->kind ?? '*';
 		$filters = [ucfirst($kind), $category, $title];
 
-		$offers = Database::query("SELECT * FROM _empleos_offers 
+		$sql = "_empleos_offers 
 		WHERE (category = '$category' OR '$category' = '') 
 			AND ('$title' = '' OR title LIKE '%$title%')
-			AND (kind = '$kind' OR '$kind' = '' OR '$kind' = '*') 
-		ORDER BY inserted DESC LIMIT $offset,$limit;");
+			AND (kind = '$kind' OR '$kind' = '' OR '$kind' = '*'";
 
-		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM _empleos_offers")->cnt;
+		$offers = Database::query("SELECT * FROM $sql ORDER BY inserted DESC LIMIT $offset,$limit;");
+
+		$total = Database::queryFirst("SELECT COUNT(*) AS cnt FROM $sql ")->cnt;
 
 		$pages = intval($total / $limit) + ($total % $limit > 0 ? 1 : 0);
 
