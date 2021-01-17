@@ -45,10 +45,10 @@ class Service
 		$kind = $request->input->data->kind ?? '*';
 		$filters = [ucfirst($kind), $category, $title];
 
-		$sql = "_empleos_offers 
+		$sql = " _empleos_offers 
 		WHERE (category = '$category' OR '$category' = '') 
 			AND ('$title' = '' OR title LIKE '%$title%')
-			AND (kind = '$kind' OR '$kind' = '' OR '$kind' = '*'";
+			AND (kind = '$kind' OR '$kind' = '' OR '$kind' = '*') ";
 
 		$offers = Database::query("SELECT * FROM $sql ORDER BY inserted DESC LIMIT $offset,$limit;");
 
